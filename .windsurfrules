@@ -1,0 +1,35 @@
+- Jira benzeri bir proje yönetim sistemi
+- Laravel 12
+- TALL stack kullanılmıştır
+- Yarn kullan
+- Tasarım araçlarında öncelikle MaryUI 2 kullan (https://mary-ui.com/docs/installation)
+- Livewire 3
+- Tema modern ve futuristik olmalı
+- Arayüz english olmalı
+- AI olaral cevapları Türkçe ver
+- PHP 8.3
+Postgres 15
+- PSR kullan
+- Jira, Asana, Trello gibi proje yönetim sistemlerinden feyz al
+- Icon set olarak fas kullan örnek fas.user gibi ("owenvoke/blade-fontawesome": "^2.9" kullanılıyor)
+- Laravel Livewire Volt kullan, örneğin:
+- dosyalar şöyle başlayacak
+MaryUI 2 kullan (https://mary-ui.com/docs/installation)
+
+<?php
+    new class extends Livewire\Component {
+
+    }
+?>
+
+<div>
+.....
+</div>
+
+
+Routes:
+use Livewire\Volt\Volt;
+
+Volt::route('/', 'index');
+
+gibi
