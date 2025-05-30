@@ -1,9 +1,9 @@
 <?php
 
 use Livewire\Volt\Volt;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SprintExportController;
 use App\Http\Controllers\SprintCloneController;
+use App\Http\Controllers\MeetingExportController;
 
 // Ana sayfa
 Volt::route('/', 'pages.dashboard')->name('dashboard');
@@ -13,6 +13,9 @@ Volt::route('/projects', 'projects.index')->name('projects.index');
 Volt::route('/projects/create', 'projects.create')->name('projects.create');
 Volt::route('/projects/{project}', 'projects.show')->name('projects.show');
 Volt::route('/projects/{project}/edit', 'projects.edit')->name('projects.edit');
+
+// Proje Üyeleri
+Volt::route('/projects/{project}/members', 'projects.members.index')->name('projects.members.index');
 
 // Görevler
 Volt::route('/projects/{project}/tasks', 'tasks.index')->name('tasks.index');
@@ -49,6 +52,18 @@ Volt::route('/projects/{project}/kanban-board', 'tasks.kanban-board')->name('tas
 
 // Gantt Şeması
 Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');
+
+// Toplantılar
+Volt::route('/meetings', 'meetings.index')->name('meetings.index');
+Volt::route('/meetings/create', 'meetings.create')->name('meetings.create');
+Volt::route('/meetings/{meeting}', 'meetings.show')->name('meetings.show');
+Volt::route('/meetings/{meeting}/edit', 'meetings.edit')->name('meetings.edit');
+Volt::route('/meetings/{meeting}/join', 'meetings.video-conference')->name('meetings.join');
+Volt::route('/projects/{project}/meetings', 'meetings.index')->name('projects.meetings.index');
+
+// Toplantı dışa aktarma işlemleri
+Route::get('/meetings/export/ics/{id?}', [MeetingExportController::class, 'exportICalendar'])->name('meetings.export.ics');
+Route::get('/meetings/export/csv/{id?}', [MeetingExportController::class, 'exportCsv'])->name('meetings.export.csv');
 
 // Profil
 Volt::route('/profile', 'profile.index')->name('profile.index');

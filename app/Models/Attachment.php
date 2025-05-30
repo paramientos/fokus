@@ -12,17 +12,36 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *
  * @property int $id
  * @property string $filename
- * @property string $path
+ * @property string $original_filename
  * @property string $mime_type
  * @property int $size File size in bytes
- * @property string|null $description
+ * @property string $path
  * @property int|null $user_id
  * @property string $attachable_type
  * @property int $attachable_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Model|\Eloquent $attachable
+ * @property-read string $extension
+ * @property-read string $formatted_size
+ * @property-read string $icon_class
+ * @property-read bool $is_image
  * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereAttachableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereAttachableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereFilename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereMimeType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereOriginalFilename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereUserId($value)
+ * @mixin \Eloquent
  */
 class Attachment extends Model
 {

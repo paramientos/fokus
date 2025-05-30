@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Task;
 use App\Models\Sprint;
 use App\Models\Status;
+use App\Models\Meeting;
 
 /**
  * 
@@ -23,12 +24,16 @@ use App\Models\Status;
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Meeting> $meetings
+ * @property-read int|null $meetings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Sprint> $sprints
  * @property-read int|null $sprints_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Status> $statuses
  * @property-read int|null $statuses_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Task> $tasks
  * @property-read int|null $tasks_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $teamMembers
+ * @property-read int|null $team_members_count
  * @property-read User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newQuery()
@@ -101,5 +106,23 @@ class Project extends Model
     public function statuses(): HasMany
     {
         return $this->hasMany(Status::class);
+    }
+    
+    /**
+     * Get the meetings for the project.
+     */
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+    
+    /**
+     * Get the team members for the project.
+     */
+    public function teamMembers()
+    {
+        return $this->belongsToMany(User::class, 'project_members')
+            ->withPivot(['role'])
+            ->withTimestamps();
     }
 }

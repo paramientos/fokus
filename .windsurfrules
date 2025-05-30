@@ -1,4 +1,6 @@
 - Jira benzeri bir proje yönetim sistemi
+- Adı Projecta
+- mesela projede şunu istiyorum bir ekip ne yapar sabahları daily toplantısı yapar sonra buradan taskları ilerletir dailyde ekran paylaşır vs şimdi ben de aslında slack, jira, retro çıktıları gibi durumları buradan yapmak istiyorum kimse başka bir araç kullanmadan bunu yapabilsin
 - Laravel 12
 - TALL stack kullanılmıştır
 - Yarn kullan

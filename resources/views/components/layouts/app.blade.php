@@ -69,6 +69,7 @@
 
                 @if($project)
                     <x-menu-separator/>
+
                     <div class="px-4 py-2">
                         <p class="text-xs text-gray-500">CURRENT PROJECT</p>
                         <p class="font-medium">{{ $project->name }}</p>
@@ -78,7 +79,9 @@
                     <x-menu-item title="Board" icon="o-view-columns" link="/projects/{{ $project->id }}/board"/>
                     <x-menu-item title="Tasks" icon="o-clipboard-document-list"
                                  link="/projects/{{ $project->id }}/tasks"/>
-                    <x-menu-item title="Sprints" icon="o-calendar" link="/projects/{{ $project->id }}/sprints"/>
+                    <x-menu-item title="Sprints" icon="fas.calendar" link="/projects/{{ $project->id }}/sprints"/>
+                    <x-menu-item title="Meetings" icon="fas.calendar-alt" link="/projects/{{ $project->id }}/meetings"/>
+                    <x-menu-item title="Gantt Chart" icon="fas.chart-gantt" :link="route('tasks.gantt-chart', $project)"/>
                 @endif
             @endif
 
