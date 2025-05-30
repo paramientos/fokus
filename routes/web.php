@@ -47,6 +47,9 @@ Volt::route('/projects/{project}/board', 'board.index')->name('board.index');
 Volt::route('/projects/{project}/kanban', 'board.kanban')->name('board.kanban');
 Volt::route('/projects/{project}/kanban-board', 'tasks.kanban-board')->name('tasks.kanban-board');
 
+// Gantt Şeması
+Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');
+
 // Profil
 Volt::route('/profile', 'profile.index')->name('profile.index');
 

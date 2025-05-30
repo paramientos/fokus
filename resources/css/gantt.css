@@ -1,0 +1,133 @@
+/* Gantt Şeması Stilleri */
+.gantt-container {
+    position: relative;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Görev durumlarına göre renkler */
+.task-todo .bar {
+    fill: #3498db !important;
+}
+
+.task-progress .bar {
+    fill: #f39c12 !important;
+}
+
+.task-done .bar {
+    fill: #2ecc71 !important;
+}
+
+.task-blocked .bar {
+    fill: #e74c3c !important;
+}
+
+.task-review .bar {
+    fill: #9b59b6 !important;
+}
+
+.task-default .bar {
+    fill: #95a5a6 !important;
+}
+
+/* Gantt şeması başlık stilleri */
+.gantt .grid-header {
+    fill: #f8fafc;
+    stroke: #e2e8f0;
+}
+
+.gantt .grid-row {
+    fill: #ffffff;
+}
+
+.gantt .grid-row:nth-child(even) {
+    fill: #f8fafc;
+}
+
+.gantt .row-line {
+    stroke: #e2e8f0;
+}
+
+.gantt .tick {
+    stroke: #e2e8f0;
+}
+
+.gantt .today-highlight {
+    fill: rgba(249, 115, 22, 0.1);
+}
+
+/* Gantt popup stilleri */
+.gantt-popup {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    max-width: 300px;
+    z-index: 50;
+}
+
+.gantt-popup h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.gantt-popup p {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+/* Responsive tasarım için */
+@media (max-width: 768px) {
+    .gantt-container {
+        height: 400px !important;
+    }
+}
+
+/* Gantt kontrol paneli */
+.gantt-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.gantt-controls .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Futuristik görünüm için ek stiller */
+.gantt-chart-container {
+    background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.gantt-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gantt-title i {
+    color: #3b82f6;
+}
+
+/* Gantt şeması için animasyonlar */
+.gantt .bar-wrapper {
+    transition: transform 0.2s ease;
+}
+
+.gantt .bar-wrapper:hover {
+    transform: translateY(-2px);
+}
