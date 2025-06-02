@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Send meeting reminders 15 minutes before each meeting
         $schedule->command('meetings:send-reminders --minutes=15')
             ->everyMinute();
-            
+
         // Send meeting reminders 1 day before each meeting
         $schedule->command('meetings:send-reminders --minutes=1440')
             ->dailyAt('09:00');

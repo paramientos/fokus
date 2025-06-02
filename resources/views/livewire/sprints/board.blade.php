@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Status;
+
 new class extends Livewire\Volt\Component {
     public $project;
     public $sprint;
@@ -16,7 +18,7 @@ new class extends Livewire\Volt\Component {
     public function loadData()
     {
         // Proje durumlarını yükle
-        $this->statuses = \App\Models\Status::where('project_id', $this->project->id)
+        $this->statuses = Status::where('project_id', $this->project->id)
             ->orderBy('order')
             ->get();
 
@@ -26,20 +28,21 @@ new class extends Livewire\Volt\Component {
                 ['name' => 'To Do', 'slug' => 'todo', 'color' => '#3498db', 'order' => 1],
                 ['name' => 'In Progress', 'slug' => 'in-progress', 'color' => '#f39c12', 'order' => 2],
                 ['name' => 'Review', 'slug' => 'review', 'color' => '#9b59b6', 'order' => 3],
-                ['name' => 'Done', 'slug' => 'done', 'color' => '#2ecc71', 'order' => 4],
+                ['name' => 'Done', 'slug' => 'done', 'color' => '#2ecc71', 'order' => 4, 'is_completed' => true],
             ];
 
             foreach ($defaultStatuses as $status) {
-                \App\Models\Status::create([
+                Status::create([
                     'name' => $status['name'],
                     'slug' => $status['slug'],
                     'color' => $status['color'],
                     'order' => $status['order'],
                     'project_id' => $this->project->id,
+                    'is_completed' => $status['is_completed'] ?? false
                 ]);
             }
 
-            $this->statuses = \App\Models\Status::where('project_id', $this->project->id)
+            $this->statuses = Status::where('project_id', $this->project->id)
                 ->orderBy('order')
                 ->get();
         }
@@ -90,16 +93,20 @@ new class extends Livewire\Volt\Component {
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-2">
-                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" icon="o-arrow-left" class="btn-ghost btn-sm" />
+                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" icon="o-arrow-left"
+                          class="btn-ghost btn-sm"/>
                 <h1 class="text-2xl font-bold text-primary">Sprint Board: {{ $sprint->name }}</h1>
-                <div class="badge {{ $sprint->is_completed ? 'badge-info' : ($sprint->is_active ? 'badge-success' : 'badge-warning') }}">
+                <div
+                    class="badge {{ $sprint->is_completed ? 'badge-info' : ($sprint->is_active ? 'badge-success' : 'badge-warning') }}">
                     {{ $sprint->is_completed ? 'Completed' : ($sprint->is_active ? 'Active' : 'Planned') }}
                 </div>
             </div>
 
             <div class="flex gap-2">
-                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/report" label="View Report" icon="o-chart-bar" class="btn-outline" />
-                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Add Task" icon="o-plus" class="btn-primary" />
+                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/report" label="View Report"
+                          icon="o-chart-bar" class="btn-outline"/>
+                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Add Task" icon="o-plus"
+                          class="btn-primary"/>
             </div>
         </div>
 
@@ -149,7 +156,8 @@ new class extends Livewire\Volt\Component {
                                     <div class="card-body p-3">
                                         <div class="flex justify-between items-start">
                                             <h3 class="font-medium text-sm">
-                                                <a href="/projects/{{ $project->id }}/tasks/{{ $task['id'] }}" class="link link-hover">
+                                                <a href="/projects/{{ $project->id }}/tasks/{{ $task['id'] }}"
+                                                   class="link link-hover">
                                                     {{ $project->key }}-{{ $task['id'] }}
                                                 </a>
                                             </h3>
@@ -170,8 +178,10 @@ new class extends Livewire\Volt\Component {
                                             @if(isset($task['user']) && $task['user'])
                                                 <div class="flex items-center gap-1">
                                                     <div class="avatar placeholder">
-                                                        <div class="bg-neutral text-neutral-content rounded-full w-5 h-5">
-                                                            <span class="text-xs">{{ substr($task['user']['name'], 0, 1) }}</span>
+                                                        <div
+                                                            class="bg-neutral text-neutral-content rounded-full w-5 h-5">
+                                                            <span
+                                                                class="text-xs">{{ substr($task['user']['name'], 0, 1) }}</span>
                                                         </div>
                                                     </div>
                                                     <span class="text-xs">{{ $task['user']['name'] }}</span>

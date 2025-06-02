@@ -117,7 +117,7 @@
 
                                         <!-- Timeline items -->
                                         <ul class="space-y-6 relative">
-                                            @foreach($task->activities as $activity)
+                                            @foreach($task->latestActivities as $activity)
                                                 <li class="ml-10 relative">
                                                     <!-- Timeline dot with icon -->
                                                     <div

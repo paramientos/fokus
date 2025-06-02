@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->string('color')->default('#3498db');
             $table->integer('order')->default(0);
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+
+            $table->unique(['project_id', 'slug'], 'statuses_project_id_slug_unique');
         });
     }
 

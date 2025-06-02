@@ -21,6 +21,7 @@
     "dependencies": {
         "dragula": "^3.7.3",
         "frappe-gantt": "^1.0.3",
-        "html2canvas": "^1.4.1"
+        "html2canvas": "^1.4.1",
+        "sortablejs": "^1.15.6"
     }
 }

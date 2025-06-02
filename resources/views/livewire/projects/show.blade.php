@@ -84,8 +84,7 @@ new class extends Livewire\Volt\Component {
             <a wire:click="setTab('sprints')"
                class="tab {{ $selectedTab === 'sprints' ? 'tab-active' : '' }}">Sprints</a>
             <a wire:click="setTab('team')" class="tab {{ $selectedTab === 'team' ? 'tab-active' : '' }}">Team Members</a>
-            <a wire:click="setTab('daily')" class="tab {{ $selectedTab === 'daily' ? 'tab-active' : '' }}">Daily Meeting</a>
-            <a wire:click="setTab('chat')" class="tab {{ $selectedTab === 'chat' ? 'tab-active' : '' }}">Team Chat</a>
+            <a wire:click="setTab('status')" onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" class="tab {{ $selectedTab === 'status' ? 'tab-active' : '' }}">Status</a>
             <a wire:click="setTab('settings')" class="tab {{ $selectedTab === 'settings' ? 'tab-active' : '' }}">Settings</a>
         </div>
 
@@ -290,14 +289,9 @@ new class extends Livewire\Volt\Component {
                 <livewire:projects.team-members :project="$project" />
             @endif
 
-            <!-- Daily Meeting Tab -->
-            @if($selectedTab === 'daily')
-                <livewire:projects.daily-meeting :project="$project" />
-            @endif
-
-            <!-- Team Chat Tab -->
-            @if($selectedTab === 'chat')
-                <livewire:projects.team-chat :project="$project->id" />
+            <!-- Status Tab -->
+            @if($selectedTab === 'status')
+                <livewire:projects.status-manager :project="$project" />
             @endif
 
             <!-- Settings Tab -->

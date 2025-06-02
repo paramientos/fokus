@@ -58,7 +58,8 @@
             <x-menu-item title="Projects" icon="o-folder" link="/projects"/>
 
             @if(request()->routeIs('projects.show') || request()->routeIs('projects.edit') ||
-                request()->routeIs('tasks.*') || request()->routeIs('sprints.*') || request()->routeIs('board.*'))
+                request()->routeIs('tasks.*') || request()->routeIs('sprints.*') || request()->routeIs('board.*')
+                ||request()->routeIs('projects.*'))
                 @php
                     $project = request()->route('project');
 
@@ -111,5 +112,8 @@
 
     {{--  TOAST area --}}
     <x-toast />
+    
+    {{-- Stack for page specific scripts --}}
+    @stack('scripts')
 </body>
 </html>

@@ -14,6 +14,9 @@ Volt::route('/projects/create', 'projects.create')->name('projects.create');
 Volt::route('/projects/{project}', 'projects.show')->name('projects.show');
 Volt::route('/projects/{project}/edit', 'projects.edit')->name('projects.edit');
 
+// Proje Statü Yönetimi
+Volt::route('/projects/{project}/statuses', 'projects.status-manager')->name('projects.statuses');
+
 // Proje Üyeleri
 Volt::route('/projects/{project}/members', 'projects.members.index')->name('projects.members.index');
 
@@ -36,6 +39,9 @@ Volt::route('/projects/{project}/sprints/{sprint}/retrospective', 'sprints.retro
 Volt::route('/projects/{project}/sprints/calendar', 'sprints.calendar')->name('sprints.calendar');
 
 // Aktivite Zaman Çizelgesi
+
+// Proje Kanban Board ve Statü Geçiş Yönetimi
+Volt::route('/projects/{project}/status-transitions', 'projects.status-transition-manager')->name('projects.status-transitions');
 Volt::route('/projects/{project}/activities', 'activities.timeline')->name('activities.timeline');
 Volt::route('/projects/{project}/tasks/{task}/activities', 'activities.timeline')->name('activities.timeline');
 Volt::route('/projects/{project}/sprints/{sprint}/activities', 'activities.timeline')->name('activities.timeline');
@@ -52,6 +58,7 @@ Volt::route('/projects/{project}/kanban-board', 'tasks.kanban-board')->name('tas
 
 // Gantt Şeması
 Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');
+
 
 // Toplantılar
 Volt::route('/meetings', 'meetings.index')->name('meetings.index');

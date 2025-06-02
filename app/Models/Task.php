@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -185,6 +185,11 @@ class Task extends Model
     public function activities()
     {
         return $this->hasMany(\App\Models\Activity::class, 'task_id');
+    }
+
+    public function latestActivities()
+    {
+        return $this->hasMany(\App\Models\Activity::class, 'task_id')->latest();
     }
 
     /**

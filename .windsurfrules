@@ -1,5 +1,5 @@
 - Jira benzeri bir proje yönetim sistemi
-- Adı Projecta
+- Adı Fokus
 - mesela projede şunu istiyorum bir ekip ne yapar sabahları daily toplantısı yapar sonra buradan taskları ilerletir dailyde ekran paylaşır vs şimdi ben de aslında slack, jira, retro çıktıları gibi durumları buradan yapmak istiyorum kimse başka bir araç kullanmadan bunu yapabilsin
 - Laravel 12
 - TALL stack kullanılmıştır
@@ -16,7 +16,7 @@ Postgres 15
 - Icon set olarak fas kullan örnek fas.user gibi ("owenvoke/blade-fontawesome": "^2.9" kullanılıyor)
 - Laravel Livewire Volt kullan, örneğin:
 - dosyalar şöyle başlayacak
-MaryUI 2 kullan (https://mary-ui.com/docs/installation)
+MaryUI 2 kullan (https://mary-ui.com/docs/installation) <x-component></x-component> şeklinde x-mary-input değil x-input gibi
 
 <?php
     new class extends Livewire\Component {

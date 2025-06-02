@@ -1,6 +1,12 @@
 <?php
 
+use App\Models\StatusTransition;
+use App\Models\Task;
+use Carbon\Carbon;
+
 new class extends Livewire\Volt\Component {
+    use \Mary\Traits\Toast;
+
     public $project;
     public $statuses = [];
     public $tasks = [];
@@ -25,17 +31,39 @@ new class extends Livewire\Volt\Component {
 
     public function updateTaskStatus($taskId, $statusId)
     {
-        $task = \App\Models\Task::find($taskId);
-        if ($task) {
-            $task->update(['status_id' => $statusId]);
-            $this->loadBoard();
+        $task = Task::find($taskId);
+        if (!$task) {
+            $this->error('Task bulunamadı!');
+            return;
         }
+
+        // Statü geçiş kontrolü
+        $fromStatusId = $task->status_id;
+        $allowed = StatusTransition::where('project_id', $this->project->id)
+            ->where('from_status_id', $fromStatusId)
+            ->where('to_status_id', $statusId)
+            ->exists();
+
+        // Aynı statüye sürüklemeye izin ver
+        if ($fromStatusId == $statusId) {
+            $allowed = true;
+        }
+
+        if (!$allowed) {
+            $this->error('Bu durum geçişine izin verilmiyor!');
+            $this->loadBoard();
+            return;
+        }
+
+        $task->update(['status_id' => $statusId]);
+        $this->success('Task durumu güncellendi!');
+        $this->loadBoard();
     }
 
     public function viewTask($taskId)
     {
         $this->selectedTask = $taskId;
-        $this->selectedTaskDetails = \App\Models\Task::with(['user', 'reporter', 'status', 'comments.user'])
+        $this->selectedTaskDetails = Task::with(['user', 'reporter', 'status', 'comments.user'])
             ->find($taskId)
             ->toArray();
     }
@@ -55,12 +83,13 @@ new class extends Livewire\Volt\Component {
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-2">
-                <x-button link="/projects/{{ $project->id }}" icon="o-arrow-left" class="btn-ghost btn-sm" />
+                <x-button link="/projects/{{ $project->id }}" icon="o-arrow-left" class="btn-ghost btn-sm"/>
                 <h1 class="text-2xl font-bold text-primary">{{ $project->name }} Board</h1>
             </div>
 
             <div class="flex gap-2">
-                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus" class="btn-primary" />
+                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
+                          class="btn-primary"/>
             </div>
         </div>
 
@@ -90,7 +119,7 @@ new class extends Livewire\Volt\Component {
                         >
                             @if(empty($tasks[$status->id]))
                                 <div class="flex flex-col items-center justify-center h-32 text-gray-400">
-                                    <x-icon name="o-inbox" class="w-8 h-8" />
+                                    <x-icon name="o-inbox" class="w-8 h-8"/>
                                     <p class="text-sm mt-2">No tasks</p>
                                 </div>
                             @else
@@ -109,7 +138,8 @@ new class extends Livewire\Volt\Component {
                                         >
                                             <div class="card-body p-3">
                                                 <div class="flex justify-between items-start">
-                                                    <h4 class="font-medium text-sm">{{ $project->key }}-{{ $task['id'] }}</h4>
+                                                    <h4 class="font-medium text-sm">{{ $project->key }}
+                                                        -{{ $task['id'] }}</h4>
                                                     @if($task['priority'])
                                                         <div class="badge badge-sm {{
                                                             $task['priority'] === 'high' ? 'badge-error' :
@@ -124,7 +154,10 @@ new class extends Livewire\Volt\Component {
                                                 <div class="flex justify-between items-center mt-2">
                                                     <div class="flex items-center gap-1">
                                                         @if($task['story_points'])
-                                                            <div class="badge badge-sm badge-outline">{{ $task['story_points'] }}p</div>
+                                                            <div
+                                                                class="badge badge-sm badge-outline">{{ $task['story_points'] }}
+                                                                p
+                                                            </div>
                                                         @endif
 
                                                         @if($task['task_type'])
@@ -136,8 +169,10 @@ new class extends Livewire\Volt\Component {
 
                                                     @if(!empty($task['user']))
                                                         <div class="avatar placeholder">
-                                                            <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                                                <span class="text-xs">{{ substr($task['user']['name'] ?? 'U', 0, 1) }}</span>
+                                                            <div
+                                                                class="bg-neutral text-neutral-content rounded-full w-6">
+                                                                <span
+                                                                    class="text-xs">{{ substr($task['user']['name'] ?? 'U', 0, 1) }}</span>
                                                             </div>
                                                         </div>
                                                     @endif
@@ -159,7 +194,8 @@ new class extends Livewire\Volt\Component {
                 <div class="modal-box max-w-3xl">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="text-lg font-bold">{{ $project->key }}-{{ $selectedTaskDetails['id'] }}: {{ $selectedTaskDetails['title'] }}</h3>
+                            <h3 class="text-lg font-bold">{{ $project->key }}-{{ $selectedTaskDetails['id'] }}
+                                : {{ $selectedTaskDetails['title'] }}</h3>
                             <div class="flex gap-2 mt-1">
                                 @if($selectedTaskDetails['task_type'])
                                     <div class="badge">{{ ucfirst($selectedTaskDetails['task_type']) }}</div>
@@ -175,7 +211,8 @@ new class extends Livewire\Volt\Component {
                                 @endif
 
                                 @if($selectedTaskDetails['story_points'])
-                                    <div class="badge badge-outline">{{ $selectedTaskDetails['story_points'] }} points</div>
+                                    <div class="badge badge-outline">{{ $selectedTaskDetails['story_points'] }}points
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -208,13 +245,16 @@ new class extends Livewire\Volt\Component {
                                                 <div class="flex justify-between items-center mb-2">
                                                     <div class="flex items-center gap-2">
                                                         <div class="avatar placeholder">
-                                                            <div class="bg-neutral text-neutral-content rounded-full w-8">
+                                                            <div
+                                                                class="bg-neutral text-neutral-content rounded-full w-8">
                                                                 <span>{{ substr($comment['user']['name'] ?? 'U', 0, 1) }}</span>
                                                             </div>
                                                         </div>
-                                                        <span class="font-medium">{{ $comment['user']['name'] ?? 'Unknown User' }}</span>
+                                                        <span
+                                                            class="font-medium">{{ $comment['user']['name'] ?? 'Unknown User' }}</span>
                                                     </div>
-                                                    <span class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($comment['created_at'])->diffForHumans() }}</span>
+                                                    <span
+                                                        class="text-sm text-gray-500">{{ Carbon::parse($comment['created_at'])->diffForHumans() }}</span>
                                                 </div>
                                                 <p>{{ $comment['content'] }}</p>
                                             </div>
@@ -223,9 +263,9 @@ new class extends Livewire\Volt\Component {
                                 @endif
 
                                 <div class="mt-4">
-                                    <x-textarea placeholder="Add a comment..." rows="2" />
+                                    <x-textarea placeholder="Add a comment..." rows="2"/>
                                     <div class="mt-2 flex justify-end">
-                                        <x-button label="Add Comment" class="btn-primary btn-sm" />
+                                        <x-button label="Add Comment" class="btn-primary btn-sm"/>
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +276,8 @@ new class extends Livewire\Volt\Component {
                             <div class="space-y-4">
                                 <div>
                                     <p class="text-sm text-gray-500">Status</p>
-                                    <div class="badge mt-1" style="background-color: {{ $selectedTaskDetails['status']['color'] ?? '#ccc' }}">
+                                    <div class="badge mt-1"
+                                         style="background-color: {{ $selectedTaskDetails['status']['color'] ?? '#ccc' }}">
                                         {{ $selectedTaskDetails['status']['name'] ?? 'Unknown' }}
                                     </div>
                                 </div>
@@ -285,25 +326,27 @@ new class extends Livewire\Volt\Component {
                                 @if($selectedTaskDetails['due_date'])
                                     <div>
                                         <p class="text-sm text-gray-500">Due Date</p>
-                                        <p class="mt-1">{{ \Carbon\Carbon::parse($selectedTaskDetails['due_date'])->format('M d, Y') }}</p>
+                                        <p class="mt-1">{{ Carbon::parse($selectedTaskDetails['due_date'])->format('M d, Y') }}</p>
                                     </div>
                                 @endif
 
                                 <div>
                                     <p class="text-sm text-gray-500">Created</p>
-                                    <p class="mt-1">{{ \Carbon\Carbon::parse($selectedTaskDetails['created_at'])->format('M d, Y H:i') }}</p>
+                                    <p class="mt-1">{{ Carbon::parse($selectedTaskDetails['created_at'])->format('M d, Y H:i') }}</p>
                                 </div>
 
                                 <div>
                                     <p class="text-sm text-gray-500">Updated</p>
-                                    <p class="mt-1">{{ \Carbon\Carbon::parse($selectedTaskDetails['updated_at'])->format('M d, Y H:i') }}</p>
+                                    <p class="mt-1">{{ Carbon::parse($selectedTaskDetails['updated_at'])->format('M d, Y H:i') }}</p>
                                 </div>
                             </div>
 
                             <div class="divider"></div>
 
                             <div class="flex flex-col gap-2">
-                                <x-button link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit" label="Edit Task" icon="o-pencil" class="btn-outline w-full" />
+                                <x-button
+                                    link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit"
+                                    label="Edit Task" icon="o-pencil" class="btn-outline w-full"/>
                             </div>
                         </div>
                     </div>
