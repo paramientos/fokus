@@ -176,7 +176,7 @@ new class extends Livewire\Volt\Component {
         </div>
 
         <!-- Delete Sprint Modal -->
-        <x-modal name="delete-sprint-modal" title="Delete Sprint">
+        <x-modal wire:model="showDeleteModal" name="delete-sprint-modal" title="Delete Sprint">
             <div class="p-4">
                 <h3 class="text-lg font-bold">Are you sure you want to delete this sprint?</h3>
                 <p class="py-4">This action cannot be undone. All tasks in this sprint will be unassigned from it.</p>

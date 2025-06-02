@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $title
@@ -26,11 +26,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $due_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $workflow_id
  * @property int|null $time_spent Time spent in minutes
  * @property int|null $time_estimate Time estimate in minutes
  * @property \Illuminate\Support\Carbon|null $started_at When the task was started
  * @property \Illuminate\Support\Carbon|null $completed_at When the task was completed
+ * @property int|null $workflow_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\User|null $assignee
@@ -42,6 +42,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $dependencies_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Task> $dependents
  * @property-read int|null $dependents_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Activity> $latestActivities
+ * @property-read int|null $latest_activities_count
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\User $reporter
  * @property-read \App\Models\Sprint|null $sprint
@@ -49,6 +51,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $wikiPages
+ * @property-read int|null $wiki_pages_count
  * @property-read \App\Models\Workflow|null $workflow
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newQuery()
@@ -225,6 +229,15 @@ class Task extends Model
     {
         return $this->belongsToMany(Task::class, 'task_dependencies', 'dependency_id', 'task_id')
             ->withPivot('type')
+            ->withTimestamps();
+    }
+    
+    /**
+     * Bu task'tan oluşturulan wiki sayfaları
+     */
+    public function wikiPages()
+    {
+        return $this->morphToMany(WikiPage::class, 'source', 'wiki_source_references')
             ->withTimestamps();
     }
 }

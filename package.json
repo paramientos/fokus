@@ -20,8 +20,10 @@
     },
     "dependencies": {
         "dragula": "^3.7.3",
+        "easymde": "^2.20.0",
         "frappe-gantt": "^1.0.3",
         "html2canvas": "^1.4.1",
-        "sortablejs": "^1.15.6"
+        "sortablejs": "^1.15.6",
+        "trix": "^2.1.15"
     }
 }

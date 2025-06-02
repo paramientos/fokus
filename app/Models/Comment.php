@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Task $task
  * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $wikiPages
+ * @property-read int|null $wiki_pages_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Comment query()
@@ -57,5 +59,14 @@ class Comment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    
+    /**
+     * Bu yorumdan oluşturulan wiki sayfaları
+     */
+    public function wikiPages()
+    {
+        return $this->morphToMany(WikiPage::class, 'source', 'wiki_source_references')
+            ->withTimestamps();
     }
 }

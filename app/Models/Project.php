@@ -35,6 +35,10 @@ use App\Models\Meeting;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $teamMembers
  * @property-read int|null $team_members_count
  * @property-read User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiCategory> $wikiCategories
+ * @property-read int|null $wiki_categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $wikiPages
+ * @property-read int|null $wiki_pages_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project query()
@@ -124,5 +128,21 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_members')
             ->withPivot(['role'])
             ->withTimestamps();
+    }
+    
+    /**
+     * Get the wiki pages for the project.
+     */
+    public function wikiPages(): HasMany
+    {
+        return $this->hasMany(WikiPage::class);
+    }
+    
+    /**
+     * Get the wiki categories for the project.
+     */
+    public function wikiCategories(): HasMany
+    {
+        return $this->hasMany(WikiCategory::class);
     }
 }

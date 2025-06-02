@@ -7,6 +7,7 @@
     <title>{{ isset($title) ? $title.' - '.config('app.name') : config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200">
 
@@ -56,10 +57,11 @@
 
             <x-menu-item title="Dashboard" icon="o-home" link="/"/>
             <x-menu-item title="Projects" icon="o-folder" link="/projects"/>
+            <x-menu-item title="Wiki" icon="fas.book" link="/wiki"/>
 
             @if(request()->routeIs('projects.show') || request()->routeIs('projects.edit') ||
                 request()->routeIs('tasks.*') || request()->routeIs('sprints.*') || request()->routeIs('board.*')
-                ||request()->routeIs('projects.*'))
+                ||request()->routeIs('projects.*') || request()->routeIs('wiki.*'))
                 @php
                     $project = request()->route('project');
 
@@ -82,7 +84,9 @@
                                  link="/projects/{{ $project->id }}/tasks"/>
                     <x-menu-item title="Sprints" icon="fas.calendar" link="/projects/{{ $project->id }}/sprints"/>
                     <x-menu-item title="Meetings" icon="fas.calendar-alt" link="/projects/{{ $project->id }}/meetings"/>
-                    <x-menu-item title="Gantt Chart" icon="fas.chart-gantt" :link="route('tasks.gantt-chart', $project)"/>
+                    <x-menu-item title="Wiki" icon="fas.book" link="/projects/{{ $project->id }}/wiki"/>
+                    <x-menu-item title="Gantt Chart" icon="fas.chart-gantt"
+                                 :link="route('tasks.gantt-chart', $project)"/>
                 @endif
             @endif
 
@@ -107,13 +111,13 @@
         @endif
 
         {{ $slot }}
-        </x-slot:content>
-    </x-main>
+    </x-slot:content>
+</x-main>
 
-    {{--  TOAST area --}}
-    <x-toast />
-    
-    {{-- Stack for page specific scripts --}}
-    @stack('scripts')
+{{--  TOAST area --}}
+<x-toast/>
+
+{{-- Stack for page specific scripts --}}
+@stack('scripts')
 </body>
 </html>

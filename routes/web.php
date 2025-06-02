@@ -72,6 +72,12 @@ Volt::route('/projects/{project}/meetings', 'meetings.index')->name('projects.me
 Route::get('/meetings/export/ics/{id?}', [MeetingExportController::class, 'exportICalendar'])->name('meetings.export.ics');
 Route::get('/meetings/export/csv/{id?}', [MeetingExportController::class, 'exportCsv'])->name('meetings.export.csv');
 
+// Wiki
+Volt::route('/wiki', 'wiki.main')->name('wiki.main');
+Volt::route('/projects/{project}/wiki', 'wiki.index')->name('wiki.index');
+Volt::route('/projects/{project}/wiki/create', 'wiki.create')->name('wiki.create');
+Volt::route('/projects/{project}/wiki/{slug}', 'wiki.show')->name('wiki.show');
+
 // Profil
 Volt::route('/profile', 'profile.index')->name('profile.index');
 

@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  *
  * @property int $id
  * @property string $filename
- * @property string $original_filename
+ * @property string $path
  * @property string $mime_type
  * @property int $size File size in bytes
- * @property string $path
+ * @property string|null $description
  * @property int|null $user_id
  * @property string $attachable_type
  * @property int $attachable_id
@@ -33,10 +33,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereAttachableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereAttachableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereFilename($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereMimeType($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereOriginalFilename($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment wherePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereUpdatedAt($value)
