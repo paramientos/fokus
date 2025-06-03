@@ -20,6 +20,7 @@
                 <!-- Tabs -->
                 <x-tabs selected="details">
                     <x-tab name="details" label="Details" icon="o-document-text" wire:click="setActiveTab('details')">
+
                         <!-- Task Description -->
                         <div class="card bg-base-100 shadow-xl mb-6">
                             <div class="card-body">
@@ -337,6 +338,15 @@
                         </div>
                     </x-tab>
 
+                    <x-tab name="conversations" label="İletişim" icon="fas.comments" wire:click="setActiveTab('conversations')">                        
+                        <!-- Konuşmalar -->
+                        <div class="card bg-base-100 shadow-xl mb-6">
+                            <div class="card-body">
+                                <livewire:conversations.index :project="$project" :task="$task" />
+                            </div>
+                        </div>
+                    </x-tab>
+                    
                     <x-tab name="dependencies" label="Dependencies" icon="o-link"
                            wire:click="setActiveTab('dependencies')">
                         <!-- Dependencies -->

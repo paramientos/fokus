@@ -302,39 +302,39 @@ new class extends Livewire\Volt\Component {
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="card-title">Proje Wiki</h2>
                             <div class="flex gap-2">
-                                <x-button 
-                                    link="/projects/{{ $project->id }}/wiki" 
-                                    label="Wiki'ye Git" 
-                                    icon="o-arrow-right" 
+                                <x-button
+                                    link="/projects/{{ $project->id }}/wiki"
+                                    label="Wiki'ye Git"
+                                    icon="o-arrow-right"
                                     class="btn-primary"
                                 />
                             </div>
                         </div>
-                        
+
                         <div class="py-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <h3 class="text-lg font-medium mb-3">Otomatik Dokümantasyon</h3>
                                     <p class="mb-4">Fokus, task açıklamaları ve yorumlarından otomatik olarak wiki sayfaları oluşturabilir. Bu özellik sayesinde:</p>
-                                    
+
                                     <ul class="list-disc pl-5 space-y-2 mb-4">
                                         <li>Task'larınız ve yorumlarınız otomatik olarak dokümantasyona dönüşür</li>
                                         <li>Statülere ve task tiplerine göre kategorize edilmiş wiki sayfaları oluşturulur</li>
                                         <li>Teknik ve kullanıcı dokümantasyonu otomatik olarak güncellenir</li>
                                         <li>Proje ilerledikçe dokümantasyon her zaman güncel kalır</li>
                                     </ul>
-                                    
-                                    <x-button 
-                                        link="/projects/{{ $project->id }}/wiki" 
-                                        label="Wiki'yi Görüntüle" 
-                                        icon="o-document-text" 
+
+                                    <x-button
+                                        link="/projects/{{ $project->id }}/wiki"
+                                        label="Wiki'yi Görüntüle"
+                                        icon="o-document-text"
                                         class="btn-outline"
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <h3 class="text-lg font-medium mb-3">Nasıl Çalışır?</h3>
-                                    
+
                                     <div class="space-y-4">
                                         <div class="flex items-start gap-3">
                                             <div class="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">1</div>
@@ -343,7 +343,7 @@ new class extends Livewire\Volt\Component {
                                                 <p class="text-sm text-gray-500">Normal iş akışınızda task'ları oluşturun, açıklamalar ekleyin ve yorumlar yapın.</p>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="flex items-start gap-3">
                                             <div class="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">2</div>
                                             <div>
@@ -351,7 +351,7 @@ new class extends Livewire\Volt\Component {
                                                 <p class="text-sm text-gray-500">Wiki sayfasındaki "Otomatik Dokümantasyon Oluştur" butonuna tıklayın.</p>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="flex items-start gap-3">
                                             <div class="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">3</div>
                                             <div>
@@ -359,7 +359,7 @@ new class extends Livewire\Volt\Component {
                                                 <p class="text-sm text-gray-500">Oluşturulan wiki sayfalarını görüntüleyin, gerekirse manuel olarak düzenleyin.</p>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="flex items-start gap-3">
                                             <div class="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">4</div>
                                             <div>
@@ -374,7 +374,7 @@ new class extends Livewire\Volt\Component {
                     </div>
                 </div>
             @endif
-            
+
             <!-- Settings Tab -->
             @if($selectedTab === 'settings')
                 <div class="card bg-base-100 shadow-xl">
@@ -453,6 +453,15 @@ new class extends Livewire\Volt\Component {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Konuşmalar Sekmesi -->
+            @if($selectedTab === 'conversations')
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <livewire:conversations.index :project="$project" />
                     </div>
                 </div>
             @endif
