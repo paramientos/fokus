@@ -13,14 +13,17 @@
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "daisyui": "^5.0.42",
+        "laravel-echo": "^2.1.4",
         "laravel-vite-plugin": "^1.2.0",
         "postcss": "^8.5.4",
+        "pusher-js": "^8.4.0",
         "tailwindcss": "^4.1.8",
         "vite": "^6.2.4"
     },
     "dependencies": {
         "dragula": "^3.7.3",
         "easymde": "^2.20.0",
+        "expo-network": "^7.1.5",
         "frappe-gantt": "^1.0.3",
         "html2canvas": "^1.4.1",
         "sortablejs": "^1.15.6",
