@@ -126,7 +126,7 @@ new class extends Livewire\Volt\Component {
 
             <!-- Önerilen Görevler Bileşeni -->
             <div class="col-span-1 md:col-span-2">
-                <livewire:tasks.recommendations :project="$latestProject" />
+                <livewire:tasks.recommendations :project="$latestProject"/>
             </div>
 
             <!-- Project Statistics -->
@@ -152,32 +152,35 @@ new class extends Livewire\Volt\Component {
                 </div>
             </div>
 
-            <!-- Activity Timeline -->
-            <div class="card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">Recent Activity</h2>
-                    <x-button link="/projects/{{ $latestProject->id }}/activities" label="Activity Timeline" icon="fas.clock-rotate-left" class="btn-outline mb-4" />
-                    <div class="py-4">
-                        <ul class="timeline timeline-vertical">
-                            @foreach($tasks->take(5) as $index => $task)
-                                <li>
-                                    <div class="timeline-start">{{ $task->created_at->diffForHumans() }}</div>
-                                    <div class="timeline-middle">
-                                        <x-icon name="fas.circle" class="text-primary"/>
-                                    </div>
-                                    <div class="timeline-end timeline-box">
-                                        <p class="font-bold">{{ $task->title }}</p>
-                                        <p class="text-sm">Created in {{ $task->project->name }}</p>
-                                    </div>
-                                    @if($index < count($tasks->take(5)) - 1)
-                                        <hr/>
-                                    @endif
-                                </li>
-                            @endforeach
-                        </ul>
+            @if ($latestProject)
+                <!-- Activity Timeline -->
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <x-button link="/projects/{{ $latestProject->id }}/activities" label="Activity Timeline"
+                                  icon="fas.clock-rotate-left" class="btn-outline mb-4"/>
+                        <div class="py-4">
+                            <ul class="timeline timeline-vertical">
+                                @foreach($tasks->take(5) as $index => $task)
+                                    <li>
+                                        <div class="timeline-start">{{ $task->created_at->diffForHumans() }}</div>
+                                        <div class="timeline-middle">
+                                            <x-icon name="fas.circle" class="text-primary"/>
+                                        </div>
+                                        <div class="timeline-end timeline-box">
+                                            <p class="font-bold">{{ $task->title }}</p>
+                                            <p class="text-sm">Created in {{ $task->project->name }}</p>
+                                        </div>
+                                        @if($index < count($tasks->take(5)) - 1)
+                                            <hr/>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 </div>
