@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * 
@@ -137,5 +138,51 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'project_members')
             ->withPivot(['role'])
             ->withTimestamps();
+    }
+    
+    /**
+     * Kullanıcının katıldığı konuşmalar
+     */
+    public function conversations(): BelongsToMany
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_participants')
+            ->withPivot(['is_admin', 'last_read_at', 'joined_at', 'left_at'])
+            ->withTimestamps();
+    }
+    
+    /**
+     * Kullanıcının oluşturduğu konuşmalar
+     */
+    public function createdConversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'created_by');
+    }
+    
+    /**
+     * Kullanıcının gönderdiği mesajlar
+     */
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+    
+    /**
+     * Kullanıcının okunmamış mesajlarını getir
+     */
+    public function unreadMessages()
+    {
+        return $this->messages()->whereNull('read_at');
+    }
+    
+    /**
+     * Kullanıcının aktif olduğu konuşmaları getir
+     */
+    public function activeConversations()
+    {
+        return $this->conversations()
+            ->whereHas('participants', function (Builder $query) {
+                $query->where('user_id', $this->id)
+                      ->whereNull('left_at');
+            });
     }
 }

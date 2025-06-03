@@ -11,6 +11,7 @@ use App\Models\Task;
 use App\Models\Sprint;
 use App\Models\Status;
 use App\Models\Meeting;
+use App\Models\Conversation;
 
 /**
  * 
@@ -144,5 +145,13 @@ class Project extends Model
     public function wikiCategories(): HasMany
     {
         return $this->hasMany(WikiCategory::class);
+    }
+    
+    /**
+     * Get the conversations for the project.
+     */
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
     }
 }

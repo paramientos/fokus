@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * 
@@ -96,5 +97,13 @@ class Sprint extends Model
     public function activities(): HasMany
     {
         return $this->hasMany(Activity::class);
+    }
+    
+    /**
+     * Sprint ile ilişkili konuşmalar
+     */
+    public function conversations(): MorphMany
+    {
+        return $this->morphMany(Conversation::class, 'context');
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * 
@@ -239,5 +240,13 @@ class Task extends Model
     {
         return $this->morphToMany(WikiPage::class, 'source', 'wiki_source_references')
             ->withTimestamps();
+    }
+    
+    /**
+     * Görev ile ilişkili konuşmalar
+     */
+    public function conversations()
+    {
+        return $this->morphMany(Conversation::class, 'context');
     }
 }
