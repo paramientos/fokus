@@ -129,6 +129,7 @@ new class extends Livewire\Volt\Component {
     public function addCustomHeader()
     {
         if (empty($this->newHeaderKey)) return;
+
         $this->customHeaders[$this->newHeaderKey] = $this->newHeaderValue;
         $this->newHeaderKey = '';
         $this->newHeaderValue = '';
@@ -236,14 +237,7 @@ new class extends Livewire\Volt\Component {
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <h3 class="text-lg font-medium">İstek Detayları</h3>
-                            <x-button wire:click="execute" wire:loading.attr="disabled" class="w-full md:w-auto">
-                                <span wire:loading wire:target="execute">
-                                    <i class="fas fa-spinner fa-spin mr-2"></i> Gönderiliyor...
-                                </span>
-                                <span wire:loading.remove wire:target="execute">
-                                    <i class="fas fa-paper-plane mr-2"></i> Gönder
-                                </span>
-                            </x-button>
+                            <x-button wire:click="execute" label="Send" class="w-full md:w-auto" spinner />
                         </div>
 
                         <div class="space-y-2 text-sm">
@@ -295,9 +289,8 @@ new class extends Livewire\Volt\Component {
                                 @foreach($customHeaders as $key => $value)
                                     <div class="flex items-center justify-between text-sm mb-1 p-1 bg-gray-50 rounded">
                                         <span><strong>{{ $key }}:</strong> {{ $value }}</span>
-                                        <button type="button" wire:click="removeCustomHeader('{{ $key }}')"
-                                                class="text-red-500 hover:text-red-700 ml-2"><i
-                                                class="fas fa-times"></i></button>
+                                        <x-button type="button" wire:click="removeCustomHeader('{{ $key }}')"
+                                                  class="text-red-500 hover:text-red-700 ml-2"  icon="fas.times"/>
                                     </div>
                                 @endforeach
                             @else
@@ -306,7 +299,7 @@ new class extends Livewire\Volt\Component {
                             <div class="flex space-x-1 mt-2">
                                 <x-input wire:model="newHeaderKey" placeholder="Header Adı" class="text-sm flex-1"/>
                                 <x-input wire:model="newHeaderValue" placeholder="Değer" class="text-sm flex-1"/>
-                                <x-button wire:click="addCustomHeader" size="sm"><i class="fas fa-plus"></i></x-button>
+                                <x-button wire:click="addCustomHeader" size="sm" icon="fas.plus"/>
                             </div>
                         </div>
 
@@ -317,9 +310,8 @@ new class extends Livewire\Volt\Component {
                                 @foreach($customParams as $key => $value)
                                     <div class="flex items-center justify-between text-sm mb-1 p-1 bg-gray-50 rounded">
                                         <span><strong>{{ $key }}:</strong> {{ $value }}</span>
-                                        <button type="button" wire:click="removeCustomParam('{{ $key }}')"
-                                                class="text-red-500 hover:text-red-700 ml-2"><i
-                                                class="fas fa-times"></i></button>
+                                        <x-button type="button" wire:click="removeCustomParam('{{ $key }}')"
+                                                class="text-red-500 hover:text-red-700 ml-2"  icon="fas.times"/>
                                     </div>
                                 @endforeach
                             @else
@@ -328,7 +320,7 @@ new class extends Livewire\Volt\Component {
                             <div class="flex space-x-1 mt-2">
                                 <x-input wire:model="newParamKey" placeholder="Parametre Adı" class="text-sm flex-1"/>
                                 <x-input wire:model="newParamValue" placeholder="Değer" class="text-sm flex-1"/>
-                                <x-button wire:click="addCustomParam" size="sm"><i class="fas fa-plus"></i></x-button>
+                                <x-button wire:click="addCustomParam" size="sm" icon="fas.plus"/>
                             </div>
                         </div>
 
