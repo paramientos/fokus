@@ -86,11 +86,18 @@ new class extends Livewire\Volt\Component {
             <a wire:click="setTab('team')" class="tab {{ $selectedTab === 'team' ? 'tab-active' : '' }}">Team Members</a>
             <a wire:click="setTab('status')" onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" class="tab {{ $selectedTab === 'status' ? 'tab-active' : '' }}">Status</a>
             <a wire:click="setTab('wiki')" class="tab {{ $selectedTab === 'wiki' ? 'tab-active' : '' }}">Wiki</a>
+            <a wire:click="setTab('files')" class="tab {{ $selectedTab === 'files' ? 'tab-active' : '' }}">Files</a>
             <a wire:click="setTab('settings')" class="tab {{ $selectedTab === 'settings' ? 'tab-active' : '' }}">Settings</a>
         </div>
 
         <!-- Tab Content -->
         <div>
+            <!-- Files Tab -->
+            @if($selectedTab === 'files')
+                <div class="mt-4">
+                    <livewire:file-manager :fileable_type="'App\\Models\\Project'" :fileable_id="$project->id" />
+                </div>
+            @endif
             <!-- Overview Tab -->
             @if($selectedTab === 'overview')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -453,15 +460,6 @@ new class extends Livewire\Volt\Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Konuşmalar Sekmesi -->
-            @if($selectedTab === 'conversations')
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <livewire:conversations.index :project="$project" />
                     </div>
                 </div>
             @endif

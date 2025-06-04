@@ -338,15 +338,12 @@
                         </div>
                     </x-tab>
 
-                    <x-tab name="conversations" label="İletişim" icon="fas.comments" wire:click="setActiveTab('conversations')">                        
-                        <!-- Konuşmalar -->
-                        <div class="card bg-base-100 shadow-xl mb-6">
-                            <div class="card-body">
-                                <livewire:conversations.index :project="$project" :task="$task" />
-                            </div>
+                    <x-tab name="files" label="Files" icon="fas.file" wire:click="setActiveTab('files')">
+                        <div class="mt-4">
+                            <livewire:file-manager :fileable_type="'App\\Models\\Task'" :fileable_id="$task->id" />
                         </div>
                     </x-tab>
-                    
+
                     <x-tab name="dependencies" label="Dependencies" icon="o-link"
                            wire:click="setActiveTab('dependencies')">
                         <!-- Dependencies -->

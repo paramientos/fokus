@@ -248,12 +248,7 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
 
-        <!-- Sekmeler -->
-        <div class="tabs tabs-boxed mb-6">
-            <a class="tab tab-active">Görevler</a>
-            <a href="{{ route('sprints.conversations.index', ['project' => $project->id, 'sprint' => $sprint->id]) }}" class="tab">İletişim</a>
-        </div>
-        
+
         <!-- Görevler -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @foreach($tasksByStatus as $status => $statusTasks)

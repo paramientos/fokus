@@ -93,6 +93,7 @@
                     <x-menu-item title="API Tester" icon="fas.calendar" link="/api-tester"/>
                     <x-menu-item title="Meetings" icon="fas.calendar-alt" link="/projects/{{ $project->id }}/meetings"/>
                     <x-menu-item title="Wiki" icon="fas.book" link="/projects/{{ $project->id }}/wiki"/>
+                    <x-menu-item title="Files" icon="fas.folder" link="/projects/{{ $project->id }}?tab=files"/>
                     <x-menu-item title="Gantt Chart" icon="fas.chart-gantt"
                                  :link="route('tasks.gantt-chart', $project)"/>
                 @endif
