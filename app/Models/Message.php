@@ -7,6 +7,37 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $content
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $channel_id
+ * @property \Illuminate\Support\Carbon|null $read_at
+ * @property-read \App\Models\Conversation|null $conversation
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message forConversation($conversationId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message fromUser($userId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message systemMessages()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message unread()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereReadAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Message extends Model
 {
     use HasFactory, SoftDeletes;

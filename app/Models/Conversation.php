@@ -9,6 +9,56 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * 
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property string|null $description
+ * @property int $project_id
+ * @property int $created_by
+ * @property string $type
+ * @property int|null $context_id
+ * @property string|null $context_type
+ * @property bool $is_private
+ * @property \Illuminate\Support\Carbon|null $last_message_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read Model|\Eloquent|null $context
+ * @property-read \App\Models\User $creator
+ * @property-read \App\Models\Message|null $lastMessage
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message> $messages
+ * @property-read int|null $messages_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConversationParticipant> $participants
+ * @property-read int|null $participants_count
+ * @property-read \App\Models\Project $project
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation forContext($contextType, $contextId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation forProject($projectId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation ofType($type)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereContextId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereContextType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereIsPrivate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereLastMessageAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Conversation extends Model
 {
     use HasFactory, SoftDeletes;

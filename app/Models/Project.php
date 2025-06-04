@@ -25,6 +25,8 @@ use App\Models\Conversation;
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Conversation> $conversations
+ * @property-read int|null $conversations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Meeting> $meetings
  * @property-read int|null $meetings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Sprint> $sprints

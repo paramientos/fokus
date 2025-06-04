@@ -39,6 +39,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read int|null $attachments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
  * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
+ * @property-read int|null $conversations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Task> $dependencies
  * @property-read int|null $dependencies_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Task> $dependents

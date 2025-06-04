@@ -24,6 +24,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // API Endpoints for Projects
 Route::middleware('auth:sanctum')->group(function () {
+    // API Test Aracı Rotaları
+    Route::prefix('api-tester')->group(function () {
+        Route::get('/endpoints', [\App\Http\Controllers\ApiEndpointController::class, 'index']);
+        Route::post('/endpoints', [\App\Http\Controllers\ApiEndpointController::class, 'store']);
+        Route::get('/endpoints/{apiEndpoint}', [\App\Http\Controllers\ApiEndpointController::class, 'show']);
+        Route::put('/endpoints/{apiEndpoint}', [\App\Http\Controllers\ApiEndpointController::class, 'update']);
+        Route::delete('/endpoints/{apiEndpoint}', [\App\Http\Controllers\ApiEndpointController::class, 'destroy']);
+        Route::post('/endpoints/{apiEndpoint}/execute', [\App\Http\Controllers\ApiEndpointController::class, 'execute']);
+        Route::get('/endpoints/{apiEndpoint}/history', [\App\Http\Controllers\ApiEndpointController::class, 'history']);
+        Route::get('/history/{history}', [\App\Http\Controllers\ApiEndpointController::class, 'historyDetail']);
+    });
+    
     // Projects
     Route::get('/projects', function () {
         return Project::where('user_id', auth()->id())->get();

@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use App\Models\Project;use Illuminate\Database\Eloquent\Model; @endphp
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -57,17 +58,23 @@
 
             <x-menu-item title="Dashboard" icon="o-home" link="/"/>
             <x-menu-item title="Projects" icon="o-folder" link="/projects"/>
+            <x-menu-item title="API Tester" icon="fas.calendar" link="/api-tester"/>
             <x-menu-item title="Wiki" icon="fas.book" link="/wiki"/>
-
+            <x-menu-item title="Mail" icon="o-envelope" link="/mail"/>
             @if(request()->routeIs('projects.show') || request()->routeIs('projects.edit') ||
                 request()->routeIs('tasks.*') || request()->routeIs('sprints.*') || request()->routeIs('board.*')
-                ||request()->routeIs('projects.*') || request()->routeIs('wiki.*'))
+                || request()->routeIs('projects.*') || request()->routeIs('wiki.*') ||
+                 request()->routeIs('api-tester.*'))
                 @php
                     $project = request()->route('project');
 
-                if (!$project instanceof \Illuminate\Database\Eloquent\Model) {
-                    $project = \App\Models\Project::find($project);
+                if (!$project instanceof Model) {
+                    $project = Project::find($project);
                     }
+
+                if ((request()->filled('selectedProjectId') && !in_array(request()->input('selectedProjectId'), ['all', 'none']))) {
+                    $project = Project::find(request()->input('selectedProjectId'));
+                }
                 @endphp
 
                 @if($project)
@@ -83,6 +90,7 @@
                     <x-menu-item title="Tasks" icon="o-clipboard-document-list"
                                  link="/projects/{{ $project->id }}/tasks"/>
                     <x-menu-item title="Sprints" icon="fas.calendar" link="/projects/{{ $project->id }}/sprints"/>
+                    <x-menu-item title="API Tester" icon="fas.calendar" link="/api-tester"/>
                     <x-menu-item title="Meetings" icon="fas.calendar-alt" link="/projects/{{ $project->id }}/meetings"/>
                     <x-menu-item title="Wiki" icon="fas.book" link="/projects/{{ $project->id }}/wiki"/>
                     <x-menu-item title="Gantt Chart" icon="fas.chart-gantt"

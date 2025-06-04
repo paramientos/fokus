@@ -85,6 +85,17 @@ Route::middleware('auth')->group(function () {
 // Profil
     Volt::route('/profile', 'profile.index')->name('profile.index');
 
-// Yetkilendirme
+// Gmail Entegrasyonu
+    Volt::route('/mail', 'mail.inbox')->name('mail.inbox');
+    Route::get('/auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'redirect'])->name('google.redirect');
+    Route::get('/auth/google/callback', [\App\Http\Controllers\GoogleAuthController::class, 'callback'])->name('google.callback');
+
     Volt::route('/logout', 'auth.logout')->name('logout');
+
+    // API Test Aracı (Workspace)
+    Volt::route('/api-tester', 'api-tester.workspace')->name('api-tester.workspace');
+    Volt::route('/api-tester/{apiEndpoint}/history', 'api-tester.history')->name('api-tester.history');
+    Volt::route('/api-tester/history/{historyEntry}', 'api-tester.history-detail')->name('api-tester.history-detail');
+    // Task ile ilişkili API test aracı
+    Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
 });

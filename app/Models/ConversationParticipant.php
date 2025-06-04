@@ -6,6 +6,38 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $conversation_id
+ * @property int $user_id
+ * @property bool $is_admin
+ * @property \Illuminate\Support\Carbon|null $last_read_at
+ * @property \Illuminate\Support\Carbon $joined_at
+ * @property \Illuminate\Support\Carbon|null $left_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Conversation $conversation
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant active()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant admins()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant forConversation($conversationId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant forUser($userId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereConversationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereJoinedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereLastReadAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereLeftAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereUserId($value)
+ * @mixin \Eloquent
+ */
 class ConversationParticipant extends Model
 {
     use HasFactory;

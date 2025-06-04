@@ -8,6 +8,7 @@
 - Livewire 3
 - Tema modern ve futuristik olmalı
 - Arayüz english olmalı
+- Projenin dili ingilizcedir
 - AI olaral cevapları Türkçe ver
 - PHP 8.3
 Postgres 15
@@ -17,6 +18,8 @@ Postgres 15
 - Icon set olarak fas kullan örnek fas.user gibi ("owenvoke/blade-fontawesome": "^2.9" kullanılıyor)
 - Laravel Livewire Volt kullan, örneğin:
 - dosyalar şöyle başlayacak
+-   <x-label böyle bir yazım stili yok. label genelde prop içinde olacak
+- <x-select optionsları almıyor içine :options prop olacak ve id ve name değerleri alacak
 MaryUI 2 kullan (https://mary-ui.com/docs/installation) <x-component></x-component> şeklinde x-mary-input değil x-input gibi
 
 <?php
