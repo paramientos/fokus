@@ -3,6 +3,7 @@
 use App\Models\Status;
 use App\Models\StatusTransition;
 use App\Models\Task;
+use App\Models\Comment;
 
 new class extends Livewire\Volt\Component {
     use \Mary\Traits\Toast;
@@ -13,6 +14,8 @@ new class extends Livewire\Volt\Component {
     public $tasksByStatus = [];
     public $selectedTask = null;
     public $selectedTaskDetails = null;
+    public $newComment = '';
+    public $showCommentForm = false;
 
     public function mount($project, $sprint)
     {
@@ -119,12 +122,50 @@ new class extends Livewire\Volt\Component {
         $this->selectedTaskDetails = Task::with(['user', 'reporter', 'status', 'comments.user'])
             ->find($taskId)
             ->toArray();
+        $this->showCommentForm = false;
+        $this->newComment = '';
     }
     
     public function closeTaskDetails()
     {
         $this->selectedTask = null;
         $this->selectedTaskDetails = null;
+        $this->showCommentForm = false;
+        $this->newComment = '';
+    }
+    
+    public function showAddComment()
+    {
+        $this->showCommentForm = true;
+    }
+    
+    public function hideAddComment()
+    {
+        $this->showCommentForm = false;
+        $this->newComment = '';
+    }
+    
+    public function saveComment()
+    {
+        if (empty(trim($this->newComment))) {
+            $this->error('Yorum boş olamaz!');
+            return;
+        }
+        
+        $comment = new Comment();
+        $comment->task_id = $this->selectedTask;
+        $comment->user_id = auth()->id();
+        $comment->content = $this->newComment;
+        $comment->save();
+        
+        $this->success('Yorum eklendi!');
+        $this->newComment = '';
+        $this->showCommentForm = false;
+        
+        // Yorum eklendikten sonra task detaylarını yeniden yükle
+        $this->selectedTaskDetails = Task::with(['user', 'reporter', 'status', 'comments.user'])
+            ->find($this->selectedTask)
+            ->toArray();
     }
 }
 
@@ -298,7 +339,8 @@ new class extends Livewire\Volt\Component {
                                                         <div class="avatar placeholder">
                                                             <div
                                                                 class="bg-neutral text-neutral-content rounded-full w-8">
-                                                                <span>{{ substr($comment['user']['name'] ?? 'U', 0, 1) }}</span>
+                                                                <span
+                                                                    class="text-xs">{{ substr($comment['user']['name'] ?? 'U', 0, 1) }}</span>
                                                             </div>
                                                         </div>
                                                         <div>
@@ -317,10 +359,19 @@ new class extends Livewire\Volt\Component {
                                     <p class="text-gray-500">No comments yet.</p>
                                 @endif
 
-                                <div class="mt-4">
-                                    <x-button link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}#comments"
-                                              label="Add Comment" icon="o-chat-bubble-left" class="btn-sm"/>
-                                </div>
+                                @if($showCommentForm)
+                                    <div class="mt-4">
+                                        <textarea wire:model="newComment" class="textarea textarea-bordered w-full" placeholder="Write a comment..."></textarea>
+                                        <div class="flex gap-2 mt-2">
+                                            <x-button wire:click="saveComment" icon="o-paper-airplane" class="btn-sm btn-primary">Add Comment</x-button>
+                                            <x-button wire:click="hideAddComment" icon="o-x-mark" class="btn-sm btn-ghost">Cancel</x-button>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mt-4">
+                                        <x-button wire:click="showAddComment" icon="o-chat-bubble-left" class="btn-sm">Add Comment</x-button>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -342,21 +393,21 @@ new class extends Livewire\Volt\Component {
                                     <p class="font-medium">{{ $selectedTaskDetails['reporter']['name'] ?? 'Unknown' }}</p>
                                 </div>
 
-                                @if($selectedTaskDetails['story_points'])
+                                @if(isset($selectedTaskDetails['story_points']) && $selectedTaskDetails['story_points'])
                                     <div>
                                         <p class="text-sm text-gray-500">Story Points</p>
                                         <p class="font-medium">{{ $selectedTaskDetails['story_points'] }}</p>
                                     </div>
                                 @endif
 
-                                @if($selectedTaskDetails['estimated_hours'])
+                                @if(isset($selectedTaskDetails['estimated_hours']) && $selectedTaskDetails['estimated_hours'])
                                     <div>
                                         <p class="text-sm text-gray-500">Estimated Hours</p>
                                         <p class="font-medium">{{ $selectedTaskDetails['estimated_hours'] }}</p>
                                     </div>
                                 @endif
 
-                                @if($selectedTaskDetails['spent_hours'])
+                                @if(isset($selectedTaskDetails['spent_hours']) && $selectedTaskDetails['spent_hours'])
                                     <div>
                                         <p class="text-sm text-gray-500">Spent Hours</p>
                                         <p class="font-medium">{{ $selectedTaskDetails['spent_hours'] }}</p>
