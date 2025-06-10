@@ -29,8 +29,6 @@ new class extends Livewire\Volt\Component {
     {
         $this->project->is_archived = false;
         $this->project->save();
-
-        $this->su
     }
 
     public function with(): array
@@ -454,12 +452,12 @@ new class extends Livewire\Volt\Component {
                                 <div class="mt-4">
                                     <x-button link="/projects/{{ $project->id }}/edit" label="Edit Project"
                                               icon="o-pencil" class="btn-outline"/>
-                                    
+
                                     @if($project->is_archived)
-                                        <x-button wire:click="unarchiveProject" label="Unarchive Project" 
+                                        <x-button wire:click="unarchiveProject" label="Unarchive Project"
                                                   icon="fas.box-archive" class="btn-warning ml-2"/>
                                     @else
-                                        <x-button wire:click="archiveProject" label="Archive Project" 
+                                        <x-button wire:click="archiveProject" label="Archive Project"
                                                   icon="fas.archive" class="btn-warning ml-2"/>
                                     @endif
                                 </div>
