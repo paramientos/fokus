@@ -1,8 +1,12 @@
 <?php
 
 use App\Models\Status;
+use App\Models\StatusTransition;
+use App\Models\Task;
 
 new class extends Livewire\Volt\Component {
+    use \Mary\Traits\Toast;
+    
     public $project;
     public $sprint;
     public $statuses = [];
@@ -76,10 +80,33 @@ new class extends Livewire\Volt\Component {
 
     public function updateTaskStatus($taskId, $statusId)
     {
-        $task = \App\Models\Task::find($taskId);
+        $task = Task::find($taskId);
+        if (!$task) {
+            $this->error('Task bulunamadı!');
+            return;
+        }
+
+        // Statü geçiş kontrolü
+        $fromStatusId = $task->status_id;
+        $allowed = StatusTransition::where('project_id', $this->project->id)
+            ->where('from_status_id', $fromStatusId)
+            ->where('to_status_id', $statusId)
+            ->exists();
+
+        // Aynı statüye sürüklemeye izin ver
+        if ($fromStatusId == $statusId) {
+            $allowed = true;
+        }
+
+        if (!$allowed) {
+            $this->error('Bu durum geçişine izin verilmiyor!');
+            $this->loadData();
+            return;
+        }
 
         if ($task && $task->sprint_id === $this->sprint->id) {
             $task->update(['status_id' => $statusId]);
+            $this->success('Task durumu güncellendi!');
             $this->loadData();
         }
     }
@@ -199,8 +226,9 @@ new class extends Livewire\Volt\Component {
                             @endforeach
 
                             @if(empty($tasksByStatus[$status->id]))
-                                <div class="text-center py-4 text-gray-500 text-sm">
-                                    <p>No tasks</p>
+                                <div class="flex flex-col items-center justify-center py-6 text-gray-400">
+                                    <x-icon name="o-inbox" class="w-8 h-8"/>
+                                    <p class="text-sm mt-2">No tasks</p>
                                 </div>
                             @endif
                         </div>
