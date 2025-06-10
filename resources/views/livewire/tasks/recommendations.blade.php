@@ -50,7 +50,7 @@ new class extends Livewire\Volt\Component {
 
             @if($recommendedTasks->isEmpty())
                 <div class="py-4 text-center">
-                    <x-icon name="fas.clipboard-check" class="w-12 h-12 mx-auto text-gray-400"/>
+                    <x-icon name="fas.check" class="w-12 h-12 mx-auto text-gray-400"/>
                     <p class="mt-2 text-sm text-gray-500">
                         Şu anda önerilen görev bulunmuyor. Tüm görevler tamamlanmış olabilir veya henüz yeterli veri yok.
                     </p>
