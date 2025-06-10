@@ -14,6 +14,25 @@ new class extends Livewire\Volt\Component {
         $this->selectedTab = $tab;
     }
 
+    public function archiveProject()
+    {
+        $this->project->is_archived = true;
+        $this->project->save();
+
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Project archived successfully'
+        ]);
+    }
+
+    public function unarchiveProject()
+    {
+        $this->project->is_archived = false;
+        $this->project->save();
+
+        $this->su
+    }
+
     public function with(): array
     {
         $tasks = $this->project->tasks()
@@ -74,6 +93,11 @@ new class extends Livewire\Volt\Component {
                 <x-button link="{{ route('tasks.gantt-chart', ['project' => $project->id]) }}" icon="fas.chart-gantt" class="btn-primary">
                     Gantt Chart
                 </x-button>
+                @if($project->is_archived)
+                    <x-button wire:click="unarchiveProject" label="Unarchive" icon="o-folder-open" class="btn-primary"/>
+                @else
+                    <x-button wire:click="archiveProject" label="Archive" icon="o-folder" class="btn-error"/>
+                @endif
             </div>
         </div>
 
@@ -410,6 +434,9 @@ new class extends Livewire\Volt\Component {
                                                     class="badge {{ $project->is_active ? 'badge-success' : 'badge-error' }}">
                                                     {{ $project->is_active ? 'Active' : 'Inactive' }}
                                                 </div>
+                                                @if($project->is_archived)
+                                                    <div class="badge badge-warning ml-1">Archived</div>
+                                                @endif
                                             </td>
                                         </tr>
                                         <tr>
@@ -427,6 +454,14 @@ new class extends Livewire\Volt\Component {
                                 <div class="mt-4">
                                     <x-button link="/projects/{{ $project->id }}/edit" label="Edit Project"
                                               icon="o-pencil" class="btn-outline"/>
+                                    
+                                    @if($project->is_archived)
+                                        <x-button wire:click="unarchiveProject" label="Unarchive Project" 
+                                                  icon="fas.box-archive" class="btn-warning ml-2"/>
+                                    @else
+                                        <x-button wire:click="archiveProject" label="Archive Project" 
+                                                  icon="fas.archive" class="btn-warning ml-2"/>
+                                    @endif
                                 </div>
                             </div>
 

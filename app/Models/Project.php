@@ -23,6 +23,7 @@ use App\Models\Conversation;
  * @property int $user_id
  * @property string|null $avatar
  * @property bool $is_active
+ * @property bool $is_archived
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Conversation> $conversations
@@ -50,6 +51,7 @@ use App\Models\Conversation;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereIsArchived($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereKey($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereUpdatedAt($value)
@@ -72,6 +74,7 @@ class Project extends Model
         'user_id',
         'avatar',
         'is_active',
+        'is_archived',
     ];
 
     /**
@@ -81,6 +84,7 @@ class Project extends Model
      */
     protected $casts = [
         'is_active' => 'boolean',
+        'is_archived' => 'boolean',
     ];
 
     /**
@@ -155,5 +159,21 @@ class Project extends Model
     public function conversations(): HasMany
     {
         return $this->hasMany(Conversation::class);
+    }
+    
+    /**
+     * Scope a query to only include active projects.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)->where('is_archived', false);
+    }
+    
+    /**
+     * Scope a query to only include archived projects.
+     */
+    public function scopeArchived($query)
+    {
+        return $query->where('is_archived', true);
     }
 }

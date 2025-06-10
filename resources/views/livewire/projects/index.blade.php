@@ -4,6 +4,7 @@ new class extends Livewire\Volt\Component {
     public $search = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
+    public $showArchived = false;
 
     public function sortBy($field)
     {
@@ -12,6 +13,39 @@ new class extends Livewire\Volt\Component {
         } else {
             $this->sortField = $field;
             $this->sortDirection = 'asc';
+        }
+    }
+    
+    public function toggleArchived()
+    {
+        $this->showArchived = !$this->showArchived;
+    }
+    
+    public function archiveProject($projectId)
+    {
+        $project = \App\Models\Project::find($projectId);
+        if ($project) {
+            $project->is_archived = true;
+            $project->save();
+            
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Project archived successfully'
+            ]);
+        }
+    }
+    
+    public function unarchiveProject($projectId)
+    {
+        $project = \App\Models\Project::find($projectId);
+        if ($project) {
+            $project->is_archived = false;
+            $project->save();
+            
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Project unarchived successfully'
+            ]);
         }
     }
 
@@ -24,6 +58,11 @@ new class extends Livewire\Volt\Component {
                         ->orWhere('key', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%');
                 });
+            })
+            ->when($this->showArchived, function ($query) {
+                $query->where('is_archived', true);
+            }, function ($query) {
+                $query->where('is_archived', false);
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate(10);
@@ -49,16 +88,33 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
 
+        <div class="tabs tabs-boxed mb-4">
+            <button wire:click="$set('showArchived', false)" class="tab {{ !$showArchived ? 'tab-active' : '' }}">
+                <x-icon name="fas.folder-open" class="w-4 h-4 mr-2" />
+                Active Projects
+            </button>
+            <button wire:click="$set('showArchived', true)" class="tab {{ $showArchived ? 'tab-active' : '' }}">
+                <x-icon name="fas.archive" class="w-4 h-4 mr-2" />
+                Archived Projects
+            </button>
+        </div>
+
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
                 @if($projects->isEmpty())
                     <div class="py-8 text-center">
-                        <x-icon name="o-folder" class="w-16 h-16 mx-auto text-gray-400"/>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900">No projects found</h3>
-                        <p class="mt-1 text-sm text-gray-500">Get started by creating a new project.</p>
-                        <div class="mt-6">
-                            <x-button link="/projects/create" label="Create Project" icon="o-plus" class="btn-primary"/>
-                        </div>
+                        <x-icon name="{{ $showArchived ? 'fas.archive' : 'o-folder' }}" class="w-16 h-16 mx-auto text-gray-400"/>
+                        <h3 class="mt-4 text-lg font-medium text-gray-900">
+                            {{ $showArchived ? 'No archived projects found' : 'No projects found' }}
+                        </h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            {{ $showArchived ? 'Archived projects will appear here.' : 'Get started by creating a new project.' }}
+                        </p>
+                        @if(!$showArchived)
+                            <div class="mt-6">
+                                <x-button link="/projects/create" label="Create Project" icon="o-plus" class="btn-primary"/>
+                            </div>
+                        @endif
                     </div>
                 @else
                     <div class="overflow-x-auto">
@@ -116,6 +172,9 @@ new class extends Livewire\Volt\Component {
                                         <div class="badge {{ $project->is_active ? 'badge-success' : 'badge-error' }}">
                                             {{ $project->is_active ? 'Active' : 'Inactive' }}
                                         </div>
+                                        @if($project->is_archived)
+                                            <div class="badge badge-warning ml-1">Archived</div>
+                                        @endif
                                     </td>
                                     <td>
                                         <div class="flex gap-2">
@@ -126,6 +185,14 @@ new class extends Livewire\Volt\Component {
                                             <x-button link="/projects/{{ $project->id }}/board" icon="o-view-columns"
                                                       class="btn-sm btn-ghost" tooltip="Board"/>
                                             <x-button link="/projects/{{ $project->id }}/activities" icon="fas.clock-rotate-left" class="btn-sm btn-ghost" tooltip="Activity Timeline" />
+                                            
+                                            @if($project->is_archived)
+                                                <x-button icon="fas.box-archive" wire:click="unarchiveProject({{ $project->id }})"
+                                                        class="btn-sm btn-ghost" tooltip="Unarchive" />
+                                            @else
+                                                <x-button icon="fas.archive" wire:click="archiveProject({{ $project->id }})"
+                                                        class="btn-sm btn-ghost" tooltip="Archive" />
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
