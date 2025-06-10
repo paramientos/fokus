@@ -13,13 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id
  * @property string $name
+ * @property int $is_completed
  * @property string $slug
  * @property string $color
  * @property int $order
  * @property int $project_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property bool $is_completed
  * @property-read \App\Models\Project $project
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count

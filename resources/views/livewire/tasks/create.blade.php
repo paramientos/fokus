@@ -95,8 +95,8 @@ new class extends Livewire\Volt\Component {
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-primary">Create Task</h1>
-            <x-button link="/projects/{{ $project->id }}/tasks" label="Back to Tasks" icon="fas.arrow-left"
-                      class="btn-ghost"/>
+            <x-button link="/projects/{{ $project->id }}/tasks" icon="fas.arrow-left"
+                      class="btn-ghost">Back to Tasks</x-button>
         </div>
 
         <div class="card bg-base-100 shadow-xl">
@@ -108,14 +108,8 @@ new class extends Livewire\Volt\Component {
                             @error('title') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
-                        <div class="form-control md:col-span-2">
-                            <x-textarea
-                                label="Description"
-                                wire:model="description"
-                                placeholder="Enter task description"
-                                rows="4"
-                            />
-                            @error('description') <span class="text-error text-sm">{{ $message }}</span> @enderror
+                        <div class="md:col-span-2">
+                            <x-markdown-editor id="task-description" label="Description" wire:model="description" />
                         </div>
 
                         <div class="form-control">
@@ -209,18 +203,18 @@ new class extends Livewire\Volt\Component {
                         </div>
 
                         <div class="form-control">
-                            <x-datetime
+                            <x-input
+                                type="date"
                                 label="Due Date"
                                 wire:model="due_date"
                                 placeholder="Select due date (optional)"
-                                min-date="today"
                             />
                             @error('due_date') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div class="mt-8 flex justify-end">
-                        <x-button type="submit" label="Create Task" icon="fas.check" class="btn-primary" />
+                        <x-button type="submit" icon="fas.check" class="btn-primary">Create Task</x-button>
                     </div>
                 </form>
             </div>

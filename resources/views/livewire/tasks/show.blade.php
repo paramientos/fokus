@@ -1,4 +1,3 @@
-
 <div>
     <x-slot:title>{{ $project->key }}-{{ $task->id }}: {{ $task->title }}</x-slot:title>
 
@@ -24,10 +23,8 @@
                         <!-- Task Description -->
                         <div class="card bg-base-100 shadow-xl mb-6">
                             <div class="card-body">
-                                <h2 class="card-title">Description</h2>
-                                <div class="prose max-w-none mt-4">
-                                    {!! $task->description ? nl2br(e($task->description)) : '<p class="text-gray-400">No description provided.</p>' !!}
-                                </div>
+                                <h2 class="card-title mb-4">Description</h2>
+                                <x-markdown-viewer :content="$task->description" />
                             </div>
                         </div>
 

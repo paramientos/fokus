@@ -12,6 +12,9 @@ use App\Models\Sprint;
 use App\Models\Status;
 use App\Models\Meeting;
 use App\Models\Conversation;
+use App\Models\Workspace;
+use App\Models\WikiCategory;
+use App\Models\WikiPage;
 
 /**
  * 
@@ -21,6 +24,7 @@ use App\Models\Conversation;
  * @property string $key
  * @property string|null $description
  * @property int $user_id
+ * @property int|null $workspace_id
  * @property string|null $avatar
  * @property bool $is_active
  * @property bool $is_archived
@@ -39,10 +43,13 @@ use App\Models\Conversation;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $teamMembers
  * @property-read int|null $team_members_count
  * @property-read User $user
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiCategory> $wikiCategories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, WikiCategory> $wikiCategories
  * @property-read int|null $wiki_categories_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $wikiPages
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, WikiPage> $wikiPages
  * @property-read int|null $wiki_pages_count
+ * @property-read Workspace|null $workspace
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Project active()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Project archived()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project query()
@@ -56,6 +63,7 @@ use App\Models\Conversation;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereWorkspaceId($value)
  * @mixin \Eloquent
  */
 class Project extends Model
@@ -72,6 +80,7 @@ class Project extends Model
         'key',
         'description',
         'user_id',
+        'workspace_id',
         'avatar',
         'is_active',
         'is_archived',
@@ -93,6 +102,14 @@ class Project extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    
+    /**
+     * Get the workspace that the project belongs to.
+     */
+    public function workspace(): BelongsTo
+    {
+        return $this->belongsTo(Workspace::class);
     }
 
     /**

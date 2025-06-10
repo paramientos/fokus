@@ -179,7 +179,7 @@ new class extends Livewire\Volt\Component {
                             @if($tasks->isEmpty())
                                 <div class="py-4 text-center text-gray-500">
                                     <p>No tasks found</p>
-                                    <x-button link="/projects/{{ $project->id }}/tasks/create" label="Create Task"
+                                    <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task"
                                               icon="o-plus" class="btn-primary mt-2"/>
                                 </div>
                             @else
@@ -290,7 +290,7 @@ new class extends Livewire\Volt\Component {
                     <div class="card-body">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="card-title">All Tasks</h2>
-                            <x-button link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
+                            <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
                                       class="btn-primary"/>
                         </div>
 

@@ -88,7 +88,7 @@ new class extends Livewire\Volt\Component {
             </div>
 
             <div class="flex gap-2">
-                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
+                <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
                           class="btn-primary"/>
             </div>
         </div>

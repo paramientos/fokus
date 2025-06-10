@@ -22,10 +22,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $recurrence_pattern
  * @property string $status
  * @property string|null $meeting_link
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $ended_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MeetingActionItem> $actionItems
  * @property-read int|null $action_items_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MeetingAttendee> $attendees

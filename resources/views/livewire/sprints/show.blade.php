@@ -324,7 +324,7 @@ new class extends Livewire\Volt\Component {
                             <h3 class="mt-4 text-lg font-medium text-gray-900">No tasks in this sprint</h3>
                             <p class="mt-1 text-sm text-gray-500">Get started by adding tasks to this sprint.</p>
                             <div class="mt-6">
-                                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Create Task"
+                                <x-button  no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task"
                                           icon="o-plus" class="btn-primary"/>
                             </div>
                         </div>

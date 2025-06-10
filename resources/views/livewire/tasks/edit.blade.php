@@ -23,8 +23,8 @@ new class extends Livewire\Volt\Component {
         'sprint_id' => 'nullable|exists:sprints,id',
         'user_id' => 'nullable|exists:users,id',
         'reporter_id' => 'nullable|exists:users,id',
-        'task_type' => 'required|string',
-        'priority' => 'required|string',
+        'task_type' => 'required',
+        'priority' => 'required',
         'story_points' => 'nullable|integer|min:1|max:100',
         'due_date' => 'nullable|date',
     ];
@@ -33,7 +33,7 @@ new class extends Livewire\Volt\Component {
     {
         $this->project = \App\Models\Project::findOrFail($project);
         $this->task = \App\Models\Task::findOrFail($task);
-        
+
         // Mevcut görev verilerini yükle
         $this->title = $this->task->title;
         $this->description = $this->task->description;
@@ -98,8 +98,8 @@ new class extends Livewire\Volt\Component {
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-primary">Edit Task</h1>
-            <x-button link="/projects/{{ $project->id }}/tasks/{{ $task->id }}" label="Back to Task" icon="fas.arrow-left"
-                      class="btn-ghost"/>
+            <x-button link="/projects/{{ $project->id }}/tasks/{{ $task->id }}" icon="fas.arrow-left"
+                      class="btn-ghost">Back to Task</x-button>
         </div>
 
         <div class="card bg-base-100 shadow-xl">
@@ -111,14 +111,8 @@ new class extends Livewire\Volt\Component {
                             @error('title') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
-                        <div class="form-control md:col-span-2">
-                            <x-textarea
-                                label="Description"
-                                wire:model="description"
-                                placeholder="Enter task description"
-                                rows="4"
-                            />
-                            @error('description') <span class="text-error text-sm">{{ $message }}</span> @enderror
+                        <div class="md:col-span-2">
+                            <x-markdown-editor id="task-description" label="Description" wire:model="description" />
                         </div>
 
                         <div class="form-control">
@@ -223,7 +217,7 @@ new class extends Livewire\Volt\Component {
                     </div>
 
                     <div class="mt-8 flex justify-end">
-                        <x-button type="submit" label="Update Task" icon="fas.check" class="btn-primary" />
+                        <x-button type="submit" icon="fas.check" class="btn-primary">Update Task</x-button>
                     </div>
                 </form>
             </div>

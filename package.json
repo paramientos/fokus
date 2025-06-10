@@ -21,6 +21,13 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@tiptap/core": "^2.14.0",
+        "@tiptap/extension-link": "^2.14.0",
+        "@tiptap/extension-placeholder": "^2.14.0",
+        "@tiptap/extension-task-item": "^2.14.0",
+        "@tiptap/extension-task-list": "^2.14.0",
+        "@tiptap/pm": "^2.14.0",
+        "@tiptap/starter-kit": "^2.14.0",
         "dragula": "^3.7.3",
         "easymde": "^2.20.0",
         "expo-network": "^7.1.5",

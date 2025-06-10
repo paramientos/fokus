@@ -14,10 +14,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $project_id
  * @property string $name
  * @property string $slug
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $type Kategori tipi (status, type, technical, user)
  * @property string|null $description Kategori açıklaması
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $pages
  * @property-read int|null $pages_count
  * @property-read \App\Models\Project $project

@@ -12,6 +12,11 @@ Route::middleware('auth')->group(function () {
 // Ana sayfa
     Volt::route('/', 'pages.dashboard')->name('dashboard');
 
+// Workspaces
+    Volt::route('/workspaces', 'workspaces.index')->name('workspaces.index');
+    Volt::route('/workspaces/{id}', 'workspaces.show')->name('workspaces.show');
+    Volt::route('/workspaces/{id}/members', 'workspaces.members')->name('workspaces.members');
+
 // Projeler
     Volt::route('/projects', 'projects.index')->name('projects.index');
     Volt::route('/projects/create', 'projects.create')->name('projects.create');

@@ -19,9 +19,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $fileable_id
  * @property int|null $parent_id
  * @property int $version
- * @property bool $is_active
+ * @property int $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FileComment> $comments
  * @property-read int|null $comments_count
  * @property-read Model|\Eloquent $fileable
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFileName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFilePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFileableId($value)

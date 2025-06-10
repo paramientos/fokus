@@ -7,6 +7,9 @@ import 'frappe-gantt';
 import Sortable from 'sortablejs';
 window.Sortable = Sortable;
 
+// Markdown editörünü import et
+import './components/MarkdownEditor';
+
 function startSortable() {
     console.log('sortable kontrol');
 

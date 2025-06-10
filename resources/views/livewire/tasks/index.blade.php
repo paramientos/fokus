@@ -80,7 +80,7 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
 
-        <x-button link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task" icon="o-plus"
+        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task" icon="o-plus"
                   class="btn-primary"/>
     </div>
 
@@ -92,7 +92,7 @@ new class extends Livewire\Volt\Component {
                     <h3 class="mt-4 text-lg font-medium text-gray-900">No tasks found</h3>
                     <p class="mt-1 text-sm text-gray-500">Get started by creating a new task.</p>
                     <div class="mt-6">
-                        <x-button link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task" icon="o-plus"
+                        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task" icon="o-plus"
                                   class="btn-primary"/>
                     </div>
                 </div>

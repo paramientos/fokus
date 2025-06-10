@@ -67,7 +67,7 @@ new class extends Livewire\Volt\Component {
     <script src='https://meet.jit.si/external_api.js'></script>
     <script>
         document.addEventListener('livewire:initialized', () => {
-            const domain = '23.88.112.66:8443';
+            const domain = 'video.usefokus.com';
             const options = {
                 roomName: '{{ $meetingRoom }}',
                 width: '100%',
@@ -167,7 +167,7 @@ new class extends Livewire\Volt\Component {
             screenSharingButton.innerHTML = '<i class="fas fa-desktop text-xl"></i>';
             screenSharingButton.title = 'Ekranı Paylaş';
             document.body.appendChild(screenSharingButton);
-            
+
             // Ekran paylaşımı butonuna tıklama olayı ekle
             screenSharingButton.addEventListener('click', () => {
                 api.executeCommand('toggleShareScreen');

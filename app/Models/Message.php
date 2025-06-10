@@ -11,13 +11,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * 
  *
  * @property int $id
+ * @property int $conversation_id
  * @property int $user_id
  * @property string $content
+ * @property array<array-key, mixed>|null $attachments
+ * @property bool $is_system_message
+ * @property \Illuminate\Support\Carbon|null $read_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int|null $channel_id
- * @property \Illuminate\Support\Carbon|null $read_at
- * @property-read \App\Models\Conversation|null $conversation
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Conversation $conversation
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message forConversation($conversationId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message fromUser($userId)
@@ -27,10 +30,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message systemMessages()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message unread()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereAttachments($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereConversationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereIsSystemMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereReadAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUserId($value)

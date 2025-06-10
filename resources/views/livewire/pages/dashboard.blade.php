@@ -3,6 +3,13 @@
 new class extends Livewire\Volt\Component {
     public function with(): array
     {
+        $workspaces = \App\Models\Workspace::where('owner_id', auth()->id())
+            ->orWhereHas('members', function($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->with(['owner', 'members'])
+            ->get();
+            
         $projects = \App\Models\Project::where('is_active', true)
             ->latest()
             ->take(5)
@@ -18,6 +25,7 @@ new class extends Livewire\Volt\Component {
         $latestProject = \App\Models\Project::latest()->first();
 
         return [
+            'workspaces' => $workspaces,
             'projects' => $projects,
             'tasks' => $tasks,
             'latestProject' => $latestProject,
@@ -33,7 +41,74 @@ new class extends Livewire\Volt\Component {
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-primary">Dashboard</h1>
-            <x-button link="/projects/create" label="Create Project" icon="o-plus" class="btn-primary"/>
+            <div class="flex gap-2">
+                <x-button link="/workspaces" icon="fas.building" class="btn-outline">
+                    My Workspaces
+                </x-button>
+                <x-button link="/projects/create" icon="fas.plus" class="btn-primary">
+                    Create Project
+                </x-button>
+            </div>
+        </div>
+
+        <!-- Workspaces Section -->
+        <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">My Workspaces</h2>
+                <x-button link="/workspaces" icon="fas.arrow-right" class="btn-sm btn-ghost">
+                    View All
+                </x-button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                @forelse($workspaces->take(3) as $workspace)
+                    <div class="card bg-base-100 shadow-lg">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ $workspace->name }}</h3>
+                            <p class="text-gray-500 text-sm">{{ Str::limit($workspace->description, 60) }}</p>
+                            
+                            <div class="flex items-center gap-2 mt-2">
+                                <div class="avatar placeholder">
+                                    <div class="bg-neutral text-neutral-content rounded-full w-6">
+                                        <span class="text-xs">{{ substr($workspace->owner->name, 0, 1) }}</span>
+                                    </div>
+                                </div>
+                                <span class="text-sm">{{ $workspace->owner->name }}</span>
+                                @if($workspace->owner_id === auth()->id())
+                                    <x-badge color="primary" size="sm">Owner</x-badge>
+                                @else
+                                    @php
+                                        $member = $workspace->members->firstWhere('id', auth()->id());
+                                        $role = $member ? $member->pivot->role : 'member';
+                                    @endphp
+                                    <x-badge color="{{ $role === 'admin' ? 'secondary' : 'neutral' }}" size="sm">
+                                        {{ ucfirst($role) }}
+                                    </x-badge>
+                                @endif
+                            </div>
+                            
+                            <div class="card-actions justify-end mt-4">
+                                <x-button link="/workspaces/{{ $workspace->id }}" icon="fas.arrow-right" class="btn-sm btn-primary">
+                                    Open
+                                </x-button>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-3 card bg-base-100 shadow-lg">
+                        <div class="card-body text-center">
+                            <x-icon name="fas.building" class="w-12 h-12 mx-auto text-gray-400"/>
+                            <h3 class="text-lg font-medium mt-2">No workspaces found</h3>
+                            <p class="text-gray-500">Create your first workspace to organize your projects</p>
+                            <div class="card-actions justify-center mt-4">
+                                <x-button link="/workspaces" icon="fas.plus" class="btn-primary">
+                                    Create Workspace
+                                </x-button>
+                            </div>
+                        </div>
+                    </div>
+                @endforelse
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -42,14 +117,14 @@ new class extends Livewire\Volt\Component {
                 <div class="card-body">
                     <h2 class="card-title flex justify-between">
                         <span>Recent Projects</span>
-                        <x-button link="/projects" label="View All" icon="o-arrow-right" class="btn-sm btn-ghost"/>
+                        <x-button link="/projects" icon="fas.arrow-right" class="btn-sm btn-ghost"/>
                     </h2>
 
                     @if($projects->isEmpty())
                         <div class="py-4 text-center text-gray-500">
                             <p>No projects found</p>
-                            <x-button link="/projects/create" label="Create your first project" icon="o-plus"
-                                      class="btn-primary mt-2"/>
+                            <x-button link="/projects/create" icon="fas.plus"
+                                      class="btn-primary mt-2">Create your first project</x-button>
                         </div>
                     @else
                         <div class="overflow-x-auto">
@@ -69,7 +144,7 @@ new class extends Livewire\Volt\Component {
                                         <td>{{ $project->name }}</td>
                                         <td>{{ $project->tasks->count() }}</td>
                                         <td>
-                                            <x-button link="/projects/{{ $project->id }}" icon="o-eye"
+                                            <x-button link="/projects/{{ $project->id }}" icon="fas.eye"
                                                       class="btn-sm btn-ghost" tooltip="View Project"/>
                                         </td>
                                     </tr>
@@ -113,7 +188,7 @@ new class extends Livewire\Volt\Component {
                                         </td>
                                         <td>
                                             <x-button link="/projects/{{ $task->project_id }}/tasks/{{ $task->id }}"
-                                                      icon="o-eye" class="btn-sm btn-ghost" tooltip="View Task"/>
+                                                      icon="fas.eye" class="btn-sm btn-ghost" tooltip="View Task"/>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -157,8 +232,8 @@ new class extends Livewire\Volt\Component {
                 <div class="card bg-base-100 shadow-xl">
                     <div class="card-body">
                         <h2 class="card-title">Recent Activity</h2>
-                        <x-button link="/projects/{{ $latestProject->id }}/activities" label="Activity Timeline"
-                                  icon="fas.clock-rotate-left" class="btn-outline mb-4"/>
+                        <x-button link="/projects/{{ $latestProject->id }}/activities" 
+                                  icon="fas.clock-rotate-left" class="btn-outline mb-4">Activity Timeline</x-button>
                         <div class="py-4">
                             <ul class="timeline timeline-vertical">
                                 @foreach($tasks->take(5) as $index => $task)
