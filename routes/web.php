@@ -47,8 +47,8 @@ Route::middleware('auth')->group(function () {
 // Proje Kanban Board ve Statü Geçiş Yönetimi
     Volt::route('/projects/{project}/status-transitions', 'projects.status-transition-manager')->name('projects.status-transitions');
     Volt::route('/projects/{project}/activities', 'activities.timeline')->name('activities.timeline');
-    Volt::route('/projects/{project}/tasks/{task}/activities', 'activities.timeline')->name('activities.timeline');
-    Volt::route('/projects/{project}/sprints/{sprint}/activities', 'activities.timeline')->name('activities.timeline');
+    Volt::route('/projects/{project}/tasks/{task}/activities', 'activities.timeline')->name('activities.timeline-task');
+    Volt::route('/projects/{project}/sprints/{sprint}/activities', 'activities.timeline')->name('activities.timeline-sprint');
 
 // Sprint İşlemleri
     Route::get('/projects/{project}/sprints/{sprint}/export/csv', [SprintExportController::class, 'exportCsv'])->name('sprints.export.csv');
