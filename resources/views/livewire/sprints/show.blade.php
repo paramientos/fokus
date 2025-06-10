@@ -197,14 +197,19 @@ new class extends Livewire\Volt\Component {
 
                 <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/board" label="Task Board"
                           icon="o-view-columns" class="btn-outline"/>
-                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/burndown" label="Burndown Chart"
+
+                <x-button no-wire-navigate link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/burndown" label="Burndown Chart"
                           icon="fas.chart-line" class="btn-outline"/>
-                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/report" label="View Report"
+
+                <x-button no-wire-navigate link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/report" label="View Report"
                           icon="fas.chart-bar" class="btn-outline"/>
+
                 <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/retrospective"
                           label="Retrospective" icon="fas.user" class="btn-outline"/>
+
                 <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/edit" label="Edit"
                           icon="o-pencil" class="btn-outline"/>
+
                 <x-button wire:click="toggleCloneModal" label="Clone" icon="o-document-duplicate" class="btn-outline"/>
             </div>
         </div>
