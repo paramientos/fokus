@@ -127,6 +127,7 @@ new class extends Livewire\Volt\Component {
     public function addComment()
     {
         if(!$this->selectedTask) return;
+
         $this->validate([
             'newComment' => 'required|string|min:1',
         ]);
@@ -140,6 +141,17 @@ new class extends Livewire\Volt\Component {
         $this->newComment = '';
         $this->viewTask($this->selectedTask);
         $this->success('Comment added');
+    }
+
+    public function deleteComment($commentId)
+    {
+        $comment = \App\Models\Comment::find($commentId);
+        if(!$comment){ $this->error('Comment not found'); return; }
+        if($comment->user_id !== (auth()->id() ?? 0)){
+            $this->error('You cannot delete this comment'); return; }
+        $comment->delete();
+        $this->success('Comment deleted');
+        $this->viewTask($this->selectedTask);
     }
 }
 
@@ -317,6 +329,9 @@ new class extends Livewire\Volt\Component {
                                                     </div>
                                                     <span
                                                         class="text-sm text-gray-500">{{ Carbon::parse($comment['created_at'])->diffForHumans() }}</span>
+                                                    @if(($comment['user']['id'] ?? null) === (auth()->id()))
+                                                        <button wire:click="deleteComment({{ $comment['id'] }})" class="btn btn-xs btn-ghost text-error"><x-icon name="o-trash"/></button>
+                                                    @endif
                                                 </div>
                                                 <p>{{ $comment['content'] }}</p>
                                             </div>
@@ -325,7 +340,7 @@ new class extends Livewire\Volt\Component {
                                 @endif
 
                                 <div class="mt-4">
-                                    <x-textarea wire:model.defer="newComment" placeholder="Add a comment..." rows="2"/>
+                                    <x-textarea wire:model="newComment" placeholder="Add a comment..." rows="2"/>
                                     <div class="mt-2 flex justify-end">
                                         <x-button wire:click="addComment" label="Add Comment" class="btn-primary btn-sm"/>
                                     </div>

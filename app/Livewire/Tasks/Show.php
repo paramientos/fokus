@@ -5,6 +5,7 @@ namespace App\Livewire\Tasks;
 use App\Models\Task;
 use App\Models\Tag;
 use App\Models\Attachment;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -79,6 +80,25 @@ class Show extends Component
         ]);
 
         $this->newComment = '';
+        $this->loadComments();
+    }
+
+    // Delete a comment (only by author)
+    public function deleteComment($commentId)
+    {
+        $comment = Comment::find($commentId);
+
+        if (!$comment) {
+            return;
+        }
+
+        // Only allow the author to delete
+        if ($comment->user_id !== auth()->id()) {
+            return;
+        }
+
+        $comment->delete();
+
         $this->loadComments();
     }
 

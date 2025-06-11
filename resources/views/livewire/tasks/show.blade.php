@@ -56,6 +56,9 @@
                                                     <div class="text-xs text-gray-500">
                                                         {{ $comment->created_at->format('M d, Y H:i') }}
                                                     </div>
+                                                    @if($comment->user_id === auth()->id())
+                                                        <button wire:click="deleteComment({{ $comment->id }})" class="btn btn-xs btn-ghost text-error"><x-icon name="o-trash"/></button>
+                                                    @endif
                                                 </div>
                                                 <div class="mt-2">
                                                     {{ $comment->content }}
