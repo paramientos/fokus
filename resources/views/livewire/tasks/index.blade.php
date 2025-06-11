@@ -43,7 +43,7 @@ new class extends Livewire\Volt\Component {
 
         // Apply sorting
         $tasks = $query->orderBy($this->sortField, $this->sortDirection)
-            ->paginate(10);
+            ->paginate(50);
 
         $statuses = $this->project->statuses;
 
