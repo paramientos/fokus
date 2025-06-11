@@ -16,6 +16,7 @@ new class extends Livewire\Volt\Component {
     public $modalStatusId = null;
     public $modalUserId = null;
     public $users = [];
+    public $newComment = '';
 
     public function mount($project)
     {
@@ -121,6 +122,24 @@ new class extends Livewire\Volt\Component {
         $this->success('Task güncellendi');
         $this->loadBoard();
         $this->viewTask($task->id); // refresh modal data
+    }
+
+    public function addComment()
+    {
+        if(!$this->selectedTask) return;
+        $this->validate([
+            'newComment' => 'required|string|min:1',
+        ]);
+
+        \App\Models\Comment::create([
+            'content' => $this->newComment,
+            'task_id' => $this->selectedTask,
+            'user_id' => auth()->id() ?? 1,
+        ]);
+
+        $this->newComment = '';
+        $this->viewTask($this->selectedTask);
+        $this->success('Comment added');
     }
 }
 
@@ -274,13 +293,7 @@ new class extends Livewire\Volt\Component {
                         <div class="md:col-span-2">
                             <div class="mb-6">
                                 <h4 class="font-bold mb-2">Description</h4>
-                                <div class="prose max-w-none">
-                                    @if($selectedTaskDetails['description'])
-                                        <p>{{ $selectedTaskDetails['description'] }}</p>
-                                    @else
-                                        <p class="text-gray-500 italic">No description provided</p>
-                                    @endif
-                                </div>
+                                <x-markdown-viewer :content="$selectedTaskDetails['description'] ?? ''"/>
                             </div>
 
                             <div>
@@ -312,9 +325,9 @@ new class extends Livewire\Volt\Component {
                                 @endif
 
                                 <div class="mt-4">
-                                    <x-textarea placeholder="Add a comment..." rows="2"/>
+                                    <x-textarea wire:model.defer="newComment" placeholder="Add a comment..." rows="2"/>
                                     <div class="mt-2 flex justify-end">
-                                        <x-button label="Add Comment" class="btn-primary btn-sm"/>
+                                        <x-button wire:click="addComment" label="Add Comment" class="btn-primary btn-sm"/>
                                     </div>
                                 </div>
                             </div>

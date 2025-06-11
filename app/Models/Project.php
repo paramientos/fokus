@@ -96,6 +96,19 @@ class Project extends Model
         'is_archived' => 'boolean',
     ];
 
+    protected static function booted(): void
+    {
+        static::created(function (Project $project) {
+            // Projeyi oluşturan kullanıcıyı otomatik olarak üyeler listesine ekle
+            if ($project->user_id) {
+                // Eğer zaten eklenmediyse ekle
+                if (!$project->teamMembers()->where('users.id', $project->user_id)->exists()) {
+                    $project->teamMembers()->attach($project->user_id, ['role' => 'admin']);
+                }
+            }
+        });
+    }
+
     /**
      * Get the user that owns the project.
      */
