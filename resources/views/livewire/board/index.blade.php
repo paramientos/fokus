@@ -13,10 +13,14 @@ new class extends Livewire\Volt\Component {
     public $selectedTask = null;
     public $selectedTaskDetails = null;
     public $selectedTaskActivities = [];
+    public $modalStatusId = null;
+    public $modalUserId = null;
+    public $users = [];
 
     public function mount($project)
     {
         $this->project = \App\Models\Project::findOrFail($project);
+        $this->users = $this->project->teamMembers()->select('users.id','users.name')->get();
         $this->loadBoard();
     }
 
@@ -68,6 +72,9 @@ new class extends Livewire\Volt\Component {
             ->find($taskId)
             ->toArray();
 
+        $this->modalStatusId = $this->selectedTaskDetails['status_id'] ?? null;
+        $this->modalUserId = $this->selectedTaskDetails['user_id'] ?? null;
+
         // Load latest activities (history)
         $this->selectedTaskActivities = \App\Models\Activity::with('user')
             ->where('task_id', $taskId)
@@ -82,6 +89,38 @@ new class extends Livewire\Volt\Component {
         $this->selectedTask = null;
         $this->selectedTaskDetails = null;
         $this->selectedTaskActivities = [];
+        $this->modalStatusId = null;
+        $this->modalUserId = null;
+    }
+
+    public function saveModalChanges()
+    {
+        if(!$this->selectedTask) return;
+        $task = Task::find($this->selectedTask);
+        if(!$task) { $this->error('Task bulunamadı!'); return; }
+
+        // Status change
+        if($this->modalStatusId && $this->modalStatusId != $task->status_id){
+            $allowed = StatusTransition::where('project_id',$this->project->id)
+                ->where('from_status_id',$task->status_id)
+                ->where('to_status_id',$this->modalStatusId)
+                ->exists();
+            if(!$allowed){
+                $this->error('Bu durum geçişine izin verilmiyor!');
+            } else {
+                $task->status_id = $this->modalStatusId;
+            }
+        }
+
+        // Assignee change
+        if($this->modalUserId != $task->user_id){
+            $task->user_id = $this->modalUserId ?: null;
+        }
+
+        $task->save();
+        $this->success('Task güncellendi');
+        $this->loadBoard();
+        $this->viewTask($task->id); // refresh modal data
     }
 }
 
@@ -306,26 +345,12 @@ new class extends Livewire\Volt\Component {
                             <div class="space-y-4">
                                 <div>
                                     <p class="text-sm text-gray-500">Status</p>
-                                    <div class="badge mt-1"
-                                         style="background-color: {{ $selectedTaskDetails['status']['color'] ?? '#ccc' }}">
-                                        {{ $selectedTaskDetails['status']['name'] ?? 'Unknown' }}
-                                    </div>
+                                    <x-select wire:model.live="modalStatusId" :options="$statuses" class="w-full mt-1"/>
                                 </div>
 
                                 <div>
                                     <p class="text-sm text-gray-500">Assignee</p>
-                                    @if(!empty($selectedTaskDetails['user']))
-                                        <div class="flex items-center gap-2 mt-1">
-                                            <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                                    <span>{{ substr($selectedTaskDetails['user']['name'] ?? 'U', 0, 1) }}</span>
-                                                </div>
-                                            </div>
-                                            <span>{{ $selectedTaskDetails['user']['name'] }}</span>
-                                        </div>
-                                    @else
-                                        <p class="italic text-gray-500 mt-1">Unassigned</p>
-                                    @endif
+                                    <x-select wire:model.live="modalUserId" :options="$users->pluck('name','id')->toArray()" empty-message="Unassigned" class="w-full mt-1"/>
                                 </div>
 
                                 <div>
@@ -377,6 +402,7 @@ new class extends Livewire\Volt\Component {
                                 <x-button
                                     link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit"
                                     label="Edit Task" icon="o-pencil" class="btn-outline w-full"/>
+                                <x-button wire:click="saveModalChanges" label="Save Changes" icon="o-check" class="btn-primary w-full"/>
                                 <x-button no-wire-navigate
                                     link="{{ route('tasks.show', ['project' => $project, 'task' => $selectedTaskDetails['id']]) }}"
                                     label="Open Task Page" icon="o-arrow-top-right-on-square" class="btn-outline w-full"/>
