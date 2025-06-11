@@ -18,7 +18,7 @@ new class extends Livewire\Volt\Component {
     public function mount()
     {
         // Projedeki kullanıcıları yükle
-        $this->users = $this->project->members()->select('users.id', 'users.name')->get()->toArray();
+        $this->users = $this->project->teamMembers()->select('users.id', 'users.name')->get()->toArray();
 
         // Projedeki statüsleri yükle
         $this->availableStatuses = $this->project->statuses;
