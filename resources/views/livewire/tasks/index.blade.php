@@ -7,6 +7,20 @@ new class extends Livewire\Volt\Component {
     public $priorityFilter = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
+    public $users = [];
+    public $editingTaskId = null;
+    public $editingTaskStatus = null;
+    public $editingTaskUser = null;
+    public $availableStatuses = [];
+
+    public function mount()
+    {
+        // Projedeki kullanıcıları yükle
+        $this->users = $this->project->members()->select('users.id', 'users.name')->get()->toArray();
+        
+        // Projedeki statüsleri yükle
+        $this->availableStatuses = $this->project->statuses;
+    }
 
     public function sortBy($field)
     {
@@ -16,6 +30,85 @@ new class extends Livewire\Volt\Component {
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
+    }
+
+    public function editTask($taskId)
+    {
+        $task = \App\Models\Task::find($taskId);
+        if ($task) {
+            $this->editingTaskId = $taskId;
+            $this->editingTaskStatus = $task->status_id;
+            $this->editingTaskUser = $task->user_id;
+        }
+    }
+
+    public function cancelEdit()
+    {
+        $this->reset(['editingTaskId', 'editingTaskStatus', 'editingTaskUser']);
+    }
+
+    public function updateTaskStatus($taskId, $statusId)
+    {
+        $task = \App\Models\Task::find($taskId);
+        if (!$task) {
+            $this->dispatch('toast', type: 'error', message: 'Task not found!');
+            return;
+        }
+
+        // Aynı statüye güncelleme yapılıyorsa işlem yapmaya gerek yok
+        if ($task->status_id == $statusId) {
+            return;
+        }
+
+        // Statü geçiş kontrolü
+        $fromStatusId = $task->status_id;
+        $allowed = \App\Models\StatusTransition::where('project_id', $this->project->id)
+            ->where('from_status_id', $fromStatusId)
+            ->where('to_status_id', $statusId)
+            ->exists();
+
+        if (!$allowed) {
+            $this->dispatch('toast', type: 'error', message: 'This status transition is not allowed!');
+            return;
+        }
+
+        $task->update(['status_id' => $statusId]);
+        $this->dispatch('toast', type: 'success', message: 'Task status updated successfully!');
+        $this->cancelEdit();
+    }
+
+    public function updateTaskAssignee($taskId, $userId)
+    {
+        $task = \App\Models\Task::find($taskId);
+        if (!$task) {
+            $this->dispatch('toast', type: 'error', message: 'Task not found!');
+            return;
+        }
+
+        // Kullanıcı null olabilir (unassigned)
+        $task->update(['user_id' => $userId ?: null]);
+        $this->dispatch('toast', type: 'success', message: 'Task assignee updated successfully!');
+        $this->cancelEdit();
+    }
+
+    public function saveChanges()
+    {
+        if ($this->editingTaskId) {
+            $task = \App\Models\Task::find($this->editingTaskId);
+            if ($task) {
+                // Status değişikliği
+                if ($task->status_id != $this->editingTaskStatus) {
+                    $this->updateTaskStatus($this->editingTaskId, $this->editingTaskStatus);
+                }
+                
+                // Atama değişikliği
+                if ($task->user_id != $this->editingTaskUser) {
+                    $this->updateTaskAssignee($this->editingTaskId, $this->editingTaskUser);
+                }
+            }
+        }
+        
+        $this->cancelEdit();
     }
 
     public function with(): array
@@ -140,12 +233,20 @@ new class extends Livewire\Volt\Component {
                                     </a>
                                 </td>
                                 <td>
-                                    @if($task->status)
-                                        <div class="badge" style="background-color: {{ $task->status->color }}">
-                                            {{ $task->status->name }}
-                                        </div>
+                                    @if($editingTaskId === $task->id)
+                                        <x-select
+                                            wire:model="editingTaskStatus"
+                                            :options="$availableStatuses"
+                                            class="w-full"
+                                        />
                                     @else
-                                        <span class="text-gray-500">-</span>
+                                        @if($task->status)
+                                            <div class="badge cursor-pointer" style="background-color: {{ $task->status->color }}" wire:click="editTask({{ $task->id }})">
+                                                {{ $task->status->name }}
+                                            </div>
+                                        @else
+                                            <span class="text-gray-500">-</span>
+                                        @endif
                                     @endif
                                 </td>
                                 <td>
@@ -161,17 +262,28 @@ new class extends Livewire\Volt\Component {
                                     @endif
                                 </td>
                                 <td>
-                                    @if($task->user)
-                                        <div class="flex items-center gap-2">
-                                            <div class="avatar placeholder">
-                                                <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                                    <span>{{ substr($task->user->name, 0, 1) }}</span>
-                                                </div>
-                                            </div>
-                                            <span>{{ $task->user->name }}</span>
-                                        </div>
+                                    @if($editingTaskId === $task->id)
+                                        <x-select
+                                            wire:model="editingTaskUser"
+                                            :options="collect($users)->pluck('name', 'id')->toArray()"
+                                            empty-message="Unassigned"
+                                            class="w-full"
+                                        />
                                     @else
-                                        <span class="text-gray-500">Unassigned</span>
+                                        <div class="cursor-pointer" wire:click="editTask({{ $task->id }})">
+                                            @if($task->user)
+                                                <div class="flex items-center gap-2">
+                                                    <div class="avatar placeholder">
+                                                        <div class="bg-neutral text-neutral-content rounded-full w-6">
+                                                            <span>{{ substr($task->user->name, 0, 1) }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <span>{{ $task->user->name }}</span>
+                                                </div>
+                                            @else
+                                                <span class="text-gray-500">Unassigned</span>
+                                            @endif
+                                        </div>
                                     @endif
                                 </td>
                                 <td>
@@ -186,10 +298,15 @@ new class extends Livewire\Volt\Component {
                                 <td>{{ $task->created_at->format('M d, Y') }}</td>
                                 <td>
                                     <div class="flex gap-2">
-                                        <x-button link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}" icon="o-eye"
-                                                  class="btn-sm btn-ghost" tooltip="View"/>
-                                        <x-button no-wire-navigate link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
-                                                  icon="o-pencil" class="btn-sm btn-ghost" tooltip="Edit"/>
+                                        @if($editingTaskId === $task->id)
+                                            <x-button wire:click="saveChanges" icon="o-check" class="btn-sm btn-success" tooltip="Save"/>
+                                            <x-button wire:click="cancelEdit" icon="o-x-mark" class="btn-sm btn-ghost" tooltip="Cancel"/>
+                                        @else
+                                            <x-button link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}" icon="o-eye"
+                                                    class="btn-sm btn-ghost" tooltip="View"/>
+                                            <x-button no-wire-navigate link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
+                                                    icon="o-pencil" class="btn-sm btn-ghost" tooltip="Edit"/>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
