@@ -53,7 +53,7 @@ new class extends Livewire\Volt\Component {
     {
         $task = \App\Models\Task::find($taskId);
         if (!$task) {
-            $this->err 'Task not found!');
+            $this->error('Task not found!');
             return;
         }
 
