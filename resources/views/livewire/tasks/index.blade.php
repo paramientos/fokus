@@ -75,7 +75,7 @@ new class extends Livewire\Volt\Component {
         }
 
         $task->update(['status_id' => $statusId]);
-        $this - $this->success('Task status updated successfully!');
+        $this->success('Task status updated successfully!');
         $this->cancelEdit();
     }
 
@@ -113,10 +113,19 @@ new class extends Livewire\Volt\Component {
         $this->cancelEdit();
     }
 
+    public function reorder(array $ids)
+    {
+        foreach ($ids as $index => $id) {
+            \App\Models\Task::where('id', $id)->update(['order' => $index]);
+        }
+        $this->success('Task order updated');
+    }
+
     public function with(): array
     {
         $query = $this->project->tasks()
-            ->with(['status', 'user', 'sprint']);
+            ->with(['status', 'user', 'sprint'])
+            ->ordered();
 
         // Apply search filter
         if ($this->search) {
@@ -198,6 +207,7 @@ new class extends Livewire\Volt\Component {
                     <table class="table table-zebra w-full">
                         <thead>
                         <tr>
+                            <th></th>
                             <th class="cursor-pointer" wire:click="sortBy('id')">
                                 ID
                                 @if($sortField === 'id')
@@ -226,9 +236,21 @@ new class extends Livewire\Volt\Component {
                             <th>Actions</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody x-data
+                               x-init="
+                                    Sortable.create($el, {
+                                        animation: 150,
+                                        handle: '.drag-handle',
+                                        onEnd: function (evt) {
+                                            const ids = Array.from(evt.to.children).map(row => row.dataset.id);
+                                            $wire.reorder(ids);
+                                        }
+                                    });
+                               "
+                        >
                         @foreach($tasks as $task)
-                            <tr>
+                            <tr data-id="{{ $task->id }}">
+                                <td class="drag-handle cursor-move select-none text-gray-400"><x-icon name="o-bars-3" class="w-4 h-4"/></td>
                                 <td>{{ $project->key }}-{{ $task->id }}</td>
                                 <td>
                                     <a href="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}"

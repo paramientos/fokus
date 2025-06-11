@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * 
  *
  * @property int $id
+ * @property int $order
  * @property string $title
  * @property string|null $description
  * @property int $project_id
@@ -59,12 +60,14 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read \App\Models\Workflow|null $workflow
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Task ordered()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereCompletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereDueDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task wherePriority($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereReporterId($value)
@@ -106,6 +109,7 @@ class Task extends Model
         'time_estimate',
         'started_at',
         'completed_at',
+        'order',
     ];
 
     /**
@@ -250,5 +254,10 @@ class Task extends Model
     public function conversations()
     {
         return $this->morphMany(Conversation::class, 'context');
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('order');
     }
 }
