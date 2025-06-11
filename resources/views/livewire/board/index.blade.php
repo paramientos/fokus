@@ -350,7 +350,7 @@ new class extends Livewire\Volt\Component {
 
                                 <div>
                                     <p class="text-sm text-gray-500">Assignee</p>
-                                    <x-select wire:model.live="modalUserId" :options="$users->pluck('name','id')->toArray()" empty-message="Unassigned" class="w-full mt-1"/>
+                                    <x-select wire:model.live="modalUserId" :options="$users->select('name','id')->toArray()" empty-message="Unassigned" class="w-full mt-1"/>
                                 </div>
 
                                 <div>
