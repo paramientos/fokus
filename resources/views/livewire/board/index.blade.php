@@ -12,6 +12,7 @@ new class extends Livewire\Volt\Component {
     public $tasks = [];
     public $selectedTask = null;
     public $selectedTaskDetails = null;
+    public $selectedTaskActivities = [];
 
     public function mount($project)
     {
@@ -66,12 +67,21 @@ new class extends Livewire\Volt\Component {
         $this->selectedTaskDetails = Task::with(['user', 'reporter', 'status', 'comments.user'])
             ->find($taskId)
             ->toArray();
+
+        // Load latest activities (history)
+        $this->selectedTaskActivities = \App\Models\Activity::with('user')
+            ->where('task_id', $taskId)
+            ->latest()
+            ->take(20)
+            ->get()
+            ->toArray();
     }
 
     public function closeTaskDetails()
     {
         $this->selectedTask = null;
         $this->selectedTaskDetails = null;
+        $this->selectedTaskActivities = [];
     }
 }
 
@@ -269,6 +279,26 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="mt-6">
+                                <h4 class="font-bold mb-2">History</h4>
+                                @if(empty($selectedTaskActivities))
+                                    <p class="text-gray-500 italic">No history</p>
+                                @else
+                                    <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                                        @foreach($selectedTaskActivities as $activity)
+                                            <div class="flex items-start gap-2">
+                                                <x-icon name="{{ $activity['icon'] ?? 'fas.circle-info' }}" class="w-4 h-4 text-{{ $activity['color'] ?? 'neutral' }}"/>
+                                                <p class="text-sm">
+                                                    <span class="font-medium">{{ $activity['user']['name'] ?? 'Unknown' }}</span>
+                                                    {{ $activity['description'] ?? $activity['action'] }}
+                                                    <span class="text-gray-500">- {{ Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
+                                                </p>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
                         <div>
@@ -347,6 +377,9 @@ new class extends Livewire\Volt\Component {
                                 <x-button
                                     link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit"
                                     label="Edit Task" icon="o-pencil" class="btn-outline w-full"/>
+                                <x-button no-wire-navigate
+                                    link="{{ route('tasks.show', ['project' => $project, 'task' => $selectedTaskDetails['id']]) }}"
+                                    label="Open Task Page" icon="o-arrow-top-right-on-square" class="btn-outline w-full"/>
                             </div>
                         </div>
                     </div>
