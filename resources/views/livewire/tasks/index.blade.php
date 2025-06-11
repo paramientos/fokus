@@ -1,6 +1,8 @@
 <?php
 
 new class extends Livewire\Volt\Component {
+    use \Mary\Traits\Toast;
+
     public \App\Models\Project $project;
     public $search = '';
     public $statusFilter = '';
@@ -17,7 +19,7 @@ new class extends Livewire\Volt\Component {
     {
         // Projedeki kullanıcıları yükle
         $this->users = $this->project->members()->select('users.id', 'users.name')->get()->toArray();
-        
+
         // Projedeki statüsleri yükle
         $this->availableStatuses = $this->project->statuses;
     }
@@ -51,7 +53,7 @@ new class extends Livewire\Volt\Component {
     {
         $task = \App\Models\Task::find($taskId);
         if (!$task) {
-            $this->dispatch('toast', type: 'error', message: 'Task not found!');
+            $this->err 'Task not found!');
             return;
         }
 
@@ -68,12 +70,12 @@ new class extends Livewire\Volt\Component {
             ->exists();
 
         if (!$allowed) {
-            $this->dispatch('toast', type: 'error', message: 'This status transition is not allowed!');
+            $this->error('This status transition is not allowed!');
             return;
         }
 
         $task->update(['status_id' => $statusId]);
-        $this->dispatch('toast', type: 'success', message: 'Task status updated successfully!');
+        $this - $this->success('Task status updated successfully!');
         $this->cancelEdit();
     }
 
@@ -81,13 +83,13 @@ new class extends Livewire\Volt\Component {
     {
         $task = \App\Models\Task::find($taskId);
         if (!$task) {
-            $this->dispatch('toast', type: 'error', message: 'Task not found!');
+            $this->error('Task not found!');
             return;
         }
 
         // Kullanıcı null olabilir (unassigned)
         $task->update(['user_id' => $userId ?: null]);
-        $this->dispatch('toast', type: 'success', message: 'Task assignee updated successfully!');
+        $this->success('Task assignee updated successfully!');
         $this->cancelEdit();
     }
 
@@ -100,14 +102,14 @@ new class extends Livewire\Volt\Component {
                 if ($task->status_id != $this->editingTaskStatus) {
                     $this->updateTaskStatus($this->editingTaskId, $this->editingTaskStatus);
                 }
-                
+
                 // Atama değişikliği
                 if ($task->user_id != $this->editingTaskUser) {
                     $this->updateTaskAssignee($this->editingTaskId, $this->editingTaskUser);
                 }
             }
         }
-        
+
         $this->cancelEdit();
     }
 
@@ -173,7 +175,8 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
 
-        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task" icon="o-plus"
+        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task"
+                  icon="o-plus"
                   class="btn-primary"/>
     </div>
 
@@ -185,7 +188,8 @@ new class extends Livewire\Volt\Component {
                     <h3 class="mt-4 text-lg font-medium text-gray-900">No tasks found</h3>
                     <p class="mt-1 text-sm text-gray-500">Get started by creating a new task.</p>
                     <div class="mt-6">
-                        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task" icon="o-plus"
+                        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}"
+                                  label="Create Task" icon="o-plus"
                                   class="btn-primary"/>
                     </div>
                 </div>
@@ -235,13 +239,15 @@ new class extends Livewire\Volt\Component {
                                 <td>
                                     @if($editingTaskId === $task->id)
                                         <x-select
-                                            wire:model="editingTaskStatus"
-                                            :options="$availableStatuses"
-                                            class="w-full"
+                                                wire:model="editingTaskStatus"
+                                                :options="$availableStatuses"
+                                                class="w-full"
                                         />
                                     @else
                                         @if($task->status)
-                                            <div class="badge cursor-pointer" style="background-color: {{ $task->status->color }}" wire:click="editTask({{ $task->id }})">
+                                            <div class="badge cursor-pointer"
+                                                 style="background-color: {{ $task->status->color }}"
+                                                 wire:click="editTask({{ $task->id }})">
                                                 {{ $task->status->name }}
                                             </div>
                                         @else
@@ -264,10 +270,10 @@ new class extends Livewire\Volt\Component {
                                 <td>
                                     @if($editingTaskId === $task->id)
                                         <x-select
-                                            wire:model="editingTaskUser"
-                                            :options="collect($users)->pluck('name', 'id')->toArray()"
-                                            empty-message="Unassigned"
-                                            class="w-full"
+                                                wire:model="editingTaskUser"
+                                                :options="collect($users)->pluck('name', 'id')->toArray()"
+                                                empty-message="Unassigned"
+                                                class="w-full"
                                         />
                                     @else
                                         <div class="cursor-pointer" wire:click="editTask({{ $task->id }})">
@@ -299,13 +305,18 @@ new class extends Livewire\Volt\Component {
                                 <td>
                                     <div class="flex gap-2">
                                         @if($editingTaskId === $task->id)
-                                            <x-button wire:click="saveChanges" icon="o-check" class="btn-sm btn-success" tooltip="Save"/>
-                                            <x-button wire:click="cancelEdit" icon="o-x-mark" class="btn-sm btn-ghost" tooltip="Cancel"/>
+                                            <x-button wire:click="saveChanges" icon="o-check" class="btn-sm btn-success"
+                                                      tooltip="Save"/>
+                                            <x-button wire:click="cancelEdit" icon="o-x-mark" class="btn-sm btn-ghost"
+                                                      tooltip="Cancel"/>
                                         @else
-                                            <x-button link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}" icon="o-eye"
+                                            <x-button
+                                                    link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}"
+                                                    icon="o-eye"
                                                     class="btn-sm btn-ghost" tooltip="View"/>
-                                            <x-button no-wire-navigate link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
-                                                    icon="o-pencil" class="btn-sm btn-ghost" tooltip="Edit"/>
+                                            <x-button no-wire-navigate
+                                                      link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
+                                                      icon="o-pencil" class="btn-sm btn-ghost" tooltip="Edit"/>
                                         @endif
                                     </div>
                                 </td>
