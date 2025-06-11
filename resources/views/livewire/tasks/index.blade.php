@@ -188,7 +188,7 @@ new class extends Livewire\Volt\Component {
                                     <div class="flex gap-2">
                                         <x-button link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}" icon="o-eye"
                                                   class="btn-sm btn-ghost" tooltip="View"/>
-                                        <x-button link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
+                                        <x-button no-wire-navigate link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
                                                   icon="o-pencil" class="btn-sm btn-ghost" tooltip="Edit"/>
                                     </div>
                                 </td>
