@@ -14,5 +14,7 @@
         {{ $slot }}
     </x-slot:content>
 </x-main-line>
+
+@stack('scripts')
 </body>
 </html>

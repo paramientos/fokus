@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Http;
 
 new
 #[Layout('components.layouts.empty')]
@@ -8,15 +9,35 @@ class extends Livewire\Volt\Component {
     public string $email = '';
     public string $password = '';
     public bool $remember = false;
+    public string $turnstileToken = '';
 
     protected array $rules = [
         'email' => 'required|email',
         'password' => 'required',
+        'turnstileToken' => 'required',
+    ];
+
+    protected array $messages = [
+        'turnstileToken.required' => 'Please complete the security verification.',
     ];
 
     public function login()
     {
         $this->validate();
+
+        // Verify Turnstile token
+        $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret' => config('services.turnstile.secret_key'),
+            'response' => $this->turnstileToken,
+            'remoteip' => get_real_ip(),
+        ]);
+
+        if (!$response->json('success')) {
+            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+            $this->dispatch('reset-turnstile');
+            $this->turnstileToken = '';
+            return;
+        }
 
         if (auth()->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
@@ -49,7 +70,7 @@ class extends Livewire\Volt\Component {
 
                 <h2 class="text-center text-2xl font-bold mb-6">Login to your account</h2>
 
-                <livewire:components.all-info-component />
+                <livewire:components.all-info-component/>
 
                 <form wire:submit="login">
                     <div class="space-y-4">
@@ -65,6 +86,13 @@ class extends Livewire\Volt\Component {
                             @error('password') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
+                        <div class="form-control">
+                            <div class="turnstile"
+                                 data-sitekey="{{ config('services.turnstile.site_key') }}"
+                                 data-callback="turnstileCallback"></div>
+                            @error('turnstileToken') <span class="text-error text-sm">{{ $message }}</span> @enderror
+                        </div>
+
                         <div class="flex items-center justify-between">
                             <label class="cursor-pointer label justify-start gap-2">
                                 <x-checkbox wire:model="remember"/>
@@ -73,6 +101,8 @@ class extends Livewire\Volt\Component {
 
                             <a href="#" class="text-sm text-primary hover:underline">Forgot password?</a>
                         </div>
+
+                        <div class="cf-turnstile"  data-callback="turnstileCallback" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
 
                         <div class="form-control mt-6">
                             <x-button type="submit" label="Login" class="btn-primary w-full"/>
@@ -89,4 +119,17 @@ class extends Livewire\Volt\Component {
             </div>
         </div>
     </div>
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Turnstile callback function
+                window.turnstileCallback = function (token) {
+                    @this.set('turnstileToken', token);
+                };
+            });
+        </script>
+    @endpush
 </div>
