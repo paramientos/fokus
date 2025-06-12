@@ -9,7 +9,7 @@ new class extends Livewire\Volt\Component {
             })
             ->with(['owner', 'members'])
             ->get();
-            
+
         $projects = \App\Models\Project::where('is_active', true)
             ->latest()
             ->take(5)
@@ -37,7 +37,6 @@ new class extends Livewire\Volt\Component {
 
 <div>
     <x-slot:title>Dashboard</x-slot:title>
-
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-primary">Dashboard</h1>
@@ -59,14 +58,16 @@ new class extends Livewire\Volt\Component {
                     View All
                 </x-button>
             </div>
-            
+
+            <livewire:components.all-info-component />
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 @forelse($workspaces->take(3) as $workspace)
                     <div class="card bg-base-100 shadow-lg">
                         <div class="card-body">
                             <h3 class="card-title">{{ $workspace->name }}</h3>
                             <p class="text-gray-500 text-sm">{{ Str::limit($workspace->description, 60) }}</p>
-                            
+
                             <div class="flex items-center gap-2 mt-2">
                                 <div class="avatar placeholder">
                                     <div class="bg-neutral text-neutral-content rounded-full w-6">
@@ -86,7 +87,7 @@ new class extends Livewire\Volt\Component {
                                     </x-badge>
                                 @endif
                             </div>
-                            
+
                             <div class="card-actions justify-end mt-4">
                                 <x-button link="/workspaces/{{ $workspace->id }}" icon="fas.arrow-right" class="btn-sm btn-primary">
                                     Open
@@ -232,7 +233,7 @@ new class extends Livewire\Volt\Component {
                 <div class="card bg-base-100 shadow-xl">
                     <div class="card-body">
                         <h2 class="card-title">Recent Activity</h2>
-                        <x-button link="/projects/{{ $latestProject->id }}/activities" 
+                        <x-button link="/projects/{{ $latestProject->id }}/activities"
                                   icon="fas.clock-rotate-left" class="btn-outline mb-4">Activity Timeline</x-button>
                         <div class="py-4">
                             <ul class="timeline timeline-vertical">

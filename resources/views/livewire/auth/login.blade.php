@@ -1,7 +1,9 @@
 <?php
 
+use Livewire\Attributes\Layout;
+
 new
-#[\Livewire\Attributes\Layout('components.layouts.empty')]
+#[Layout('components.layouts.empty')]
 class extends Livewire\Volt\Component {
     public string $email = '';
     public string $password = '';
@@ -32,7 +34,9 @@ class extends Livewire\Volt\Component {
 
     <div class="min-h-screen flex items-center justify-center">
         <div class="card bg-base-100 shadow-xl w-full max-w-md">
+
             <div class="card-body">
+
                 <div class="flex justify-center mb-6">
                     <div class="flex items-center gap-2">
                         <x-icon name="o-rocket-launch" class="text-primary w-10 h-10"/>
@@ -44,6 +48,8 @@ class extends Livewire\Volt\Component {
                 </div>
 
                 <h2 class="text-center text-2xl font-bold mb-6">Login to your account</h2>
+
+                <livewire:components.all-info-component />
 
                 <form wire:submit="login">
                     <div class="space-y-4">

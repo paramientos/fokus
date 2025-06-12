@@ -3,15 +3,59 @@
 use App\Http\Controllers\MeetingExportController;
 use App\Http\Controllers\SprintCloneController;
 use App\Http\Controllers\SprintExportController;
+use App\Models\WorkspaceInvitation;
 use Livewire\Volt\Volt;
 
 Volt::route('/login', 'auth.login')->name('login');
 Volt::route('/register', 'auth.register')->name('register');
 
+Route::get('/workspaces/invitation/{token}', function ($token) {
+    $invitation = WorkspaceInvitation::where('token', $token)->firstOrFail();
+
+    if ($invitation->isExpired()) {
+        return to_route('login')->with('error', 'This invitation has expired.');
+    }
+    if ($invitation->accepted_at) {
+        return to_route('login')->with('info', 'This invitation has already been accepted.');
+    }
+
+    if (!auth()->check()) {
+        session(['invitation_token' => $token]);
+
+        return to_route('login')->with('info', 'Please login or register to accept the workspace invitation.');
+    }
+
+    // Check if user is already a member of the workspace
+    if ($invitation->workspace->members()->where('user_id', auth()->id())->exists()) {
+        session(['workspace_id' => $invitation->workspace_id]);
+
+        return to_route('dashboard')->with('info', 'You are already a member of ' . $invitation->workspace->name . '.');
+    }
+
+    if (auth()->user()->email !== $invitation->email) {
+        return to_route('dashboard')->with('error', 'Invitation not found!');
+    }
+
+    $invitation->update(['accepted_at' => now()]);
+
+    $invitation->workspace->members()->attach(auth()->id(), [
+        'role' => $invitation->role
+    ]);
+
+    session(['workspace_id' => $invitation->workspace_id]);
+
+    return redirect()->route('dashboard')->with('success', 'Welcome to ' . $invitation->workspace->name . '!');
+})->name('workspaces.invitation.accept');
+
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
-        if (!session()->has('workspace_id')) {
-            return redirect()->route('workspaces.index');
+        if (session()->hasAny(['info', 'warning', 'error', 'success'])) {
+            return redirect()->route('dashboard.show')->with([
+                'info' => session('info'),
+                'warning' => session('warning'),
+                'error' => session('error'),
+                'success' => session('success')
+            ]);
         }
 
         return redirect()->route('dashboard.show');

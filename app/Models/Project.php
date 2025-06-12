@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $name
@@ -22,40 +22,41 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_archived
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Conversation> $conversations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
  * @property-read int|null $conversations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Meeting> $meetings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Meeting> $meetings
  * @property-read int|null $meetings_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Sprint> $sprints
+ * @property-read \App\Models\User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Sprint> $sprints
  * @property-read int|null $sprints_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Status> $statuses
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Status> $statuses
  * @property-read int|null $statuses_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Task> $tasks
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $teamMembers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $teamMembers
  * @property-read int|null $team_members_count
- * @property-read User $user
- * @property-read \Illuminate\Database\Eloquent\Collection<int, WikiCategory> $wikiCategories
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiCategory> $wikiCategories
  * @property-read int|null $wiki_categories_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, WikiPage> $wikiPages
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $wikiPages
  * @property-read int|null $wiki_pages_count
- * @property-read Workspace|null $workspace
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project active()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project archived()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereAvatar($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereIsArchived($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Project whereWorkspaceId($value)
+ * @property-read \App\Models\Workspace|null $workspace
+ * @method static Builder<static>|Project active()
+ * @method static Builder<static>|Project archived()
+ * @method static Builder<static>|Project newModelQuery()
+ * @method static Builder<static>|Project newQuery()
+ * @method static Builder<static>|Project query()
+ * @method static Builder<static>|Project whereAvatar($value)
+ * @method static Builder<static>|Project whereCreatedAt($value)
+ * @method static Builder<static>|Project whereDescription($value)
+ * @method static Builder<static>|Project whereId($value)
+ * @method static Builder<static>|Project whereIsActive($value)
+ * @method static Builder<static>|Project whereIsArchived($value)
+ * @method static Builder<static>|Project whereKey($value)
+ * @method static Builder<static>|Project whereName($value)
+ * @method static Builder<static>|Project whereUpdatedAt($value)
+ * @method static Builder<static>|Project whereUserId($value)
+ * @method static Builder<static>|Project whereWorkspaceId($value)
  * @mixin \Eloquent
  */
 class Project extends Model

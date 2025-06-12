@@ -16,7 +16,16 @@ class EnsureWorkspaceIsSelected
         }
 
         if (!session()->has('workspace_id')) {
-            return redirect()->route('workspaces.index');
+            if (session()->hasAny(['info', 'warning', 'error', 'success'])) {
+                return redirect()->route('workspaces.index')->with([
+                    'info' => session('info'),
+                    'warning' => session('warning'),
+                    'error' => session('error'),
+                    'success' => session('success')
+                ]);
+            }
+
+            return to_route('workspaces.index');
         }
 
         return $next($request);

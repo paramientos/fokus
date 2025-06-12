@@ -82,6 +82,9 @@ new class extends Livewire\Volt\Component {
             </x-button>
         </div>
 
+        <livewire:components.all-info-component/>
+
+
         <!-- Workspace Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($workspaces as $workspace)
