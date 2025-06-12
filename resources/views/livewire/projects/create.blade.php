@@ -18,26 +18,9 @@ new class extends Livewire\Volt\Component {
         $this->validateOnly($propertyName);
     }
 
-    public function generateKey()
+    public function generateKey(): void
     {
-        if (empty($this->name)) {
-            return;
-        }
-
-        $words = explode(' ', $this->name);
-        if (count($words) > 1) {
-            $this->key = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
-        } else {
-            $this->key = strtoupper(substr($this->name, 0, 2));
-        }
-
-        // Ensure key is unique
-        $count = 1;
-        $originalKey = $this->key;
-        while (\App\Models\Project::where('key', $this->key)->exists()) {
-            $this->key = $originalKey . $count;
-            $count++;
-        }
+        $this->key = generate_project_key($this->name);
     }
 
     public function save()

@@ -106,6 +106,7 @@ new class extends Livewire\Volt\Component {
                 ->where('from_status_id',$task->status_id)
                 ->where('to_status_id',$this->modalStatusId)
                 ->exists();
+
             if(!$allowed){
                 $this->error('Bu durum geçişine izin verilmiyor!');
             } else {

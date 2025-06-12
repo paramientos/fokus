@@ -33,10 +33,30 @@
         <div class="px-5 pt-4 flex items-center gap-2">
             <x-icon name="o-rocket-launch" class="text-primary w-8 h-8"/>
             <div>
-                <h1 class="text-xl font-bold text-primary">ProjectFlow</h1>
+                <h1 class="text-xl font-bold text-primary">Fokus</h1>
                 <p class="text-xs">Project Management</p>
             </div>
         </div>
+
+        {{-- Current Workspace --}}
+        @if(session('workspace_id'))
+            @php
+                $currentWorkspace = \App\Models\Workspace::find(session('workspace_id'));
+            @endphp
+            @if($currentWorkspace)
+                <div class="px-5 py-2 bg-primary/10 mx-2 rounded-lg mt-2">
+                    <p class="text-xs text-gray-500">CURRENT WORKSPACE</p>
+                    <p class="font-medium">{{ $currentWorkspace->name }}</p>
+                    <a href="{{ route('workspaces.index') }}" onclick="event.preventDefault(); document.getElementById('change-workspace-form').submit();" class="btn btn-xs btn-ghost mt-1">
+                        <x-icon name="fas.exchange-alt" class="w-3 h-3"/>
+                        Change
+                    </a>
+                    <form id="change-workspace-form" action="{{ route('workspaces.index') }}" method="GET" style="display: none;">
+                        <input type="hidden" name="reset_workspace" value="1">
+                    </form>
+                </div>
+            @endif
+        @endif
 
         {{-- MENU --}}
         <x-menu activate-by-route>

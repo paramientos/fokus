@@ -7,13 +7,13 @@ import TaskItem from '@tiptap/extension-task-item'
 
 document.addEventListener('DOMContentLoaded', () => {
   const editorElements = document.querySelectorAll('.markdown-editor')
-  
+
   editorElements.forEach(element => {
     const content = element.querySelector('.content')
     const input = element.querySelector('.input')
-    
+
     if (!content || !input) return
-    
+
     const editor = new Editor({
       element: content,
       extensions: [
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     })
-    
+
     // Toolbar buttons
     const toolbar = element.querySelector('.toolbar')
     if (toolbar) {
@@ -58,47 +58,47 @@ document.addEventListener('DOMContentLoaded', () => {
       toolbar.querySelector('[data-action="heading"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleHeading({ level: 2 }).run()
       })
-      
+
       // Bold
       toolbar.querySelector('[data-action="bold"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleBold().run()
       })
-      
+
       // Italic
       toolbar.querySelector('[data-action="italic"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleItalic().run()
       })
-      
+
       // Bullet List
       toolbar.querySelector('[data-action="bullet-list"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleBulletList().run()
       })
-      
+
       // Ordered List
       toolbar.querySelector('[data-action="ordered-list"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleOrderedList().run()
       })
-      
+
       // Task List
       toolbar.querySelector('[data-action="task-list"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleTaskList().run()
       })
-      
+
       // Code Block
       toolbar.querySelector('[data-action="code-block"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleCodeBlock().run()
       })
-      
+
       // Blockquote
       toolbar.querySelector('[data-action="blockquote"]')?.addEventListener('click', () => {
         editor.chain().focus().toggleBlockquote().run()
       })
-      
+
       // Horizontal Rule
       toolbar.querySelector('[data-action="horizontal-rule"]')?.addEventListener('click', () => {
         editor.chain().focus().setHorizontalRule().run()
       })
-      
+
       // Link
       toolbar.querySelector('[data-action="link"]')?.addEventListener('click', () => {
         const url = window.prompt('URL')

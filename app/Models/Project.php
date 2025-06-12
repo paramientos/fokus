@@ -2,22 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\User;
-use App\Models\Task;
-use App\Models\Sprint;
-use App\Models\Status;
-use App\Models\Meeting;
-use App\Models\Conversation;
-use App\Models\Workspace;
-use App\Models\WikiCategory;
-use App\Models\WikiPage;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -101,10 +93,21 @@ class Project extends Model
         static::created(function (Project $project) {
             // Projeyi oluşturan kullanıcıyı otomatik olarak üyeler listesine ekle
             if ($project->user_id) {
-                // Eğer zaten eklenmediyse ekle
                 if (!$project->teamMembers()->where('users.id', $project->user_id)->exists()) {
                     $project->teamMembers()->attach($project->user_id, ['role' => 'admin']);
                 }
+            }
+
+            $project->update([
+                'workspace_id' => session('workspace_id')
+            ]);
+        });
+
+        static::addGlobalScope('with_workspace', function (Builder $builder) {
+            $workspaceId = session('workspace_id');
+
+            if ($workspaceId) {
+                $builder->where('workspace_id', $workspaceId);
             }
         });
     }
@@ -116,7 +119,15 @@ class Project extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
+    /**
+     * Get the owner of the project (alias for user relationship).
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     /**
      * Get the workspace that the project belongs to.
      */
@@ -148,7 +159,7 @@ class Project extends Model
     {
         return $this->hasMany(Status::class);
     }
-    
+
     /**
      * Get the meetings for the project.
      */
@@ -156,7 +167,7 @@ class Project extends Model
     {
         return $this->hasMany(Meeting::class);
     }
-    
+
     /**
      * Get the team members for the project.
      */
@@ -166,7 +177,7 @@ class Project extends Model
             ->withPivot(['role'])
             ->withTimestamps();
     }
-    
+
     /**
      * Get the wiki pages for the project.
      */
@@ -174,7 +185,7 @@ class Project extends Model
     {
         return $this->hasMany(WikiPage::class);
     }
-    
+
     /**
      * Get the wiki categories for the project.
      */
@@ -182,7 +193,7 @@ class Project extends Model
     {
         return $this->hasMany(WikiCategory::class);
     }
-    
+
     /**
      * Get the conversations for the project.
      */
@@ -190,18 +201,12 @@ class Project extends Model
     {
         return $this->hasMany(Conversation::class);
     }
-    
-    /**
-     * Scope a query to only include active projects.
-     */
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->where('is_archived', false);
     }
-    
-    /**
-     * Scope a query to only include archived projects.
-     */
+
     public function scopeArchived($query)
     {
         return $query->where('is_archived', true);

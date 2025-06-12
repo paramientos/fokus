@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -81,4 +82,26 @@ function in_array_recursive($needle, $haystack, $strict = false): bool
     }
 
     return false;
+}
+
+
+function generate_project_key(string $name): string
+{
+    $words = explode(' ', $name);
+
+    if (count($words) > 1) {
+        $key = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
+    } else {
+        $key = strtoupper(substr($name, 0, 2));
+    }
+
+    $count = 1;
+    $originalKey = $key;
+
+    while (Project::where('key', $key)->exists()) {
+        $key = $originalKey . $count;
+        $count++;
+    }
+
+    return $key;
 }

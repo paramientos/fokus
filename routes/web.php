@@ -1,21 +1,28 @@
 <?php
 
-use Livewire\Volt\Volt;
-use App\Http\Controllers\SprintExportController;
-use App\Http\Controllers\SprintCloneController;
 use App\Http\Controllers\MeetingExportController;
+use App\Http\Controllers\SprintCloneController;
+use App\Http\Controllers\SprintExportController;
+use Livewire\Volt\Volt;
 
 Volt::route('/login', 'auth.login')->name('login');
 Volt::route('/register', 'auth.register')->name('register');
 
 Route::middleware('auth')->group(function () {
-// Ana sayfa
-    Volt::route('/', 'pages.dashboard')->name('dashboard');
+    Route::get('/', function () {
+        if (!session()->has('workspace_id')) {
+            return redirect()->route('workspaces.index');
+        }
+
+        return redirect()->route('dashboard.show');
+    })->name('dashboard');
+
+    Volt::route('/dashboard', 'pages.dashboard')->name('dashboard.show');
 
 // Workspaces
     Volt::route('/workspaces', 'workspaces.index')->name('workspaces.index');
     Volt::route('/workspaces/{id}', 'workspaces.show')->name('workspaces.show');
-    Volt::route('/workspaces/{id}/members', 'workspaces.members')->name('workspaces.members');
+    Volt::route('/workspaces/{workspace}/members', 'workspaces.members')->name('workspaces.members');
 
 // Projeler
     Volt::route('/projects', 'projects.index')->name('projects.index');

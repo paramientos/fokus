@@ -3,11 +3,11 @@
 new
 #[\Livewire\Attributes\Layout('components.layouts.empty')]
 class extends Livewire\Volt\Component {
-    public $email = '';
-    public $password = '';
-    public $remember = false;
+    public string $email = '';
+    public string $password = '';
+    public bool $remember = false;
 
-    protected $rules = [
+    protected array $rules = [
         'email' => 'required|email',
         'password' => 'required',
     ];
@@ -35,7 +35,7 @@ class extends Livewire\Volt\Component {
             <div class="card-body">
                 <div class="flex justify-center mb-6">
                     <div class="flex items-center gap-2">
-                        <x-icon name="o-rocket-launch" class="text-primary w-10 h-10" />
+                        <x-icon name="o-rocket-launch" class="text-primary w-10 h-10"/>
                         <div>
                             <h1 class="text-2xl font-bold text-primary">ProjectFlow</h1>
                             <p class="text-sm">Project Management</p>
@@ -48,18 +48,20 @@ class extends Livewire\Volt\Component {
                 <form wire:submit="login">
                     <div class="space-y-4">
                         <div class="form-control">
-                            <x-input label="Email" wire:model="email" type="email" placeholder="your@email.com" required />
+                            <x-input label="Email" wire:model="email" type="email" placeholder="your@email.com"
+                                     required/>
                             @error('email') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-control">
-                            <x-input label="Password" wire:model="password" type="password" placeholder="••••••••" required />
+                            <x-input label="Password" wire:model="password" type="password" placeholder="••••••••"
+                                     required/>
                             @error('password') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="flex items-center justify-between">
                             <label class="cursor-pointer label justify-start gap-2">
-                                <x-checkbox wire:model="remember" />
+                                <x-checkbox wire:model="remember"/>
                                 <span class="label-text">Remember me</span>
                             </label>
 
@@ -67,7 +69,7 @@ class extends Livewire\Volt\Component {
                         </div>
 
                         <div class="form-control mt-6">
-                            <x-button type="submit" label="Login" class="btn-primary w-full" />
+                            <x-button type="submit" label="Login" class="btn-primary w-full"/>
                         </div>
                     </div>
                 </form>

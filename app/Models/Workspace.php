@@ -68,12 +68,24 @@ class Workspace extends Model
             ->withTimestamps()
             ->withPivot(['role']);
     }
-    
+
     /**
      * Get the projects for the workspace.
      */
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function (Workspace $workspace) {
+            // Add creator/owner to workspace_members pivot as role 'owner' if not already.
+            if (!$workspace->members()->where('user_id', $workspace->owner_id)->exists()) {
+                $workspace->members()->attach($workspace->owner_id, [
+                    'role' => 'owner',
+                ]);
+            }
+        });
     }
 }
