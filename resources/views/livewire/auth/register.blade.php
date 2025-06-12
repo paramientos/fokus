@@ -102,7 +102,7 @@ class extends Livewire\Volt\Component {
                         </div>
 
                         <div class="form-control">
-                            <div class="cf-turnstile"
+                            <div class="cf-turnstile" wire:ignore
                                  data-sitekey="{{ config('services.turnstile.site_key') }}"
                                  data-callback="turnstileCallback"></div>
                             @error('turnstileToken') <span class="text-error text-sm">{{ $message }}</span> @enderror
