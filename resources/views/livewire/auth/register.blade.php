@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Http;
 
 new
 #[Layout('components.layouts.empty')]
@@ -9,6 +11,7 @@ class extends Livewire\Volt\Component {
     public $email = '';
     public $password = '';
     public $password_confirmation = '';
+    public string $turnstileToken = '';
 
     protected $rules = [
         'name' => 'required|min:3|max:255',
@@ -20,7 +23,27 @@ class extends Livewire\Volt\Component {
     {
         $this->validate();
 
-        $user = \App\Models\User::create([
+        if ($this->turnstileToken === '') {
+            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+            $this->dispatch('reset-turnstile');
+            return;
+        }
+
+        // Verify Turnstile token
+        $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret' => config('services.turnstile.secret_key'),
+            'response' => $this->turnstileToken,
+            'remoteip' => get_real_ip(),
+        ]);
+
+        if (!$response->json('success')) {
+            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+            $this->dispatch('reset-turnstile');
+            $this->turnstileToken = '';
+            return;
+        }
+
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => bcrypt($this->password),
@@ -78,6 +101,13 @@ class extends Livewire\Volt\Component {
                                      placeholder="••••••••" required/>
                         </div>
 
+                        <div class="form-control">
+                            <div class="cf-turnstile"
+                                 data-sitekey="{{ config('services.turnstile.site_key') }}"
+                                 data-callback="turnstileCallback"></div>
+                            @error('turnstileToken') <span class="text-error text-sm">{{ $message }}</span> @enderror
+                        </div>
+
                         <div class="form-control mt-6">
                             <x-button type="submit" label="Register" class="btn-primary w-full"/>
                         </div>
@@ -93,4 +123,24 @@ class extends Livewire\Volt\Component {
             </div>
         </div>
     </div>
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                window.turnstileCallback = function (token) {
+                    @this.set('turnstileToken', token);
+                };
+
+                document.addEventListener('livewire:init', () => {
+                    Livewire.on('reset-turnstile', () => {
+                        if (window.turnstile) {
+                            window.turnstile.reset();
+                        }
+                    });
+                });
+            });
+        </script>
+    @endpush
 </div>

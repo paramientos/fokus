@@ -14,16 +14,17 @@ class extends Livewire\Volt\Component {
     protected array $rules = [
         'email' => 'required|email',
         'password' => 'required',
-        'turnstileToken' => 'required',
-    ];
-
-    protected array $messages = [
-        'turnstileToken.required' => 'Please complete the security verification.',
     ];
 
     public function login()
     {
         $this->validate();
+
+        if ($this->turnstileToken === '') {
+            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+            $this->dispatch('reset-turnstile');
+            return;
+        }
 
         // Verify Turnstile token
         $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
@@ -102,7 +103,8 @@ class extends Livewire\Volt\Component {
                             <a href="#" class="text-sm text-primary hover:underline">Forgot password?</a>
                         </div>
 
-                        <div class="cf-turnstile"  data-callback="turnstileCallback" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
+                        <div wire:ignore class="cf-turnstile" data-callback="turnstileCallback"
+                             data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
 
                         <div class="form-control mt-6">
                             <x-button type="submit" label="Login" class="btn-primary w-full"/>
@@ -127,8 +129,17 @@ class extends Livewire\Volt\Component {
             document.addEventListener('DOMContentLoaded', function () {
                 // Turnstile callback function
                 window.turnstileCallback = function (token) {
-                    @this.set('turnstileToken', token);
+                    @this.
+                    set('turnstileToken', token);
                 };
+            });
+
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('reset-turnstile', () => {
+                    if (window.turnstile) {
+                        window.turnstile.reset();
+                    }
+                });
             });
         </script>
     @endpush
