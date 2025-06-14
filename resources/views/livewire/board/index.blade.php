@@ -18,11 +18,42 @@ new class extends Livewire\Volt\Component {
     public $users = [];
     public $newComment = '';
 
+    // Filter properties
+    public $search = '';
+    public $assigneeFilter = '';
+    public $reporterFilter = '';
+    public $sprintFilter = '';
+    public $priorityFilter = '';
+    public $taskTypeFilter = '';
+    public $dueDateFilter = '';
+    
+    // Filter options
+    public $sprints = [];
+    public $priorities = [];
+    public $taskTypes = [];
+
     public function mount($project)
     {
         $this->project = \App\Models\Project::findOrFail($project);
         $this->users = $this->project->teamMembers()->select('users.id','users.name')->get();
+        $this->loadFilterOptions();
         $this->loadBoard();
+    }
+
+    public function loadFilterOptions()
+    {
+        // Load sprints
+        $this->sprints = $this->project->sprints()->select('id', 'name')->get();
+        
+        // Load priorities
+        $this->priorities = collect(\App\Enums\Priority::cases())->map(function ($priority) {
+            return ['value' => $priority->value, 'label' => $priority->name];
+        });
+        
+        // Load task types
+        $this->taskTypes = collect(\App\Enums\TaskType::cases())->map(function ($type) {
+            return ['value' => $type->value, 'label' => $type->name];
+        });
     }
 
     public function loadBoard()
@@ -31,8 +62,96 @@ new class extends Livewire\Volt\Component {
 
         $this->tasks = [];
         foreach ($this->statuses as $status) {
-            $this->tasks[$status->id] = $status->tasks()->with(['user', 'reporter'])->get()->toArray();
+            $query = $status->tasks()->with(['user', 'reporter', 'sprint']);
+            
+            // Apply filters
+            if ($this->search) {
+                $query->where(function($q) {
+                    $q->where('title', 'like', '%' . $this->search . '%')
+                      ->orWhere('description', 'like', '%' . $this->search . '%');
+                });
+            }
+            
+            if ($this->assigneeFilter) {
+                $query->where('user_id', $this->assigneeFilter);
+            }
+            
+            if ($this->reporterFilter) {
+                $query->where('reporter_id', $this->reporterFilter);
+            }
+            
+            if ($this->sprintFilter) {
+                $query->where('sprint_id', $this->sprintFilter);
+            }
+            
+            if ($this->priorityFilter) {
+                $query->where('priority', $this->priorityFilter);
+            }
+            
+            if ($this->taskTypeFilter) {
+                $query->where('task_type', $this->taskTypeFilter);
+            }
+            
+            if ($this->dueDateFilter) {
+                switch ($this->dueDateFilter) {
+                    case 'overdue':
+                        $query->where('due_date', '<', now());
+                        break;
+                    case 'today':
+                        $query->whereDate('due_date', today());
+                        break;
+                    case 'this_week':
+                        $query->whereBetween('due_date', [now()->startOfWeek(), now()->endOfWeek()]);
+                        break;
+                    case 'next_week':
+                        $query->whereBetween('due_date', [now()->addWeek()->startOfWeek(), now()->addWeek()->endOfWeek()]);
+                        break;
+                }
+            }
+            
+            $this->tasks[$status->id] = $query->get()->toArray();
         }
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'assigneeFilter', 'reporterFilter', 'sprintFilter', 'priorityFilter', 'taskTypeFilter', 'dueDateFilter']);
+        $this->loadBoard();
+    }
+
+    public function updatedSearch()
+    {
+        $this->loadBoard();
+    }
+
+    public function updatedAssigneeFilter()
+    {
+        $this->loadBoard();
+    }
+
+    public function updatedReporterFilter()
+    {
+        $this->loadBoard();
+    }
+
+    public function updatedSprintFilter()
+    {
+        $this->loadBoard();
+    }
+
+    public function updatedPriorityFilter()
+    {
+        $this->loadBoard();
+    }
+
+    public function updatedTaskTypeFilter()
+    {
+        $this->loadBoard();
+    }
+
+    public function updatedDueDateFilter()
+    {
+        $this->loadBoard();
     }
 
     public function updateTaskStatus($taskId, $statusId)
@@ -171,6 +290,106 @@ new class extends Livewire\Volt\Component {
             <div class="flex gap-2">
                 <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
                           class="btn-primary"/>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="card bg-base-100 shadow-sm mb-6">
+            <div class="card-body p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    <!-- Search -->
+                    <div class="col-span-1 md:col-span-2">
+                        <x-input 
+                            placeholder="Search tasks..." 
+                            wire:model.live.debounce.300ms="search" 
+                            icon="o-magnifying-glass"
+                        />
+                    </div>
+
+                    <!-- Assignee Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Assignee" 
+                            wire:model.live="assigneeFilter"
+                            :options="$users"
+                            option-value="id"
+                            option-label="name"
+                        />
+                    </div>
+
+                    <!-- Reporter Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Reporter" 
+                            wire:model.live="reporterFilter"
+                            :options="$users"
+                            option-value="id"
+                            option-label="name"
+                        />
+                    </div>
+
+                    <!-- Sprint Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Sprint" 
+                            wire:model.live="sprintFilter"
+                            :options="$sprints"
+                            option-value="id"
+                            option-label="name"
+                        />
+                    </div>
+
+                    <!-- Priority Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Priority" 
+                            wire:model.live="priorityFilter"
+                            :options="$priorities"
+                            option-value="value"
+                            option-label="label"
+                        />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
+                    <!-- Task Type Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Task Type" 
+                            wire:model.live="taskTypeFilter"
+                            :options="$taskTypes"
+                            option-value="value"
+                            option-label="label"
+                        />
+                    </div>
+
+                    <!-- Due Date Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Due Date" 
+                            wire:model.live="dueDateFilter"
+                            :options="[
+                                ['value' => 'overdue', 'label' => 'Overdue'],
+                                ['value' => 'today', 'label' => 'Due Today'],
+                                ['value' => 'this_week', 'label' => 'This Week'],
+                                ['value' => 'next_week', 'label' => 'Next Week']
+                            ]"
+                            option-value="value"
+                            option-label="label"
+                        />
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <div class="flex items-end">
+                        <x-button 
+                            wire:click="clearFilters" 
+                            icon="o-x-mark" 
+                            class="btn-ghost btn-sm w-full"
+                        >
+                            Clear Filters
+                        </x-button>
+                    </div>
+                </div>
             </div>
         </div>
 

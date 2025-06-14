@@ -1,7 +1,7 @@
 <?php
 
-use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Http;
+use Livewire\Attributes\Layout;
 
 new
 #[Layout('components.layouts.empty')]
@@ -20,24 +20,26 @@ class extends Livewire\Volt\Component {
     {
         $this->validate();
 
-        if ($this->turnstileToken === '') {
-            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
-            $this->dispatch('reset-turnstile');
-            return;
-        }
+        if (!app()->isLocal()) {
+            if ($this->turnstileToken === '') {
+                $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+                $this->dispatch('reset-turnstile');
+                return;
+            }
 
-        // Verify Turnstile token
-        $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-            'secret' => config('services.turnstile.secret_key'),
-            'response' => $this->turnstileToken,
-            'remoteip' => get_real_ip(),
-        ]);
+            // Verify Turnstile token
+            $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                'secret' => config('services.turnstile.secret_key'),
+                'response' => $this->turnstileToken,
+                'remoteip' => get_real_ip(),
+            ]);
 
-        if (!$response->json('success')) {
-            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
-            $this->dispatch('reset-turnstile');
-            $this->turnstileToken = '';
-            return;
+            if (!$response->json('success')) {
+                $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+                $this->dispatch('reset-turnstile');
+                $this->turnstileToken = '';
+                return;
+            }
         }
 
         if (auth()->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
@@ -87,12 +89,15 @@ class extends Livewire\Volt\Component {
                             @error('password') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
-                        <div class="form-control">
-                            <div class="turnstile"
-                                 data-sitekey="{{ config('services.turnstile.site_key') }}"
-                                 data-callback="turnstileCallback"></div>
-                            @error('turnstileToken') <span class="text-error text-sm">{{ $message }}</span> @enderror
-                        </div>
+                        @env('production')
+                            <div class="form-control">
+                                <div class="turnstile"
+                                     data-sitekey="{{ config('services.turnstile.site_key') }}"
+                                     data-callback="turnstileCallback"></div>
+                                @error('turnstileToken') <span
+                                    class="text-error text-sm">{{ $message }}</span> @enderror
+                            </div>
+                        @endenv
 
                         <div class="flex items-center justify-between">
                             <label class="cursor-pointer label justify-start gap-2">
@@ -122,25 +127,27 @@ class extends Livewire\Volt\Component {
         </div>
     </div>
 
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @if (!app()->isLocal())
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Turnstile callback function
-                window.turnstileCallback = function (token) {
-                    @this.
-                    set('turnstileToken', token);
-                };
-            });
-
-            document.addEventListener('livewire:init', () => {
-                Livewire.on('reset-turnstile', () => {
-                    if (window.turnstile) {
-                        window.turnstile.reset();
-                    }
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Turnstile callback function
+                    window.turnstileCallback = function (token) {
+                        @this.
+                        set('turnstileToken', token);
+                    };
                 });
-            });
-        </script>
-    @endpush
+
+                document.addEventListener('livewire:init', () => {
+                    Livewire.on('reset-turnstile', () => {
+                        if (window.turnstile) {
+                            window.turnstile.reset();
+                        }
+                    });
+                });
+            </script>
+        @endpush
+    @endif
 </div>

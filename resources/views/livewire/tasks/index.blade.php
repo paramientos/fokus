@@ -7,6 +7,11 @@ new class extends Livewire\Volt\Component {
     public $search = '';
     public $statusFilter = '';
     public $priorityFilter = '';
+    public $assigneeFilter = '';
+    public $reporterFilter = '';
+    public $sprintFilter = '';
+    public $taskTypeFilter = '';
+    public $dueDateFilter = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $users = [];
@@ -14,6 +19,11 @@ new class extends Livewire\Volt\Component {
     public $editingTaskStatus = null;
     public $editingTaskUser = null;
     public $availableStatuses = [];
+    
+    // Filter options
+    public $sprints = [];
+    public $priorities = [];
+    public $taskTypes = [];
 
     public function mount()
     {
@@ -22,6 +32,95 @@ new class extends Livewire\Volt\Component {
 
         // Projedeki statüsleri yükle
         $this->availableStatuses = $this->project->statuses;
+        
+        $this->loadFilterOptions();
+    }
+
+    public function loadFilterOptions()
+    {
+        // Load sprints
+        $this->sprints = $this->project->sprints()->select('id', 'name')->get()->toArray();
+        
+        // Load priorities
+        $this->priorities = collect(\App\Enums\Priority::cases())->map(function ($priority) {
+            return ['value' => $priority->value, 'label' => $priority->name];
+        })->toArray();
+        
+        // Load task types
+        $this->taskTypes = collect(\App\Enums\TaskType::cases())->map(function ($type) {
+            return ['value' => $type->value, 'label' => $type->name];
+        })->toArray();
+    }
+
+    public function getTasksProperty()
+    {
+        $query = $this->project->tasks()->with(['status', 'user', 'reporter', 'sprint']);
+
+        // Apply search filter
+        if ($this->search) {
+            $query->where(function($q) {
+                $q->where('title', 'like', '%' . $this->search . '%')
+                  ->orWhere('description', 'like', '%' . $this->search . '%');
+            });
+        }
+
+        // Apply status filter
+        if ($this->statusFilter) {
+            $query->where('status_id', $this->statusFilter);
+        }
+
+        // Apply priority filter
+        if ($this->priorityFilter) {
+            $query->where('priority', $this->priorityFilter);
+        }
+
+        // Apply assignee filter
+        if ($this->assigneeFilter) {
+            $query->where('user_id', $this->assigneeFilter);
+        }
+
+        // Apply reporter filter
+        if ($this->reporterFilter) {
+            $query->where('reporter_id', $this->reporterFilter);
+        }
+
+        // Apply sprint filter
+        if ($this->sprintFilter) {
+            $query->where('sprint_id', $this->sprintFilter);
+        }
+
+        // Apply task type filter
+        if ($this->taskTypeFilter) {
+            $query->where('task_type', $this->taskTypeFilter);
+        }
+
+        // Apply due date filter
+        if ($this->dueDateFilter) {
+            switch ($this->dueDateFilter) {
+                case 'overdue':
+                    $query->where('due_date', '<', now());
+                    break;
+                case 'today':
+                    $query->whereDate('due_date', today());
+                    break;
+                case 'this_week':
+                    $query->whereBetween('due_date', [now()->startOfWeek(), now()->endOfWeek()]);
+                    break;
+                case 'next_week':
+                    $query->whereBetween('due_date', [now()->addWeek()->startOfWeek(), now()->addWeek()->endOfWeek()]);
+                    break;
+                case 'no_due_date':
+                    $query->whereNull('due_date');
+                    break;
+            }
+        }
+
+        return $query->orderBy($this->sortField, $this->sortDirection)->paginate(20);
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'statusFilter', 'priorityFilter', 'assigneeFilter', 'reporterFilter', 'sprintFilter', 'taskTypeFilter', 'dueDateFilter']);
     }
 
     public function sortBy($field)
@@ -163,30 +262,115 @@ new class extends Livewire\Volt\Component {
 <div>
     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <div class="flex flex-col sm:flex-row gap-4 w-full">
-            <x-input placeholder="Search tasks..." wire:model.live="search" icon="o-magnifying-glass" class="w-full"/>
-
-            <div class="flex gap-2">
-                <x-select
-                        placeholder="Status"
-                        wire:model.live="statusFilter"
-                        :options="$statuses"
-                        empty-message="All Statuses"
-                        class="w-32"
-                />
-
-                <x-select
-                        placeholder="Priority"
-                        wire:model.live="priorityFilter"
-                        :options="['low' => 'Low', 'medium' => 'Medium', 'high' => 'High']"
-                        empty-message="All Priorities"
-                        class="w-32"
-                />
-            </div>
+            <x-input placeholder="Search tasks..." wire:model.live.debounce.300ms="search" icon="o-magnifying-glass" class="w-full"/>
         </div>
 
-        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}" label="Create Task"
-                  icon="o-plus"
-                  class="btn-primary"/>
+        <x-button link="/projects/{{ $project->id }}/tasks/create" icon="o-plus" class="btn-primary whitespace-nowrap">
+            Add Task
+        </x-button>
+    </div>
+
+    <!-- Advanced Filters -->
+    <div class="card bg-base-100 shadow-sm mb-6">
+        <div class="card-body p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                <!-- Status Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Status" 
+                        wire:model.live="statusFilter"
+                        :options="$availableStatuses"
+                        option-value="id"
+                        option-label="name"
+                    />
+                </div>
+
+                <!-- Assignee Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Assignee" 
+                        wire:model.live="assigneeFilter"
+                        :options="$users"
+                        option-value="id"
+                        option-label="name"
+                    />
+                </div>
+
+                <!-- Reporter Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Reporter" 
+                        wire:model.live="reporterFilter"
+                        :options="$users"
+                        option-value="id"
+                        option-label="name"
+                    />
+                </div>
+
+                <!-- Sprint Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Sprint" 
+                        wire:model.live="sprintFilter"
+                        :options="$sprints"
+                        option-value="id"
+                        option-label="name"
+                    />
+                </div>
+
+                <!-- Priority Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Priority" 
+                        wire:model.live="priorityFilter"
+                        :options="$priorities"
+                        option-value="value"
+                        option-label="label"
+                    />
+                </div>
+
+                <!-- Task Type Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Task Type" 
+                        wire:model.live="taskTypeFilter"
+                        :options="$taskTypes"
+                        option-value="value"
+                        option-label="label"
+                    />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
+                <!-- Due Date Filter -->
+                <div>
+                    <x-select 
+                        placeholder="Due Date" 
+                        wire:model.live="dueDateFilter"
+                        :options="[
+                            ['value' => 'overdue', 'label' => 'Overdue'],
+                            ['value' => 'today', 'label' => 'Due Today'],
+                            ['value' => 'this_week', 'label' => 'This Week'],
+                            ['value' => 'next_week', 'label' => 'Next Week'],
+                            ['value' => 'no_due_date', 'label' => 'No Due Date']
+                        ]"
+                        option-value="value"
+                        option-label="label"
+                    />
+                </div>
+
+                <!-- Clear Filters -->
+                <div class="flex items-end">
+                    <x-button 
+                        wire:click="clearFilters" 
+                        icon="o-x-mark" 
+                        class="btn-ghost btn-sm w-full"
+                    >
+                        Clear Filters
+                    </x-button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card bg-base-100 shadow-xl">
