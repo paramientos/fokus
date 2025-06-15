@@ -78,6 +78,8 @@
 
             <x-menu-item title="Dashboard" icon="o-home" link="/"/>
             <x-menu-item title="Projects" icon="o-folder" link="/projects"/>
+            <x-menu-item title="Assets" icon="fas.box" link="/assets"/>
+            <x-menu-item title="Licenses" icon="fas.key" link="/licenses"/>
             <x-menu-item title="API Tester" icon="fas.calendar" link="/api-tester"/>
             <x-menu-item title="Wiki" icon="fas.book" link="/wiki"/>
             <x-menu-item title="Mail" icon="o-envelope" link="/mail"/>

@@ -41,6 +41,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $reported_tasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Workspace> $workspaceMembers
+ * @property-read int|null $workspace_members_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -69,6 +71,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'current_workspace_id',
     ];
 
     /**
@@ -190,5 +193,15 @@ class User extends Authenticatable
                 $query->where('user_id', $this->id)
                       ->whereNull('left_at');
             });
+    }
+    
+    /**
+     * Kullanıcının üye olduğu iş alanları
+     */
+    public function workspaceMembers(): BelongsToMany
+    {
+        return $this->belongsToMany(Workspace::class, 'workspace_members')
+            ->withPivot(['role'])
+            ->withTimestamps();
     }
 }

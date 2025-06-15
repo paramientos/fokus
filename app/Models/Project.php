@@ -22,8 +22,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_archived
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectAlert> $alerts
+ * @property-read int|null $alerts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
  * @property-read int|null $conversations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectHealthMetric> $healthMetrics
+ * @property-read int|null $health_metrics_count
+ * @property-read \App\Models\ProjectHealthMetric|null $latestHealthMetric
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Meeting> $meetings
  * @property-read int|null $meetings_count
  * @property-read \App\Models\User $owner
@@ -35,6 +40,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $tasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $teamMembers
  * @property-read int|null $team_members_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectAlert> $unresolvedAlerts
+ * @property-read int|null $unresolved_alerts_count
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiCategory> $wikiCategories
  * @property-read int|null $wiki_categories_count
@@ -201,6 +208,46 @@ class Project extends Model
     public function conversations(): HasMany
     {
         return $this->hasMany(Conversation::class);
+    }
+
+    /**
+     * Get the health metrics for the project.
+     */
+    public function healthMetrics(): HasMany
+    {
+        return $this->hasMany(ProjectHealthMetric::class);
+    }
+
+    /**
+     * Get the alerts for the project.
+     */
+    public function alerts(): HasMany
+    {
+        return $this->hasMany(ProjectAlert::class);
+    }
+
+    /**
+     * Get the latest health metric for the project.
+     */
+    public function latestHealthMetric()
+    {
+        return $this->hasOne(ProjectHealthMetric::class)->latest('metric_date');
+    }
+
+    /**
+     * Get unresolved alerts for the project.
+     */
+    public function unresolvedAlerts(): HasMany
+    {
+        return $this->hasMany(ProjectAlert::class)->where('is_resolved', false);
+    }
+
+    /**
+     * Get members relationship (alias for teamMembers).
+     */
+    public function members()
+    {
+        return $this->teamMembers();
     }
 
     public function scopeActive($query)

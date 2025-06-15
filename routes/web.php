@@ -105,6 +105,8 @@ Route::middleware('auth')->group(function () {
     Volt::route('/projects/{project}/activities', 'activities.timeline')->name('activities.timeline');
     Volt::route('/projects/{project}/tasks/{task}/activities', 'activities.timeline')->name('activities.timeline-task');
     Volt::route('/projects/{project}/sprints/{sprint}/activities', 'activities.timeline')->name('activities.timeline-sprint');
+    Volt::route('/projects/{project}/health', 'projects.health')->name('projects.health');
+    Volt::route('/projects/{project}/health-analytics', 'projects.health-analytics')->name('projects.health-analytics');
 
 // Sprint İşlemleri
     Route::get('/projects/{project}/sprints/{sprint}/export/csv', [SprintExportController::class, 'exportCsv'])->name('sprints.export.csv');
@@ -119,6 +121,23 @@ Route::middleware('auth')->group(function () {
 // Gantt Şeması
     Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');
 
+// Asset Management
+    Volt::route('/assets', 'assets.index')->name('assets.index');
+    Volt::route('/assets/list', 'assets.list')->name('assets.list');
+    Volt::route('/assets/create', 'assets.create')->name('assets.create');
+    Volt::route('/assets/{asset}', 'assets.show')->name('assets.show');
+    Volt::route('/assets/{asset}/edit', 'assets.edit')->name('assets.edit');
+    
+    // Asset Categories
+    Volt::route('/asset-categories', 'asset-categories.index')->name('asset-categories.index');
+    Volt::route('/asset-categories/create', 'asset-categories.create')->name('asset-categories.create');
+    Volt::route('/asset-categories/{category}/edit', 'asset-categories.edit')->name('asset-categories.edit');
+    
+    // Software Licenses
+    Volt::route('/licenses', 'licenses.index')->name('licenses.index');
+    Volt::route('/licenses/create', 'licenses.create')->name('licenses.create');
+    Volt::route('/licenses/{license}', 'licenses.show')->name('licenses.show');
+    Volt::route('/licenses/{license}/edit', 'licenses.edit')->name('licenses.edit');
 
 // Toplantılar
     Volt::route('/meetings', 'meetings.index')->name('meetings.index');

@@ -1,10 +1,6 @@
 <?php
 
 use App\Models\Project;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 function get_real_ip(): mixed
 {
@@ -104,4 +100,9 @@ function generate_project_key(string $name): string
     }
 
     return $key;
+}
+
+function get_workspace_id(): ?string
+{
+    return session('workspace_id');
 }

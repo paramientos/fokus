@@ -32,5 +32,26 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('wiki:generate all')
             ->dailyAt('00:00')
             ->appendOutputTo(storage_path('logs/wiki-generator.log'));
+
+        // Health Monitoring Tasks
+        // Update project health metrics daily at 6 AM
+        $schedule->command('projects:update-health')
+            ->dailyAt('06:00')
+            ->appendOutputTo(storage_path('logs/health-updates.log'));
+
+        // Send daily health digests at 9 AM
+        $schedule->command('health:send-notifications --type=daily')
+            ->dailyAt('09:00')
+            ->appendOutputTo(storage_path('logs/health-notifications.log'));
+
+        // Send weekly health reports on Monday at 10 AM
+        $schedule->command('health:send-notifications --type=weekly')
+            ->weeklyOn(1, '10:00')
+            ->appendOutputTo(storage_path('logs/health-reports.log'));
+
+        // Check for critical alerts every 15 minutes
+        $schedule->command('health:send-notifications --type=critical')
+            ->everyFifteenMinutes()
+            ->appendOutputTo(storage_path('logs/critical-alerts.log'));
     })
     ->create();

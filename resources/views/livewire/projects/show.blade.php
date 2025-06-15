@@ -107,6 +107,7 @@ new class extends Livewire\Volt\Component {
                class="tab {{ $selectedTab === 'sprints' ? 'tab-active' : '' }}">Sprints</a>
             <a wire:click="setTab('team')" class="tab {{ $selectedTab === 'team' ? 'tab-active' : '' }}">Team Members</a>
             <a wire:click="setTab('status')" onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" class="tab {{ $selectedTab === 'status' ? 'tab-active' : '' }}">Status</a>
+            <a wire:click="setTab('health')" class="tab {{ $selectedTab === 'health' ? 'tab-active' : '' }}">Health</a>
             <a wire:click="setTab('wiki')" class="tab {{ $selectedTab === 'wiki' ? 'tab-active' : '' }}">Wiki</a>
             <a wire:click="setTab('files')" class="tab {{ $selectedTab === 'files' ? 'tab-active' : '' }}">Files</a>
             <a wire:click="setTab('settings')" class="tab {{ $selectedTab === 'settings' ? 'tab-active' : '' }}">Settings</a>
@@ -402,6 +403,11 @@ new class extends Livewire\Volt\Component {
                         </div>
                     </div>
                 </div>
+            @endif
+
+            <!-- Health Tab -->
+            @if($selectedTab === 'health')
+                <livewire:projects.health :project="$project" />
             @endif
 
             <!-- Settings Tab -->
