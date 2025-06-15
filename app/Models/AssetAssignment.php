@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $asset_id
@@ -28,22 +28,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read string $condition_color
  * @property-read string|null $duration
  * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereAssetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereAssignedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereAssignedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereAssignmentNotes($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereConditionOnAssignment($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereConditionOnReturn($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereReturnNotes($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereReturnedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AssetAssignment whereUserId($value)
+ * @method static Builder<static>|AssetAssignment newModelQuery()
+ * @method static Builder<static>|AssetAssignment newQuery()
+ * @method static Builder<static>|AssetAssignment query()
+ * @method static Builder<static>|AssetAssignment whereAssetId($value)
+ * @method static Builder<static>|AssetAssignment whereAssignedAt($value)
+ * @method static Builder<static>|AssetAssignment whereAssignedBy($value)
+ * @method static Builder<static>|AssetAssignment whereAssignmentNotes($value)
+ * @method static Builder<static>|AssetAssignment whereConditionOnAssignment($value)
+ * @method static Builder<static>|AssetAssignment whereConditionOnReturn($value)
+ * @method static Builder<static>|AssetAssignment whereCreatedAt($value)
+ * @method static Builder<static>|AssetAssignment whereId($value)
+ * @method static Builder<static>|AssetAssignment whereIsActive($value)
+ * @method static Builder<static>|AssetAssignment whereReturnNotes($value)
+ * @method static Builder<static>|AssetAssignment whereReturnedAt($value)
+ * @method static Builder<static>|AssetAssignment whereUpdatedAt($value)
+ * @method static Builder<static>|AssetAssignment whereUserId($value)
  * @mixin \Eloquent
  */
 class AssetAssignment extends Model

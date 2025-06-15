@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $software_license_id
@@ -25,20 +25,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read string|null $duration
  * @property-read \App\Models\SoftwareLicense $softwareLicense
  * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereAssignedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereAssignedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereAssignmentNotes($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereRevocationNotes($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereRevokedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereSoftwareLicenseId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|LicenseAssignment whereUserId($value)
+ * @method static Builder<static>|LicenseAssignment newModelQuery()
+ * @method static Builder<static>|LicenseAssignment newQuery()
+ * @method static Builder<static>|LicenseAssignment query()
+ * @method static Builder<static>|LicenseAssignment whereAssignedAt($value)
+ * @method static Builder<static>|LicenseAssignment whereAssignedBy($value)
+ * @method static Builder<static>|LicenseAssignment whereAssignmentNotes($value)
+ * @method static Builder<static>|LicenseAssignment whereCreatedAt($value)
+ * @method static Builder<static>|LicenseAssignment whereId($value)
+ * @method static Builder<static>|LicenseAssignment whereIsActive($value)
+ * @method static Builder<static>|LicenseAssignment whereRevocationNotes($value)
+ * @method static Builder<static>|LicenseAssignment whereRevokedAt($value)
+ * @method static Builder<static>|LicenseAssignment whereSoftwareLicenseId($value)
+ * @method static Builder<static>|LicenseAssignment whereUpdatedAt($value)
+ * @method static Builder<static>|LicenseAssignment whereUserId($value)
  * @mixin \Eloquent
  */
 class LicenseAssignment extends Model

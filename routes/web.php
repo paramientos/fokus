@@ -173,4 +173,7 @@ Route::middleware('auth')->group(function () {
     Volt::route('/api-tester/history/{historyEntry}', 'api-tester.history-detail')->name('api-tester.history-detail');
     // Task ile ilişkili API test aracı
     Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
+    
+    // HR Module Routes
+    require __DIR__.'/hr.php';
 });

@@ -16,9 +16,23 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property string|null $phone
+ * @property string|null $date_of_birth
+ * @property string|null $gender
+ * @property string|null $nationality
+ * @property string|null $national_id
+ * @property string|null $passport_number
+ * @property string|null $tax_id
+ * @property string|null $address
+ * @property string|null $city
+ * @property string|null $state
+ * @property string|null $postal_code
+ * @property string|null $country
+ * @property string|null $emergency_contact_relationship
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property int|null $current_workspace_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $assignedTasks
@@ -47,13 +61,27 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
  * @method static Builder<static>|User query()
+ * @method static Builder<static>|User whereAddress($value)
+ * @method static Builder<static>|User whereCity($value)
+ * @method static Builder<static>|User whereCountry($value)
  * @method static Builder<static>|User whereCreatedAt($value)
+ * @method static Builder<static>|User whereCurrentWorkspaceId($value)
+ * @method static Builder<static>|User whereDateOfBirth($value)
  * @method static Builder<static>|User whereEmail($value)
  * @method static Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static Builder<static>|User whereEmergencyContactRelationship($value)
+ * @method static Builder<static>|User whereGender($value)
  * @method static Builder<static>|User whereId($value)
  * @method static Builder<static>|User whereName($value)
+ * @method static Builder<static>|User whereNationalId($value)
+ * @method static Builder<static>|User whereNationality($value)
+ * @method static Builder<static>|User wherePassportNumber($value)
  * @method static Builder<static>|User wherePassword($value)
+ * @method static Builder<static>|User wherePhone($value)
+ * @method static Builder<static>|User wherePostalCode($value)
  * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereState($value)
+ * @method static Builder<static>|User whereTaxId($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
