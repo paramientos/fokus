@@ -175,5 +175,5 @@ Route::middleware('auth')->group(function () {
     Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
 
     require __DIR__.'/hr.php';
-    require __DIR__.'/gamification.php';
+  /*  require __DIR__.'/gamification.php';*/
 });
