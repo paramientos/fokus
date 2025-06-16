@@ -3,15 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $current_workspace_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Achievement> $achievements
+ * @property-read int|null $achievements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $assignedTasks
  * @property-read int|null $assigned_tasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
@@ -43,6 +45,13 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $created_conversations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Meeting> $createdMeetings
  * @property-read int|null $created_meetings_count
+ * @property-read int $current_streak
+ * @property-read int $level
+ * @property-read float $level_progress
+ * @property-read int $points_to_next_level
+ * @property-read int $total_points
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Leaderboard> $leaderboards
+ * @property-read int|null $leaderboards_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Meeting> $meetings
  * @property-read int|null $meetings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message> $messages
@@ -55,6 +64,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $reported_tasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserAchievement> $userAchievements
+ * @property-read int|null $user_achievements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Workspace> $workspaceMembers
  * @property-read int|null $workspace_members_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -148,7 +159,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Task::class, 'user_id');
     }
-    
+
     /**
      * Kullanıcının katıldığı toplantılar
      */
@@ -158,7 +169,7 @@ class User extends Authenticatable
             ->withPivot(['status'])
             ->withTimestamps();
     }
-    
+
     /**
      * Kullanıcının oluşturduğu toplantılar
      */
@@ -166,7 +177,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Meeting::class, 'creator_id');
     }
-    
+
     /**
      * Kullanıcının üye olduğu projeler
      */
@@ -176,7 +187,7 @@ class User extends Authenticatable
             ->withPivot(['role'])
             ->withTimestamps();
     }
-    
+
     /**
      * Kullanıcının katıldığı konuşmalar
      */
@@ -186,7 +197,7 @@ class User extends Authenticatable
             ->withPivot(['is_admin', 'last_read_at', 'joined_at', 'left_at'])
             ->withTimestamps();
     }
-    
+
     /**
      * Kullanıcının oluşturduğu konuşmalar
      */
@@ -194,7 +205,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Conversation::class, 'created_by');
     }
-    
+
     /**
      * Kullanıcının gönderdiği mesajlar
      */
@@ -202,7 +213,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class);
     }
-    
+
     /**
      * Kullanıcının okunmamış mesajlarını getir
      */
@@ -210,7 +221,7 @@ class User extends Authenticatable
     {
         return $this->messages()->whereNull('read_at');
     }
-    
+
     /**
      * Kullanıcının aktif olduğu konuşmaları getir
      */
@@ -219,10 +230,10 @@ class User extends Authenticatable
         return $this->conversations()
             ->whereHas('participants', function (Builder $query) {
                 $query->where('user_id', $this->id)
-                      ->whereNull('left_at');
+                    ->whereNull('left_at');
             });
     }
-    
+
     /**
      * Kullanıcının üye olduğu iş alanları
      */
@@ -231,5 +242,113 @@ class User extends Authenticatable
         return $this->belongsToMany(Workspace::class, 'workspace_members')
             ->withPivot(['role'])
             ->withTimestamps();
+    }
+
+    /**
+     * Kullanıcının kazandığı başarılar
+     */
+    public function userAchievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+
+    /**
+     * Kullanıcının başarıları (many-to-many)
+     */
+    public function achievements(): BelongsToMany
+    {
+        return $this->belongsToMany(Achievement::class, 'user_achievements')
+            ->withPivot(['level', 'progress', 'points_earned', 'earned_at', 'metadata'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Kullanıcının liderlik tablosu kayıtları
+     */
+    public function leaderboards(): HasMany
+    {
+        return $this->hasMany(Leaderboard::class);
+    }
+
+    /**
+     * Kullanıcının toplam puanını getir
+     */
+    public function getTotalPointsAttribute(): int
+    {
+        return $this->userAchievements()->sum('points_earned');
+    }
+
+    /**
+     * Kullanıcının aktif streak'ini getir
+     */
+    public function getCurrentStreakAttribute(): int
+    {
+        // Bu basit bir implementasyon, gerçekte daha karmaşık olabilir
+        $lastActivity = $this->tasks()
+            ->whereNotNull('completed_at')
+            ->orderByDesc('updated_at')
+            ->first();
+
+        if (!$lastActivity) {
+            return 0;
+        }
+
+        // Son aktiviteden bu yana geçen gün sayısını hesapla
+        $daysSinceLastActivity = now()->diffInDays($lastActivity->updated_at);
+
+        if ($daysSinceLastActivity > 1) {
+            return 0;
+        }
+
+        // Basit streak hesaplama - gerçekte daha detaylı olmalı
+        return $this->tasks()
+            ->whereNotNull('completed_at')
+            ->where('updated_at', '>=', now()->subDays(30))
+            ->groupBy(\DB::raw('DATE(updated_at)'))
+            ->get()
+            ->count();
+    }
+
+    /**
+     * Kullanıcının seviyesini getir
+     */
+    public function getLevelAttribute(): int
+    {
+        $totalPoints = $this->total_points;
+
+        // Basit seviye hesaplama: her 100 puan = 1 seviye
+        return intval($totalPoints / 100) + 1;
+    }
+
+    /**
+     * Kullanıcının bir sonraki seviye için gereken puanı getir
+     */
+    public function getPointsToNextLevelAttribute(): int
+    {
+        $currentLevel = $this->level;
+        $nextLevelRequirement = $currentLevel * 100;
+        $currentPoints = $this->total_points;
+
+        return max(0, $nextLevelRequirement - $currentPoints);
+    }
+
+    /**
+     * Kullanıcının seviye ilerlemesini yüzde olarak getir
+     */
+    public function getLevelProgressAttribute(): float
+    {
+        $currentLevel = $this->level;
+        $currentLevelStart = ($currentLevel - 1) * 100;
+        $nextLevelStart = $currentLevel * 100;
+        $currentPoints = $this->total_points;
+
+        if ($currentPoints >= $nextLevelStart) {
+            return 100.0;
+        }
+
+        $progressInLevel = $currentPoints - $currentLevelStart;
+        $levelRange = $nextLevelStart - $currentLevelStart;
+
+        return ($progressInLevel / $levelRange) * 100;
     }
 }

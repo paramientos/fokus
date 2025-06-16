@@ -127,12 +127,12 @@ Route::middleware('auth')->group(function () {
     Volt::route('/assets/create', 'assets.create')->name('assets.create');
     Volt::route('/assets/{asset}', 'assets.show')->name('assets.show');
     Volt::route('/assets/{asset}/edit', 'assets.edit')->name('assets.edit');
-    
+
     // Asset Categories
     Volt::route('/asset-categories', 'asset-categories.index')->name('asset-categories.index');
     Volt::route('/asset-categories/create', 'asset-categories.create')->name('asset-categories.create');
     Volt::route('/asset-categories/{category}/edit', 'asset-categories.edit')->name('asset-categories.edit');
-    
+
     // Software Licenses
     Volt::route('/licenses', 'licenses.index')->name('licenses.index');
     Volt::route('/licenses/create', 'licenses.create')->name('licenses.create');
@@ -161,9 +161,9 @@ Route::middleware('auth')->group(function () {
     Volt::route('/profile', 'profile.index')->name('profile.index');
 
 // Gmail Entegrasyonu
-    Volt::route('/mail', 'mail.inbox')->name('mail.inbox');
+ /*   Volt::route('/mail', 'mail.inbox')->name('mail.inbox');
     Route::get('/auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'redirect'])->name('google.redirect');
-    Route::get('/auth/google/callback', [\App\Http\Controllers\GoogleAuthController::class, 'callback'])->name('google.callback');
+    Route::get('/auth/google/callback', [\App\Http\Controllers\GoogleAuthController::class, 'callback'])->name('google.callback');*/
 
     Volt::route('/logout', 'auth.logout')->name('logout');
 
@@ -173,7 +173,7 @@ Route::middleware('auth')->group(function () {
     Volt::route('/api-tester/history/{historyEntry}', 'api-tester.history-detail')->name('api-tester.history-detail');
     // Task ile ilişkili API test aracı
     Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
-    
-    // HR Module Routes
+
     require __DIR__.'/hr.php';
+    require __DIR__.'/gamification.php';
 });
