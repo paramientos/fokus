@@ -16,6 +16,13 @@ class extends Livewire\Volt\Component {
         'password' => 'required',
     ];
 
+    public function mount(): void
+    {
+        if (auth()->check()) {
+            $this->redirectRoute('dashboard');
+        }
+    }
+
     public function login()
     {
         $this->validate();
@@ -44,7 +51,7 @@ class extends Livewire\Volt\Component {
 
         if (auth()->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
-            return $this->redirect('/', navigate: true);
+            $this->redirectRoute('dashboard');
         }
 
         $this->addError('email', 'The provided credentials do not match our records.');

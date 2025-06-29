@@ -11,9 +11,10 @@ class EnsureWorkspaceIsSelected
     public function handle(Request $request, Closure $next): Response
     {
         // Skip routes that should be accessible without selecting workspace
-        if ($request->hasHeader('X-Livewire') || $request->routeIs('workspaces.*') || $request->routeIs('logout') ||  $request->routeIs('login') || $request->routeIs('profile.*') ||  $request->routeIs('register')) {
+        if ($request->hasHeader('X-Livewire') || $request->routeIs('workspaces.*') || $request->routeIs('landing') || $request->routeIs('logout') ||  $request->routeIs('login') || $request->routeIs('profile.*') ||  $request->routeIs('register')) {
             return $next($request);
         }
+
 
         if (!session()->has('workspace_id')) {
             if (session()->hasAny(['info', 'warning', 'error', 'success'])) {

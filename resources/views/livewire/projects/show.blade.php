@@ -498,6 +498,12 @@ new class extends Livewire\Volt\Component {
                                     </table>
                                 </div>
                             </div>
+
+                            <!-- Git Repositories -->
+                            <div class="md:col-span-2">
+                                <h3 class="text-lg font-medium mb-2">Git Repositories</h3>
+                                <livewire:projects.settings.git-repositories :project="$project" />
+                            </div>
                         </div>
                     </div>
                 </div>

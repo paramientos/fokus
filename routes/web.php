@@ -1,10 +1,16 @@
 <?php
 
 use App\Http\Controllers\MeetingExportController;
+use App\Http\Controllers\GitWebhookController;
+use App\Http\Controllers\GitSSOController;
 use App\Http\Controllers\SprintCloneController;
 use App\Http\Controllers\SprintExportController;
+use App\Http\Controllers\LandingController;
 use App\Models\WorkspaceInvitation;
 use Livewire\Volt\Volt;
+
+// Landing page - accessible to everyone
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 Volt::route('/login', 'auth.login')->name('login');
 Volt::route('/register', 'auth.register')->name('register');
@@ -48,7 +54,7 @@ Route::get('/workspaces/invitation/{token}', function ($token) {
 })->name('workspaces.invitation.accept');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
+    Route::get('/home', function () {
         if (session()->hasAny(['info', 'warning', 'error', 'success'])) {
             return redirect()->route('dashboard.show')->with([
                 'info' => session('info'),
@@ -174,6 +180,17 @@ Route::middleware('auth')->group(function () {
     // Task ile ilişkili API test aracı
     Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
 
-    require __DIR__.'/hr.php';
-  /*  require __DIR__.'/gamification.php';*/
+    // Git SSO Routes
+    Route::get('/git/sso/{provider}/callback', [GitSSOController::class, 'callback'])->name('git.sso.callback');
+    Route::get('/git/sso/{provider}/{projectId}', [GitSSOController::class, 'redirect'])->name('git.sso.redirect');
+    Route::delete('/git/repositories/{repositoryId}', [GitSSOController::class, 'disconnect'])->name('git.repositories.disconnect');
 });
+
+// Git webhook routes (no auth middleware)
+Route::post('/webhooks/github/{token}', [GitWebhookController::class, 'handleGitHub']);
+Route::post('/webhooks/gitlab/{token}', [GitWebhookController::class, 'handleGitLab']);
+Route::post('/webhooks/bitbucket/{token}', [GitWebhookController::class, 'handleBitbucket']);
+
+require __DIR__.'/hr.php';
+require __DIR__.'/password-manager.php';
+  /*  require __DIR__.'/gamification.php';*/

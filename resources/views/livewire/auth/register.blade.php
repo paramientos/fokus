@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Http;
+use Livewire\Attributes\Layout;
 
 new
 #[Layout('components.layouts.empty')]
@@ -18,6 +18,13 @@ class extends Livewire\Volt\Component {
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:8|confirmed',
     ];
+
+    public function mount(): void
+    {
+        if (auth()->check()) {
+            $this->redirectRoute('dashboard');
+        }
+    }
 
     public function register()
     {
@@ -130,7 +137,8 @@ class extends Livewire\Volt\Component {
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 window.turnstileCallback = function (token) {
-                    @this.set('turnstileToken', token);
+                    @this.
+                    set('turnstileToken', token);
                 };
 
                 document.addEventListener('livewire:init', () => {

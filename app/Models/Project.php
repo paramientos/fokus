@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\GitRepository;
 
 /**
  * 
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $alerts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
  * @property-read int|null $conversations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, GitRepository> $gitRepositories
+ * @property-read int|null $git_repositories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectHealthMetric> $healthMetrics
  * @property-read int|null $health_metrics_count
  * @property-read \App\Models\ProjectHealthMetric|null $latestHealthMetric
@@ -240,6 +243,14 @@ class Project extends Model
     public function unresolvedAlerts(): HasMany
     {
         return $this->hasMany(ProjectAlert::class)->where('is_resolved', false);
+    }
+
+    /**
+     * Get Git repositories linked to the project.
+     */
+    public function gitRepositories(): HasMany
+    {
+        return $this->hasMany(GitRepository::class);
     }
 
     /**

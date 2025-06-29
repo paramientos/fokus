@@ -19,7 +19,8 @@
         "owenvoke/blade-fontawesome": "^2.9",
         "resend/resend-laravel": "^0.19.0",
         "resend/resend-php": "^0.18.0",
-        "robsontenorio/mary": "^2.4"
+        "robsontenorio/mary": "^2.4",
+        "ext-openssl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.5",

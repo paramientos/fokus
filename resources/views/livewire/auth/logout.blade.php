@@ -1,13 +1,13 @@
 <?php
 
 new class extends Livewire\Volt\Component {
-    public function mount()
+    public function mount(): void
     {
         auth()->logout();
         session()->invalidate();
         session()->regenerateToken();
 
-        return $this->redirect('/login', navigate: true);
+        $this->redirectRoute('landing');
     }
 }
 
