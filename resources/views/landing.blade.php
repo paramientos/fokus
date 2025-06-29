@@ -76,7 +76,7 @@
         <div class="flex space-x-4">
             @auth('web')
                 <a href="{{ route('dashboard') }}"
-                   class="px-4 py-2 rounded-lg text-white hover:text-blue-400 transition">My Dashboard</a>
+                   class="px-4 py-2 rounded-lg transition btn-primary">My Dashboard</a>
             @else
                 <a href="{{ route('login') }}"
                    class="px-4 py-2 rounded-lg text-white hover:text-blue-400 transition">Login</a>
