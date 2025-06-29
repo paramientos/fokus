@@ -80,10 +80,9 @@
             @else
                 <a href="{{ route('login') }}"
                    class="px-4 py-2 rounded-lg text-white hover:text-blue-400 transition">Login</a>
-                @endauth
 
-
-            <a href="{{ route('register') }}" class="px-6 py-2 rounded-lg btn-primary font-medium">Sign Up</a>
+                <a href="{{ route('register') }}" class="px-6 py-2 rounded-lg btn-primary font-medium">Sign Up</a>
+            @endauth
         </div>
     </div>
 </header>
