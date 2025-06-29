@@ -110,7 +110,7 @@
             </div>
         </div>
         <div class="md:w-1/2 flex justify-center">
-            <img src="https://via.placeholder.com/600x400/1e293b/38bdf8?text=Fokus+Dashboard"
+            <img src="{{ asset('/assets/images/sprint-overview-chart-fokus.png') }}"
                  alt="Fokus Dashboard Preview" class="rounded-xl shadow-2xl hero-image max-w-full">
         </div>
     </section>
