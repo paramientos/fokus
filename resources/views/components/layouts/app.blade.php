@@ -57,7 +57,7 @@
 
         {{-- BRAND --}}
         <div class="px-5 pt-4 flex items-center gap-2">
-            <x-icon name="o-rocket-launch" class="text-primary w-8 h-8"/>
+            <x-icon name="o-cube" class="text-primary w-8 h-8"/>
             <div>
                 <h1 class="text-xl font-bold text-primary">Fokus</h1>
                 <p class="text-xs">Project Management</p>
