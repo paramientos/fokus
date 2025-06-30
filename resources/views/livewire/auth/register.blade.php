@@ -13,7 +13,7 @@ class extends Livewire\Volt\Component {
     public $password_confirmation = '';
     public string $turnstileToken = '';
 
-    protected $rules = [
+    protected array $rules = [
         'name' => 'required|min:3|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:8|confirmed',
@@ -21,9 +21,12 @@ class extends Livewire\Volt\Component {
 
     public function mount(): void
     {
-        if (auth()->check()) {
+        $this->redirectRoute('landing');
+        return;
+
+        /*if (auth()->check()) {
             $this->redirectRoute('dashboard');
-        }
+        }*/
     }
 
     public function register()

@@ -14,7 +14,7 @@ use Livewire\Volt\Volt;
 Route::view('/', 'landing')->name('landing');
 
 Volt::route('/login', 'auth.login')->name('login');
-//Volt::route('/register', 'auth.register')->name('register');
+Volt::route('/register', 'auth.register')->name('register');
 
 Route::get('/workspaces/invitation/{token}', function ($token) {
     $invitation = WorkspaceInvitation::where('token', $token)->firstOrFail();
