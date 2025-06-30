@@ -133,7 +133,7 @@ Route::middleware('auth')->group(function () {
     Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');
 
 // Asset Management
-    Volt::route('/assets', 'assets.index')->name('assets.index');
+    Volt::route('/asset', 'assets.index')->name('assets.index');
     Volt::route('/assets/list', 'assets.list')->name('assets.list');
     Volt::route('/assets/create', 'assets.create')->name('assets.create');
     Volt::route('/assets/{asset}', 'assets.show')->name('assets.show');

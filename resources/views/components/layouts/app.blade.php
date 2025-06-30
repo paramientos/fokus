@@ -12,14 +12,14 @@
     <meta property="og:url" content="https://usefokus.com/">
     <meta property="og:title" content="Fokus - Modern Project Management">
     <meta property="og:description" content="Fokus is a project management tool that helps you focus on what matters.">
-    <meta property="og:image" content="{{ asset('/assets/images/og/usefokus-sprint-overview.png') }}">
+    <meta property="og:image" content="{{ asset('/asset/images/og/usefokus-sprint-overview.png') }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://usefokus.com/">
     <meta property="twitter:title" content="Fokus - Modern Project Management">
     <meta property="twitter:description" content="Fokus is a project management tool that helps you focus on what matters.">
-    <meta property="twitter:image" content="{{ asset('/assets/images/og/usefokus-sprint-overview.png') }}">
+    <meta property="twitter:image" content="{{ asset('/asset/images/og/usefokus-sprint-overview.png') }}">
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
