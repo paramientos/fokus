@@ -178,16 +178,28 @@ class Show extends Component
             'attachmentDescription' => 'nullable|string|max:255',
         ]);
 
+        $fileSize = $this->attachmentFile->getSize();
+        $workspace = $this->project->workspace;
+
+        // Workspace depolama limiti kontrolü
+        if (!$workspace->hasEnoughStorageSpace($fileSize)) {
+            $this->error('Workspace storage limit reached. Please upgrade your plan or delete some files.');
+            return;
+        }
+
         $path = $this->attachmentFile->store('attachments', 'public');
 
         $this->task->attachments()->create([
             'filename' => $this->attachmentFile->getClientOriginalName(),
             'path' => $path,
             'mime_type' => $this->attachmentFile->getMimeType(),
-            'size' => $this->attachmentFile->getSize(),
+            'size' => $fileSize,
             'description' => $this->attachmentDescription,
             'user_id' => auth()->id(),
         ]);
+
+        // Depolama kullanımını güncelle
+        $workspace->getStorageUsage()->addUsage($fileSize);
 
         $this->closeAttachmentModal();
     }
@@ -206,8 +218,14 @@ class Show extends Component
         }
 
         // Delete the file from storage
-        if (Storage::disk('public')->exists($attachment->path)) {
-            Storage::disk('public')->delete($attachment->path);
+        if (\Storage::disk('public')->exists($attachment->path)) {
+            \Storage::disk('public')->delete($attachment->path);
+        }
+
+        // Depolama kullanımını güncelle
+        $workspace = $this->project->workspace;
+        if ($workspace) {
+            $workspace->getStorageUsage()->removeUsage($attachment->size);
         }
 
         // Delete the record

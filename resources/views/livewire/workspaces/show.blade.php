@@ -300,6 +300,31 @@ new class extends Livewire\Volt\Component {
                                 </x-button>
                             </div>
                         </div>
+                        <!-- STORAGE USAGE -->
+                        @php $storage = $workspace->storageUsage; @endphp
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">Storage Usage</div>
+                            <div class="bg-base-200 rounded-xl p-4 flex flex-col gap-2 min-w-[220px] shadow-inner border border-base-300">
+                                <div class="flex items-center gap-2 text-lg font-semibold">
+                                    <i class="fas fa-database text-primary"></i>
+                                    <span>{{ $storage ? $storage->formatted_used : '0B' }}</span>
+                                    <span class="text-gray-400 font-normal text-base">/</span>
+                                    <span>{{ $storage ? $storage->formatted_limit : '—' }}</span>
+                                </div>
+                                <div class="relative w-full h-3 rounded bg-base-300 overflow-hidden mt-1">
+                                    <div class="absolute top-0 left-0 h-3 rounded bg-gradient-to-r from-primary to-accent transition-all"
+                                         style="width: {{ $storage && $storage->limit_bytes > 0 ? min(100, round($storage->used_bytes / $storage->limit_bytes * 100)) : 0 }}%"></div>
+                                    <div class="absolute inset-0 flex justify-center items-center text-xs text-gray-100 font-bold drop-shadow">
+                                        {{ $storage ? $storage->usage_percent : 0 }}%
+                                    </div>
+                                </div>
+                                <div class="flex justify-between text-xs mt-1">
+                                    <span class="text-gray-400 flex items-center gap-1"><i class="fas fa-layer-group"></i>Plan: <span class="font-semibold text-primary">{{ $storage ? ucfirst($storage->plan_name) : '—' }}</span></span>
+                                    <span class="text-gray-400 flex items-center gap-1"><i class="fas fa-users"></i>{{ $workspace->members->count() }} members</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END STORAGE USAGE -->
                     </div>
                 </div>
             </div>

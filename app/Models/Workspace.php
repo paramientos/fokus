@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * 
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Project> $projects
  * @property-read int|null $projects_count
+ * @property-read \App\Models\StorageUsage|null $storageUsage
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace query()
@@ -87,6 +89,44 @@ class Workspace extends Model
         return $this->hasMany(WorkspaceInvitation::class);
     }
 
+    /**
+     * Get the storage usage for the workspace.
+     */
+    public function storageUsage(): HasOne
+    {
+        return $this->hasOne(StorageUsage::class);
+    }
+
+    /**
+     * Get or create storage usage for the workspace.
+     * 
+     * @return StorageUsage
+     */
+    public function getStorageUsage(): StorageUsage
+    {
+        if (!$this->storageUsage) {
+            return $this->storageUsage()->create([
+                'workspace_id' => $this->id,
+                'used_bytes' => 0,
+                'limit_bytes' => 1073741824, // Default 1GB
+                'plan_name' => 'basic'
+            ]);
+        }
+        
+        return $this->storageUsage;
+    }
+
+    /**
+     * Check if the workspace has enough storage space left
+     *
+     * @param int $bytes
+     * @return bool
+     */
+    public function hasEnoughStorageSpace(int $bytes): bool
+    {
+        return $this->getStorageUsage()->hasEnoughSpace($bytes);
+    }
+
     protected static function booted()
     {
         static::created(function (Workspace $workspace) {
@@ -96,6 +136,14 @@ class Workspace extends Model
                     'role' => 'owner',
                 ]);
             }
+            
+            // Create storage usage record for the workspace
+            $workspace->storageUsage()->create([
+                'workspace_id' => $workspace->id,
+                'used_bytes' => 0,
+                'limit_bytes' => 1073741824, // Default 1GB
+                'plan_name' => 'basic'
+            ]);
         });
     }
 }

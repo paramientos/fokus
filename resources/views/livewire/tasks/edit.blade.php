@@ -112,7 +112,7 @@ new class extends Livewire\Volt\Component {
                         </div>
 
                         <div class="md:col-span-2">
-                            <x-markdown-editor id="task-description" label="Description" wire:model="description" />
+                            <x-markdown-editor id="task-description" label="Description" wire:model="description" value="{{ $description }}" />
                         </div>
 
                         <div class="form-control">

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $workspace_id
@@ -19,17 +19,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $master_password_hash
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $icon
+ * @property string|null $color
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PasswordCategory> $categories
  * @property-read int|null $categories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PasswordEntry> $entries
  * @property-read int|null $entries_count
+ * @property-read bool $is_locked
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Workspace $workspace
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereIsShared($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereMasterPasswordHash($value)

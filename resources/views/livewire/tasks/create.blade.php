@@ -1,5 +1,9 @@
 <?php
 
+use App\Enums\Priority;
+use App\Enums\TaskType;
+use App\Models\User;
+
 new class extends Livewire\Volt\Component {
     /** @var \App\Models\Project */
     public $project;
@@ -74,9 +78,9 @@ new class extends Livewire\Volt\Component {
     {
         $statuses = $this->project->statuses()->orderBy('order')->get();
         $sprints = $this->project->sprints()->orderBy('created_at', 'desc')->get();
-        $users = \App\Models\User::orderBy('name')->get();
-        $taskTypes = \App\Enums\TaskType::listForMaryUI();
-        $priorities = \App\Enums\Priority::listForMaryUI();
+        $users = User::orderBy('name')->get();
+        $taskTypes = TaskType::listForMaryUI();
+        $priorities = Priority::listForMaryUI();
 
         return [
             'statuses' => $statuses,
@@ -96,7 +100,8 @@ new class extends Livewire\Volt\Component {
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-primary">Create Task</h1>
             <x-button link="/projects/{{ $project->id }}/tasks" icon="fas.arrow-left"
-                      class="btn-ghost">Back to Tasks</x-button>
+                      class="btn-ghost">Back to Tasks
+            </x-button>
         </div>
 
         <div class="card bg-base-100 shadow-xl">
@@ -109,7 +114,8 @@ new class extends Livewire\Volt\Component {
                         </div>
 
                         <div class="md:col-span-2">
-                            <x-markdown-editor id="task-description" label="Description" wire:model="description" />
+                            <x-markdown-editor id="task-description" label="Description" wire:model="description"
+                                               value="{{ $description }}"/>
                         </div>
 
                         <div class="form-control">

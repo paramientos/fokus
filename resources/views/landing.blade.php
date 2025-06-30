@@ -337,7 +337,7 @@
                         <li><i class="fas fa-users mr-2 text-pink-400"></i> Unlimited members</li>
                         <li><i class="fas fa-project-diagram mr-2 text-pink-400"></i> Unlimited projects</li>
                         <li><i class="fas fa-layer-group mr-2 text-pink-400"></i> Unlimited workspaces</li>
-                        <li><i class="fas fa-hdd mr-2 text-pink-400"></i> 1 TB storage</li>
+                        <li><i class="fas fa-hdd mr-2 text-pink-400"></i> 5 TB storage</li>
                     </ul>
                     <div class="mt-auto">
                         <span class="text-3xl font-bold text-pink-400 line-through">$19/mo</span>

@@ -15,6 +15,7 @@ new class extends Component {
     public $upload;
     public $uploading = false;
     public $error = null;
+    public $storageInfo = null;
 
     public $showCommentsFor = null;
     public bool $showCommentsModal = false;
@@ -28,6 +29,7 @@ new class extends Component {
         $this->fileable_type = $fileable_type;
         $this->fileable_id = $fileable_id;
         $this->loadFiles();
+        $this->loadStorageInfo();
     }
 
     public function loadFiles()
@@ -39,6 +41,36 @@ new class extends Component {
             ->get();
     }
 
+    public function loadStorageInfo()
+    {
+        // Dosyanın bağlı olduğu modeli bul
+        $modelClass = $this->fileable_type;
+        $fileable = $modelClass::find($this->fileable_id);
+        
+        if (!$fileable) {
+            return;
+        }
+        
+        // Eğer fileable bir Project veya Task ise, workspace'i bul
+        $workspace = null;
+        
+        if ($fileable instanceof \App\Models\Project) {
+            $workspace = $fileable->workspace;
+        } elseif ($fileable instanceof \App\Models\Task) {
+            $workspace = $fileable->project->workspace;
+        }
+        
+        if ($workspace) {
+            $storageUsage = $workspace->getStorageUsage();
+            $this->storageInfo = [
+                'used' => $storageUsage->formatted_used,
+                'limit' => $storageUsage->formatted_limit,
+                'percentage' => $storageUsage->usage_percentage,
+                'plan_name' => ucfirst($storageUsage->plan_name)
+            ];
+        }
+    }
+
     public function deleteFile($fileId)
     {
         $file = File::find($fileId);
@@ -47,6 +79,7 @@ new class extends Component {
         if (auth()->id() === $file->uploaded_by || auth()->user()?->hasRole('admin')) {
             $file->delete();
             $this->loadFiles();
+            $this->loadStorageInfo();
         }
     }
 
@@ -102,6 +135,17 @@ new class extends Component {
                 'upload' => 'required|file|max:51200', // 50MB
             ]);
             $file = $this->upload;
+            
+            // Dosya boyutu kontrolü
+            $fileSize = $file->getSize();
+            
+            // Workspace'in yeterli depolama alanı var mı kontrol et
+            if (!File::hasEnoughStorageSpace($this->fileable_type, $this->fileable_id, $fileSize)) {
+                $this->error = 'Your workspace has reached its storage limit. Please upgrade your plan or delete some files.';
+                $this->uploading = false;
+                return;
+            }
+            
             $path = $file->store('uploads/files', 'public');
             // Versiyon kontrolü: aynı isimde aktif dosya var mı?
             $existing = File::where('fileable_type', $this->fileable_type)
@@ -121,7 +165,7 @@ new class extends Component {
                 'file_name' => $file->getClientOriginalName(),
                 'file_path' => $path,
                 'mime_type' => $file->getClientMimeType(),
-                'size' => $file->getSize(),
+                'size' => $fileSize,
                 'uploaded_by' => Auth::id(),
                 'fileable_type' => $this->fileable_type,
                 'fileable_id' => $this->fileable_id,
@@ -130,6 +174,7 @@ new class extends Component {
                 'is_active' => true,
             ]);
             $this->loadFiles();
+            $this->loadStorageInfo();
             $this->upload = null;
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
@@ -146,6 +191,18 @@ new class extends Component {
         @endif
         @if($uploading)
             <x-progress indeterminate label="Uploading..." class="mt-2"/>
+        @endif
+        
+        @if($storageInfo)
+        <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">Storage Usage ({{ $storageInfo['plan_name'] }} Plan)</span>
+                <span class="text-sm">{{ $storageInfo['used'] }} / {{ $storageInfo['limit'] }}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-primary h-2.5 rounded-full" style="width: {{ $storageInfo['percentage'] }}%"></div>
+            </div>
+        </div>
         @endif
     </div>
     <div class="overflow-x-auto">
@@ -228,4 +285,3 @@ new class extends Component {
         </x-modal>
     @endif
 </div>
-

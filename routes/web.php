@@ -190,8 +190,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/git/sso/{provider}/callback', [GitSSOController::class, 'callback'])->name('git.sso.callback');
     Route::get('/git/sso/{provider}/{projectId}', [GitSSOController::class, 'redirect'])->name('git.sso.redirect');
     Route::delete('/git/repositories/{repositoryId}', [GitSSOController::class, 'disconnect'])->name('git.repositories.disconnect');
-});
 
+    Volt::route('/admin/storage-management', 'admin.storage-management')->name('admin.storage-management');
+});
 // Git webhook routes (no auth middleware)
 Route::post('/webhooks/github/{token}', [GitWebhookController::class, 'handleGitHub']);
 Route::post('/webhooks/gitlab/{token}', [GitWebhookController::class, 'handleGitLab']);
