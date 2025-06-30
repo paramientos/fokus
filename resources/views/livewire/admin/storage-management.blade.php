@@ -14,17 +14,17 @@ new class extends Component {
     public $editingStorage = null;
 
     public array $packages = [
-        'basic' => [
+        'free' => [
             'name' => 'Forever Free',
             'limit' => 1073741824, // 1GB
             'price' => 'Free'
         ],
-        'pro' => [
+        'solo_legend' => [
             'name' => ' Solo Legend',
             'limit' => 1073741824, // 1GB
             'price' => '$9.99/month'
         ],
-        'enterprise' => [
+        'team_multiverse' => [
             'name' => ' Team Multiverse',
             'limit' => 5737418240, // 5GB
             'price' => '$19.99/month'
