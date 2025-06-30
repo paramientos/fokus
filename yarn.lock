@@ -522,6 +522,26 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-strike/-/extension-strike-2.14.0.tgz#6c6c802b1e8ffbad22ee4aec9d8068664d4dc2ea"
   integrity sha512-rD5d/IL3XPfBOrHRHxt+b+0X1jbIbWONGiad/3sX0ZYQD3PandtCWboH40r/J5tFksebuY12dVYyYQKgLpDBOQ==
 
+"@tiptap/extension-table-cell@^2.23.0":
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-table-cell/-/extension-table-cell-2.23.0.tgz#f048978eeebd2158d1dab3237a4bd350bb0f1dd0"
+  integrity sha512-+fYhtoUPAveDfbvz0aUuyzBZf3swD3Lo5Vf6oLL+rU5kIS9hHkYW8opkLnH87dOauRiTbwlM60lK9qaW07VGuA==
+
+"@tiptap/extension-table-header@^2.23.0":
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-table-header/-/extension-table-header-2.23.0.tgz#6a15220db9d25dbe1be96366f73b8320167cf3a2"
+  integrity sha512-WTd6tGUzMR1oX07BkgNPwX9HJczB3GCZfiqtXjAcFSfEwiE2CxhCxyZ3BHxmobxEs57tmANwsTPGApQnLvxAuw==
+
+"@tiptap/extension-table-row@^2.23.0":
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-table-row/-/extension-table-row-2.23.0.tgz#d8b08a9c64232616a0251d8dbf7d05be5f74ed92"
+  integrity sha512-0BO1FEU9w2cMZvdjStwF9fiVbu60HqarBLJcpsCYSUHKt6XdaYd8vuX8YOd5moqL9EpexfmDWwoUj/LwPi6PYw==
+
+"@tiptap/extension-table@^2.23.0":
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-table/-/extension-table-2.23.0.tgz#89b7b052b4424812905a5c06e4171b238d036335"
+  integrity sha512-DkXW9px5gXmiMxQdG0++j3v8D4c8lw4Op2KjZVdZ+JAy8cDZJne9BQlZ/NWPsDUhA5iB4D+oRNyTfMOgDXMXew==
+
 "@tiptap/extension-task-item@^2.14.0":
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-task-item/-/extension-task-item-2.14.0.tgz#5d576c5486dba9d4475456a3f1dc4e614b6b3ac0"
@@ -881,7 +901,7 @@ dunder-proto@^1.0.1:
 
 easymde@^2.20.0:
   version "2.20.0"
-  resolved "https://registry.npmjs.org/easymde/-/easymde-2.20.0.tgz"
+  resolved "https://registry.yarnpkg.com/easymde/-/easymde-2.20.0.tgz#88b3161feab6e1900afa9c4dab3f1da352b0a26e"
   integrity sha512-V1Z5f92TfR42Na852OWnIZMbM7zotWQYTddNaLYZFVKj7APBbyZ3FYJ27gBw2grMW3R6Qdv9J8n5Ij7XRSIgXQ==
   dependencies:
     "@types/codemirror" "^5.60.10"

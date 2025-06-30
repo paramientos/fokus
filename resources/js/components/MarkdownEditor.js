@@ -4,6 +4,10 @@ import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
+import Table from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
 
 document.addEventListener('DOMContentLoaded', () => {
   const editorElements = document.querySelectorAll('.markdown-editor')
@@ -19,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       extensions: [
         StarterKit,
         Placeholder.configure({
-          placeholder: 'Görev açıklamasını buraya yazın... Markdown formatını kullanabilirsiniz.\n\n- Liste öğeleri için tire (-) kullanabilirsiniz\n- [ ] Yapılacak görevler için\n- [x] Tamamlanmış görevler için',
+          placeholder: input.getAttribute('placeholder') || '',
           emptyEditorClass: 'is-editor-empty',
         }),
         Link.configure({
@@ -37,7 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
           HTMLAttributes: {
             class: 'task-item'
           }
-        })
+        }),
+        Table.configure({
+          resizable: true,
+          HTMLAttributes: {
+            class: 'table table-zebra w-full'
+          }
+        }),
+        TableRow,
+        TableHeader,
+        TableCell,
       ],
       content: input.value,
       onUpdate: ({ editor }) => {

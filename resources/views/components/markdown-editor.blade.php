@@ -1,4 +1,8 @@
-@props(['id', 'label' => null, 'placeholder' => 'Write your description here...', 'value' => ''])
+@props([
+    'id' => 'markdown-editor-' . uniqid(),
+    'label' => null,
+    'value' => '',
+])
 
 <div class="form-control">
     @if ($label)
@@ -7,51 +11,59 @@
         </label>
     @endif
 
-    <div class="markdown-editor">
-        <div class="toolbar">
-            <button type="button" data-action="heading" title="Heading">
-                <x-icon name="fas.heading" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="bold" title="Bold">
-                <x-icon name="fas.bold" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="italic" title="Italic">
-                <x-icon name="fas.italic" class="w-4 h-4" />
-            </button>
-            
-            <div class="separator"></div>
-            
-            <button type="button" data-action="bullet-list" title="Bullet List">
-                <x-icon name="fas.list-ul" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="ordered-list" title="Numbered List">
-                <x-icon name="fas.list-ol" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="task-list" title="Task List">
-                <x-icon name="fas.list-check" class="w-4 h-4" />
-            </button>
-            
-            <div class="separator"></div>
-            
-            <button type="button" data-action="code-block" title="Code Block">
-                <x-icon name="fas.code" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="blockquote" title="Quote">
-                <x-icon name="fas.quote-left" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="horizontal-rule" title="Horizontal Line">
-                <x-icon name="fas.minus" class="w-4 h-4" />
-            </button>
-            <button type="button" data-action="link" title="Link">
-                <x-icon name="fas.link" class="w-4 h-4" />
-            </button>
-        </div>
-        
-        <div class="content border-2 border-dashed border-gray-200 hover:border-primary focus:border-primary transition-colors"></div>
-        
-        <input type="hidden" id="{{ $id }}" name="{{ $id }}" class="input" {{ $attributes->wire('model') }} value="{{ $value }}">
+    <div class="markdown-editor-container">
+        <textarea id="{{ $id }}" name="{{ $id }}" {{ $attributes->wire('model') }}>{{ $value }}</textarea>
     </div>
+
+    <!-- EasyMDE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
     
+    <!-- EasyMDE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('{{ $id }}');
+            
+            // Initialize EasyMDE
+            const easyMDE = new EasyMDE({
+                element: textarea,
+                spellChecker: false,
+                autofocus: false,
+                toolbar: [
+                    'heading', 'bold', 'italic', '|',
+                    'unordered-list', 'ordered-list', 'task', '|',
+                    'code', 'quote', 'table', '|',
+                    'link', 'image', '|',
+                    'preview', 'side-by-side', 'fullscreen'
+                ],
+                status: false,
+                tabSize: 4,
+                renderingConfig: {
+                    singleLineBreaks: false,
+                    codeSyntaxHighlighting: true,
+                },
+            });
+
+            // Handle Livewire updates
+            if (textarea.hasAttribute('wire:model') || textarea.hasAttribute('wire:model.defer')) {
+                // Update Livewire model when editor changes
+                easyMDE.codemirror.on('change', () => {
+                    const value = easyMDE.value();
+                    textarea.value = value;
+                    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+
+                // Listen for Livewire updates
+                document.addEventListener('livewire:update', () => {
+                    if (textarea.value !== easyMDE.value()) {
+                        easyMDE.value(textarea.value);
+                    }
+                });
+            }
+        });
+    </script>
+
     @error($attributes->wire('model')->value())
         <span class="text-error text-sm">{{ $message }}</span>
     @enderror
