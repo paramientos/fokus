@@ -24,7 +24,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
     <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
-    <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#ff2d20">
     <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico">
     <meta name="msapplication-TileColor" content="#ff2d20">
     <meta name="msapplication-config" content="/assets/images/favicon/browserconfig.xml">
