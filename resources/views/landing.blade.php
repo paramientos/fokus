@@ -341,20 +341,37 @@
                 <i class="fas fa-shield-alt mr-2"></i> Data Security & Privacy
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="content-card col-span-1 md:col-span-3">
-                    <h3 class="text-2xl font-bold mb-4 gradient-text" id="data"><i class="fas fa-database mr-2"></i> Where is Your Data Stored?</h3>
-                    <p class="text-lg text-gray-200 mb-2">
-                        All Fokus data is securely stored in dedicated databases hosted on enterprise-grade servers at <b>Hetzner Falkenstein (Germany)</b>. Files and attachments are stored on <b>Hetzner Storage Boxes</b> and <b>Cloudflare R2 S3-compatible storage</b>, ensuring high durability and availability. Our infrastructure is hosted in GDPR-compliant data centers with 24/7 monitoring, regular security audits, and redundancy for high availability.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-300 mb-2">
-                        <li>Servers are physically located in Hetzner Falkenstein, Germany (ISO 27001, SOC 2 compliant).</li>
-                        <li>Files are stored on Hetzner Storage and Cloudflare S3 (R2) with multi-region redundancy.</li>
-                        <li>DNS is managed by <b>Cloudflare</b>, providing enterprise-grade DDoS protection and secure DNS resolution.</li>
-                        <li>Automated daily backups are encrypted and stored off-site.</li>
-                        <li>All access to production data is logged and strictly limited to authorized personnel with MFA.</li>
-                        <li>Data is never shared with third parties without explicit user consent.</li>
-                        <li>Users can request data export or deletion at any time.</li>
-                    </ul>
+                <div class="content-card col-span-1 md:col-span-3 flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2 w-full flex flex-col items-center">
+                        <img src="{{ asset('/asset/images/datacenterpark-fsn.jpg') }}" alt="Hetzner Datacenter Park Falkenstein" class="rounded-xl shadow-lg w-full object-cover mb-2 md:mb-0" loading="lazy">
+                        <span class="text-lg text-gray-400 mt-1">Hetzner Datacenter Park Falkenstein</span>
+                        <div class="flex gap-2 mt-2">
+                            <a href="https://files.hetzner.com/360-tour" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow transition">
+                                <i class="fas fa-vr-cardboard"></i> 360° Tour
+                            </a>
+                            <a href="https://www.google.com/local/place/fid/0x47a0dbd444e0861d:0xfad347dfa5261bd0/photosphere?iu=https://streetviewpixels-pa.googleapis.com/v1/thumbnail?panoid%3DIcHB0YH6D7bzN0l4Fid8Yw%26cb_client%3Dlu.gallery.gps%26w%3D160%26h%3D106%26yaw%3D135.48383%26pitch%3D0%26thumbfov%3D100&ik=CAISFkljSEIwWUg2RDdiek4wbDRGaWQ4WXc%3D" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-green-600 hover:bg-green-700 text-white text-sm font-semibold shadow transition">
+                                <i class="fas fa-street-view"></i> Visit on Google Streets
+                            </a>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 w-full flex flex-col gap-4">
+                        <h3 class="text-2xl font-bold mb-4 gradient-text" id="data"><i class="fas fa-database mr-2"></i> Where is Your Data Stored?</h3>
+                        <p class="text-lg text-gray-200 mb-2">
+                            All Fokus data is securely stored in dedicated databases hosted on enterprise-grade servers at <b>Hetzner Falkenstein, Munich (Germany) and Hillsboro, Oregon (USA)</b>. Files and attachments are stored on <b>Hetzner Storage Boxes</b> and <b>Cloudflare R2 S3-compatible storage</b>, ensuring high durability and availability. Our infrastructure is hosted in GDPR-compliant data centers with 24/7 monitoring, regular security audits, and redundancy for high availability.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-300 mb-2">
+                            <li>Servers are physically located in Hetzner Falkenstein, Munich (Germany) and Hillsboro, Oregon (USA) (ISO 27001, SOC 2 compliant).</li>
+                            <li>Files are stored on Hetzner Storage and Cloudflare S3 (R2) with multi-region redundancy.</li>
+                            <li>DNS is managed by <b>Cloudflare</b>, providing enterprise-grade DDoS protection and secure DNS resolution.</li>
+                            <li>Automated daily backups are encrypted and stored off-site.</li>
+                            <li>All access to production data is logged and strictly limited to authorized personnel with MFA.</li>
+                            <li>Data is never shared with third parties without explicit user consent.</li>
+                            <li>Users can request data export or deletion at any time.</li>
+                        </ul>
+                       {{-- <a href="https://files.hetzner.com/360-tour" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition">
+                            <i class="fas fa-vr-cardboard"></i> Explore Hetzner Datacenter (360° Tour)
+                        </a>--}}
+                    </div>
                 </div>
                 <div class="content-card col-span-1 md:col-span-3">
                     <h3 class="text-2xl font-bold mb-4 gradient-text" id="encryption"><i class="fas fa-lock mr-2"></i> Data Encryption & Security</h3>
@@ -370,6 +387,23 @@
                         <li><b>SIEM & Monitoring:</b> Internal security is enhanced with <b>SIEM</b> (Security Information and Event Management) systems for real-time threat detection, anomaly analysis, and incident response.</li>
                         <li><b>Regular Penetration Testing:</b> Fokus undergoes regular security testing and code review by independent experts.</li>
                         <li><b>Zero Trust Policy:</b> Internal services communicate over secure channels and require authentication for every request.</li>
+                    </ul>
+                </div>
+                <div class="content-card col-span-1 md:col-span-3">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text" id="video"><i class="fas fa-video mr-2"></i> Video Conferencing Security</h3>
+                    <p class="text-lg text-gray-200 mb-2">
+                        We never store your video conferencing data, and all connections are encrypted and protected.
+                    </p>
+                    <p class="text-lg text-gray-200 mb-2">
+                        In Fokus, all video conferencing is powered by <b>Jitsi</b> and delivered with maximum security. Every call is hosted on our dedicated servers located at <b>Hetzner</b> (Germany), one of Europe's leading cloud providers. All communication is <b>SSL/TLS</b> encrypted end-to-end, so no third party can access your meeting content.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 mb-2">
+                        <li>Video conference servers are hosted in Hetzner data centers (Germany) and fully compliant with ISO 27001/SOC 2 standards.</li>
+                        <li>All connections are protected with <b>SSL/TLS</b> encryption, ensuring your meetings remain private and secure.</li>
+                        <li>Fokus uses a self-hosted Jitsi setup; your data is <b>never</b> shared with any third-party service.</li>
+                        <li>Server management and security are handled exclusively by the Fokus team. Regular security updates and monitoring are enforced.</li>
+                        <li>Users can securely start meetings, share their screen, and record sessions; all processes are GDPR compliant.</li>
+                        <li>The video conferencing infrastructure is optimized for high availability and low latency.</li>
                     </ul>
                 </div>
                 <div class="content-card col-span-1 md:col-span-3">
