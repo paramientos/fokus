@@ -15,6 +15,58 @@ new class extends Livewire\Volt\Component {
     public ?string $userRole = null;
     public bool $showCreateProjectModal = false;
 
+    // Delete modals
+    public bool $showDeleteWorkspaceModal = false;
+    public bool $showDeleteProfileModal = false;
+    public bool $confirmDeleteWorkspace = false;
+
+    // Math question
+    public string $mathQuestion = '';
+    public ?int $mathAnswer = null;
+    public ?int $mathAnswerProfile = null;
+    public int $correctAnswer = 0;
+    public bool $confirmDeleteProfile = false;
+
+    protected $rules = [
+        'mathAnswer' => 'required|numeric',
+        'mathAnswerProfile' => 'required|numeric',
+    ];
+
+    protected $listeners = ['refreshWorkspace' => '$refresh'];
+
+    public function generateMathQuestion(): void
+    {
+        $num1 = rand(5, 15);
+        $num2 = rand(1, 9);
+        $this->correctAnswer = $num1 + $num2;
+        $this->mathQuestion = "$num1 + $num2";
+        $this->mathAnswer = null;
+        $this->mathAnswerProfile = null;
+    }
+
+    public function updatedMathAnswer()
+    {
+        $this->validateOnly('mathAnswer');
+    }
+
+    public function updatedMathAnswerProfile()
+    {
+        $this->validateOnly('mathAnswerProfile');
+    }
+
+    public function showWorkspaceDeleteModal()
+    {
+        $this->generateMathQuestion();
+        $this->showDeleteWorkspaceModal = true;
+    }
+
+    public function showProfileDeleteModal()
+    {
+        $this->generateMathQuestion();
+        $this->confirmDeleteProfile = false;
+        $this->showDeleteProfileModal = true;
+    }
+
     public function mount($id): void
     {
         $this->workspace = Workspace::with(['members', 'owner', 'projects'])->findOrFail($id);
@@ -119,6 +171,107 @@ new class extends Livewire\Volt\Component {
                 @endif
             </div>
         </div>
+
+        <!-- Workspace Danger Zone -->
+        @if($userRole === 'owner')
+        <div class="card bg-base-200 shadow-lg border border-error mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-error"><i class="fas fa-exclamation-triangle mr-2"></i> Danger Zone</h2>
+                <p class="mb-4 text-error-content">You can permanently delete this workspace, export all workspace data, or delete your own profile. These actions are <b>irreversible</b>.</p>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Delete Workspace Button -->
+                    <x-button wire:click="showWorkspaceDeleteModal" icon="fas.trash" class="btn-error">
+                        Delete Workspace
+                    </x-button>
+
+                    <!-- Export Workspace Data Button -->
+                    <form method="POST" action="{{ route('workspaces.export', $workspace->id) }}">
+                        @csrf
+                        <x-button type="submit" icon="fas.download" class="btn-warning">
+                            Export Workspace Data
+                        </x-button>
+                    </form>
+
+                    <!-- Delete Profile Button -->
+                    <x-button wire:click="showProfileDeleteModal" icon="fas.user-slash" class="btn-neutral">
+                        Delete My Profile
+                    </x-button>
+                </div>
+
+                <!-- Delete Workspace Modal -->
+                <x-modal wire:model="showDeleteWorkspaceModal" persistent class="backdrop-blur">
+                    <x-card title="Confirm Workspace Deletion" subtitle="This action cannot be undone. All data will be permanently deleted.">
+                        <div class="space-y-4">
+                            <p class="text-error">Are you sure you want to delete this workspace? All projects, tasks, and data will be permanently removed.</p>
+
+                            <div class="bg-base-200 p-4 rounded-lg">
+                                <p class="font-medium mb-2">Security Check: Solve this math problem to continue</p>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xl">{{ $mathQuestion }} = </span>
+                                    <x-input wire:model.live="mathAnswer" type="number" class="w-24" placeholder="?" autofocus />
+                                </div>
+                                @error('mathAnswer')
+                                    <p class="text-error text-sm mt-1">{{ $message }}</p>
+                                @enderror
+
+                                <div class="mt-4">
+                                    <label class="label cursor-pointer">
+                                        <input type="checkbox" class="checkbox checkbox-error" wire:model.live="confirmDeleteWorkspace" />
+                                        <span class="label-text ml-2">I understand this action is irreversible and I want to proceed</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-3 mt-6">
+                                <x-button label="Cancel" wire:click="$set('showDeleteWorkspaceModal', false)" />
+                                <form method="POST" action="{{ route('workspaces.destroy', $workspace->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-button type="submit" label="Delete Workspace" icon="fas.trash" class="btn-error" :disabled="!$confirmDeleteWorkspace || $mathAnswer !== $correctAnswer" />
+                                </form>
+                            </div>
+                        </div>
+                    </x-card>
+                </x-modal>
+
+                <!-- Delete Profile Modal -->
+                <x-modal wire:model="showDeleteProfileModal" persistent class="backdrop-blur">
+                    <x-card title="Confirm Profile Deletion" subtitle="This action cannot be undone. Your account and all associated data will be permanently removed.">
+                        <div class="space-y-4">
+                            <p class="text-error">Are you sure you want to delete your profile? This will remove all your personal data from Fokus.</p>
+
+                            <div class="bg-base-200 p-4 rounded-lg">
+                                <p class="font-medium mb-2">Security Check: Solve this math problem to continue</p>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xl">{{ $mathQuestion }} = </span>
+                                    <x-input wire:model.live="mathAnswerProfile" type="number" class="w-24" placeholder="?" />
+                                </div>
+                                @error('mathAnswerProfile')
+                                    <p class="text-error text-sm mt-1">{{ $message }}</p>
+                                @enderror
+
+                                <div class="mt-4">
+                                    <label class="label cursor-pointer">
+                                        <input type="checkbox" class="checkbox checkbox-error" wire:model.live="confirmDeleteProfile" />
+                                        <span class="label-text ml-2">I understand this action is irreversible and I want to proceed</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-3 mt-6">
+                                <x-button label="Cancel" wire:click="$set('showDeleteProfileModal', false)" />
+                                <form method="POST" action="{{ route('profile.destroy') }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-button type="submit" label="Delete My Profile" icon="fas.user-slash" class="btn-error" :disabled="!$confirmDeleteProfile || $mathAnswerProfile !== $correctAnswer" />
+                                </form>
+                            </div>
+                        </div>
+                    </x-card>
+                </x-modal>
+            </div>
+        </div>
+        @endif
 
         <!-- Workspace Info Card -->
         <div class="card bg-base-100 shadow-sm mb-6">

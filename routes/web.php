@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\MeetingExportController;
-use App\Http\Controllers\GitWebhookController;
 use App\Http\Controllers\GitSSOController;
+use App\Http\Controllers\GitWebhookController;
+use App\Http\Controllers\MeetingExportController;
 use App\Http\Controllers\SprintCloneController;
 use App\Http\Controllers\SprintExportController;
-use App\Http\Controllers\LandingController;
+use App\Http\Controllers\WorkspaceController;
+use App\Http\Controllers\ProfileController;
 use App\Models\WorkspaceInvitation;
 use Livewire\Volt\Volt;
 
 // Landing page - accessible to everyone
-Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::view('/', 'landing')->name('landing');
 
 Volt::route('/login', 'auth.login')->name('login');
 Volt::route('/register', 'auth.register')->name('register');
@@ -73,6 +74,10 @@ Route::middleware('auth')->group(function () {
     Volt::route('/workspaces', 'workspaces.index')->name('workspaces.index');
     Volt::route('/workspaces/{id}', 'workspaces.show')->name('workspaces.show');
     Volt::route('/workspaces/{workspace}/members', 'workspaces.members')->name('workspaces.members');
+
+    // Workspace Danger Zone actions
+    Route::delete('/workspaces/{workspace}', [WorkspaceController::class, 'destroy'])->name('workspaces.destroy');
+    Route::post('/workspaces/{workspace}/export', [WorkspaceController::class, 'export'])->name('workspaces.export');
 
 // Projeler
     Volt::route('/projects', 'projects.index')->name('projects.index');
@@ -165,11 +170,12 @@ Route::middleware('auth')->group(function () {
 
 // Profil
     Volt::route('/profile', 'profile.index')->name('profile.index');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 // Gmail Entegrasyonu
- /*   Volt::route('/mail', 'mail.inbox')->name('mail.inbox');
-    Route::get('/auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'redirect'])->name('google.redirect');
-    Route::get('/auth/google/callback', [\App\Http\Controllers\GoogleAuthController::class, 'callback'])->name('google.callback');*/
+    /*   Volt::route('/mail', 'mail.inbox')->name('mail.inbox');
+       Route::get('/auth/google', [\App\Http\Controllers\GoogleAuthController::class, 'redirect'])->name('google.redirect');
+       Route::get('/auth/google/callback', [\App\Http\Controllers\GoogleAuthController::class, 'callback'])->name('google.callback');*/
 
     Volt::route('/logout', 'auth.logout')->name('logout');
 
@@ -191,6 +197,6 @@ Route::post('/webhooks/github/{token}', [GitWebhookController::class, 'handleGit
 Route::post('/webhooks/gitlab/{token}', [GitWebhookController::class, 'handleGitLab']);
 Route::post('/webhooks/bitbucket/{token}', [GitWebhookController::class, 'handleBitbucket']);
 
-require __DIR__.'/hr.php';
-require __DIR__.'/password-manager.php';
-  /*  require __DIR__.'/gamification.php';*/
+require __DIR__ . '/hr.php';
+require __DIR__ . '/password-manager.php';
+/*  require __DIR__.'/gamification.php';*/

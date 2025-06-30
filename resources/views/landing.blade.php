@@ -72,6 +72,7 @@
             <a href="#features" class="text-gray-300 hover:text-white transition">Features</a>
             <a href="#workflow" class="text-gray-300 hover:text-white transition">Workflow</a>
             <a href="#testimonials" class="text-gray-300 hover:text-white transition">Testimonials</a>
+            <a href="#security" class="text-gray-300 hover:text-blue-400 transition">Security</a>
         </nav>
         <div class="flex space-x-4">
             @auth('web')
@@ -307,6 +308,64 @@
         </div>
     </section>
 
+    <!-- Security Section (Data Security & Privacy) -->
+    <section id="security" class="py-20 bg-slate-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 gradient-text">
+                <i class="fas fa-shield-alt mr-2"></i> Data Security & Privacy
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="content-card col-span-1 md:col-span-3">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text" id="data"><i class="fas fa-database mr-2"></i> Where is Your Data Stored?</h3>
+                    <p class="text-lg text-gray-200 mb-2">
+                        All Fokus data is securely stored in dedicated databases hosted on enterprise-grade servers at <b>Hetzner Falkenstein (Germany)</b>. Files and attachments are stored on <b>Hetzner Storage Boxes</b> and <b>Cloudflare R2 S3-compatible storage</b>, ensuring high durability and availability. Our infrastructure is hosted in GDPR-compliant data centers with 24/7 monitoring, regular security audits, and redundancy for high availability.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 mb-2">
+                        <li>Servers are physically located in Hetzner Falkenstein, Germany (ISO 27001, SOC 2 compliant).</li>
+                        <li>Files are stored on Hetzner Storage and Cloudflare S3 (R2) with multi-region redundancy.</li>
+                        <li>DNS is managed by <b>Cloudflare</b>, providing enterprise-grade DDoS protection and secure DNS resolution.</li>
+                        <li>Automated daily backups are encrypted and stored off-site.</li>
+                        <li>All access to production data is logged and strictly limited to authorized personnel with MFA.</li>
+                        <li>Data is never shared with third parties without explicit user consent.</li>
+                        <li>Users can request data export or deletion at any time.</li>
+                    </ul>
+                </div>
+                <div class="content-card col-span-1 md:col-span-3">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text" id="encryption"><i class="fas fa-lock mr-2"></i> Data Encryption & Security</h3>
+                    <p class="text-lg text-gray-200 mb-2">
+                        Fokus applies industry-leading encryption and security practices to protect your data at all times. In addition to standard encryption, we implement advanced monitoring and threat detection:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 mb-2">
+                        <li><b>Encryption in Transit:</b> All traffic between your browser and our servers is encrypted using <b>TLS 1.2+</b> (HTTPS).</li>
+                        <li><b>Encryption at Rest:</b> Sensitive fields (passwords, vault entries, tokens) are encrypted using <b>AES-256</b> or <b>bcrypt</b>.</li>
+                        <li><b>Password Vault:</b> All passwords stored in the vault are encrypted with user-specific keys. Vaults use additional security layers, including unlock timers and manual lock controls.</li>
+                        <li><b>API Security:</b> All API endpoints require authentication and use strict rate limiting and input validation to prevent abuse.</li>
+                        <li><b>Server Security:</b> All servers are hardened, kept up-to-date, and protected by firewalls and intrusion detection systems.</li>
+                        <li><b>SIEM & Monitoring:</b> Internal security is enhanced with <b>SIEM</b> (Security Information and Event Management) systems for real-time threat detection, anomaly analysis, and incident response.</li>
+                        <li><b>Regular Penetration Testing:</b> Fokus undergoes regular security testing and code review by independent experts.</li>
+                        <li><b>Zero Trust Policy:</b> Internal services communicate over secure channels and require authentication for every request.</li>
+                    </ul>
+                </div>
+                <div class="content-card col-span-1 md:col-span-3">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text" id="privacy"><i class="fas fa-user-shield mr-2"></i> Privacy & Access Control</h3>
+                    <p class="text-lg text-gray-200 mb-2">
+                        We take privacy seriously. Access to user data is governed by strict access controls and the principle of least privilege:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 mb-2">
+                        <li>Only authorized users can access their own workspace and project data.</li>
+                        <li>All access events are logged and periodically reviewed for anomalies.</li>
+                        <li>Suspicious or unauthorized access attempts are automatically blocked and reported.</li>
+                        <li>Users can see and manage their own sessions and revoke access from the security dashboard.</li>
+                        <li>All data processing complies with GDPR, CCPA, and other relevant privacy regulations.</li>
+                        <li><b>Workspace Deletion:</b> Users can permanently delete their entire workspace, including all associated projects, tasks, files, and members. This action is irreversible and requires explicit confirmation.</li>
+                        <li><b>Profile Deletion:</b> Every user can permanently delete their own account and all personal data from Fokus. This process is compliant with privacy regulations and is available in the profile settings.</li>
+                        <li><b>Data Export:</b> Users can export all their data (projects, tasks, files, vaults, etc.) in a structured format for backup or migration at any time from their account dashboard.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-20 bg-slate-900">
         <div class="container mx-auto px-4">
@@ -379,6 +438,11 @@
                class="inline-block px-8 py-3 rounded-lg btn-primary font-medium text-center">
                 Start Your Free Trial
             </a>
+            <div class="mt-8">
+                <a href="#security" class="inline-block px-6 py-2 rounded-lg border border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition font-medium">
+                    <i class="fas fa-shield-alt mr-2"></i> Data Security & Privacy
+                </a>
+            </div>
         </div>
     </section>
 </main>
