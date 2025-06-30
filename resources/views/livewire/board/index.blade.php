@@ -26,7 +26,7 @@ new class extends Livewire\Volt\Component {
     public $priorityFilter = '';
     public $taskTypeFilter = '';
     public $dueDateFilter = '';
-    
+
     // Filter options
     public $sprints = [];
     public $priorities = [];
@@ -44,12 +44,12 @@ new class extends Livewire\Volt\Component {
     {
         // Load sprints
         $this->sprints = $this->project->sprints()->select('id', 'name')->get();
-        
+
         // Load priorities
         $this->priorities = collect(\App\Enums\Priority::cases())->map(function ($priority) {
             return ['value' => $priority->value, 'label' => $priority->name];
         });
-        
+
         // Load task types
         $this->taskTypes = collect(\App\Enums\TaskType::cases())->map(function ($type) {
             return ['value' => $type->value, 'label' => $type->name];
@@ -63,7 +63,7 @@ new class extends Livewire\Volt\Component {
         $this->tasks = [];
         foreach ($this->statuses as $status) {
             $query = $status->tasks()->with(['user', 'reporter', 'sprint']);
-            
+
             // Apply filters
             if ($this->search) {
                 $query->where(function($q) {
@@ -71,27 +71,27 @@ new class extends Livewire\Volt\Component {
                       ->orWhere('description', 'like', '%' . $this->search . '%');
                 });
             }
-            
+
             if ($this->assigneeFilter) {
                 $query->where('user_id', $this->assigneeFilter);
             }
-            
+
             if ($this->reporterFilter) {
                 $query->where('reporter_id', $this->reporterFilter);
             }
-            
+
             if ($this->sprintFilter) {
                 $query->where('sprint_id', $this->sprintFilter);
             }
-            
+
             if ($this->priorityFilter) {
                 $query->where('priority', $this->priorityFilter);
             }
-            
+
             if ($this->taskTypeFilter) {
                 $query->where('task_type', $this->taskTypeFilter);
             }
-            
+
             if ($this->dueDateFilter) {
                 switch ($this->dueDateFilter) {
                     case 'overdue':
@@ -108,7 +108,7 @@ new class extends Livewire\Volt\Component {
                         break;
                 }
             }
-            
+
             $this->tasks[$status->id] = $query->get()->toArray();
         }
     }
@@ -299,17 +299,17 @@ new class extends Livewire\Volt\Component {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                     <!-- Search -->
                     <div class="col-span-1 md:col-span-2">
-                        <x-input 
-                            placeholder="Search tasks..." 
-                            wire:model.live.debounce.300ms="search" 
+                        <x-input
+                            placeholder="Search tasks..."
+                            wire:model.live.debounce.300ms="search"
                             icon="o-magnifying-glass"
                         />
                     </div>
 
                     <!-- Assignee Filter -->
                     <div>
-                        <x-select 
-                            placeholder="Assignee" 
+                        <x-select
+                            placeholder="Assignee"
                             wire:model.live="assigneeFilter"
                             :options="$users"
                             option-value="id"
@@ -319,8 +319,8 @@ new class extends Livewire\Volt\Component {
 
                     <!-- Reporter Filter -->
                     <div>
-                        <x-select 
-                            placeholder="Reporter" 
+                        <x-select
+                            placeholder="Reporter"
                             wire:model.live="reporterFilter"
                             :options="$users"
                             option-value="id"
@@ -330,8 +330,8 @@ new class extends Livewire\Volt\Component {
 
                     <!-- Sprint Filter -->
                     <div>
-                        <x-select 
-                            placeholder="Sprint" 
+                        <x-select
+                            placeholder="Sprint"
                             wire:model.live="sprintFilter"
                             :options="$sprints"
                             option-value="id"
@@ -341,8 +341,8 @@ new class extends Livewire\Volt\Component {
 
                     <!-- Priority Filter -->
                     <div>
-                        <x-select 
-                            placeholder="Priority" 
+                        <x-select
+                            placeholder="Priority"
                             wire:model.live="priorityFilter"
                             :options="$priorities"
                             option-value="value"
@@ -354,8 +354,8 @@ new class extends Livewire\Volt\Component {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
                     <!-- Task Type Filter -->
                     <div>
-                        <x-select 
-                            placeholder="Task Type" 
+                        <x-select
+                            placeholder="Task Type"
                             wire:model.live="taskTypeFilter"
                             :options="$taskTypes"
                             option-value="value"
@@ -365,8 +365,8 @@ new class extends Livewire\Volt\Component {
 
                     <!-- Due Date Filter -->
                     <div>
-                        <x-select 
-                            placeholder="Due Date" 
+                        <x-select
+                            placeholder="Due Date"
                             wire:model.live="dueDateFilter"
                             :options="[
                                 ['value' => 'overdue', 'label' => 'Overdue'],
@@ -381,9 +381,9 @@ new class extends Livewire\Volt\Component {
 
                     <!-- Clear Filters -->
                     <div class="flex items-end">
-                        <x-button 
-                            wire:click="clearFilters" 
-                            icon="o-x-mark" 
+                        <x-button
+                            wire:click="clearFilters"
+                            icon="o-x-mark"
                             class="btn-ghost btn-sm w-full"
                         >
                             Clear Filters
@@ -647,7 +647,7 @@ new class extends Livewire\Volt\Component {
                             <div class="divider"></div>
 
                             <div class="flex flex-col gap-2">
-                                <x-button
+                                <x-button no-wire-navigate
                                     link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit"
                                     label="Edit Task" icon="o-pencil" class="btn-outline w-full"/>
                                 <x-button wire:click="saveModalChanges" label="Save Changes" icon="o-check" class="btn-primary w-full"/>
