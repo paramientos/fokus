@@ -9,7 +9,7 @@
             </div>
 
             <div class="flex gap-2">
-                <x-button link="/projects/{{ $project->id }}/tasks/{{ $task->id }}/edit" label="Edit" icon="o-pencil"
+                <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/{{ $task->id }}/edit" label="Edit" icon="o-pencil"
                           class="btn-outline"/>
             </div>
         </div>
