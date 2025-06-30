@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Workspace;
+use Illuminate\Support\Str;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
@@ -128,7 +129,7 @@ new class extends Component {
                     <div class="mb-4">
                         <span class="text-sm font-medium">Current Plan:</span>
                         <span class="ml-2 px-2 py-1 rounded bg-primary/10 text-primary font-semibold text-xs">
-                            {{ ucfirst($editingStorage['plan_name']) }}
+                            {{ Str::headline($editingStorage['plan_name']) }}
                         </span>
                     </div>
                     <div class="mb-4">
