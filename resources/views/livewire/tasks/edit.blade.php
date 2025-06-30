@@ -18,7 +18,7 @@ new class extends Livewire\Volt\Component {
 
     protected $rules = [
         'title' => 'required|min:3|max:255',
-        'description' => 'nullable|max:1000',
+        'description' => 'nullable|max:10000',
         'status_id' => 'required|exists:statuses,id',
         'sprint_id' => 'nullable|exists:sprints,id',
         'user_id' => 'nullable|exists:users,id',

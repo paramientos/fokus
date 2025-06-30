@@ -99,6 +99,7 @@
             <a href="#workflow" class="text-gray-300 hover:text-white transition">Workflow</a>
             <a href="#testimonials" class="text-gray-300 hover:text-white transition">Testimonials</a>
             <a href="#security" class="text-gray-300 hover:text-blue-400 transition">Security</a>
+            <a href="#pricing" class="text-gray-300 hover:text-blue-400 transition">Pricing</a>
         </nav>
         <div class="flex space-x-4">
             @auth('web')
@@ -288,6 +289,66 @@
                     <p class="text-gray-400">Conduct virtual meetings with integrated video calls, screen sharing, and
                         recording capabilities.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-slate-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 gradient-text">
+                <i class="fas fa-tags mr-2"></i> Pricing
+            </h2>
+            <div class="flex flex-col md:flex-row justify-center gap-8">
+                <!-- Free Plan -->
+                <div class="feature-card rounded-xl p-8 flex-1 max-w-sm mx-auto flex flex-col">
+                    <h3 class="text-2xl font-bold text-primary mb-2"><i class="fas fa-gift mr-2"></i> Forever Free</h3>
+                    <p class="text-gray-300 mb-6">For solo adventurers and side projects.</p>
+                    <ul class="mb-8 space-y-2 text-gray-200">
+                        <li><i class="fas fa-users mr-2 text-primary"></i> Unlimited members</li>
+                        <li><i class="fas fa-project-diagram mr-2 text-primary"></i> 1 project</li>
+                        <li><i class="fas fa-layer-group mr-2 text-primary"></i> 1 workspace</li>
+                        <li><i class="fas fa-hdd mr-2 text-primary"></i> 10 GB storage</li>
+                    </ul>
+                    <div class="mt-auto">
+                        <span class="text-3xl font-bold text-primary">Free</span>
+                    </div>
+                </div>
+                <!-- Single Workspace Plan -->
+                <div class="feature-card rounded-xl p-8 flex-1 max-w-sm mx-auto flex flex-col border-2 border-yellow-500">
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-2"><i class="fas fa-rocket mr-2"></i> Solo Legend</h3>
+                    <p class="text-gray-300 mb-6">For teams who want to go from zero to hero.</p>
+                    <ul class="mb-8 space-y-2 text-gray-200">
+                        <li><i class="fas fa-users mr-2 text-yellow-400"></i> Unlimited members</li>
+                        <li><i class="fas fa-project-diagram mr-2 text-yellow-400"></i> Unlimited projects</li>
+                        <li><i class="fas fa-layer-group mr-2 text-yellow-400"></i> 1 workspace</li>
+                        <li><i class="fas fa-hdd mr-2 text-yellow-400"></i> 1 TB storage</li>
+                    </ul>
+                    <div class="mt-auto">
+                        <span class="text-3xl font-bold text-yellow-400">$9/mo</span>
+                    </div>
+                </div>
+                <!-- Unlimited Plan -->
+                <div class="feature-card rounded-xl p-8 flex-1 max-w-sm mx-auto flex flex-col border-2 border-pink-500 relative">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-pink-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow">FREE for everyone until 2025 ends!</div>
+                    <h3 class="text-2xl font-bold text-pink-400 mb-2"><i class="fas fa-infinity mr-2"></i> Team Multiverse</h3>
+                    <p class="text-gray-300 mb-6">For organizations who want it all (and then some).</p>
+                    <ul class="mb-8 space-y-2 text-gray-200">
+                        <li><i class="fas fa-users mr-2 text-pink-400"></i> Unlimited members</li>
+                        <li><i class="fas fa-project-diagram mr-2 text-pink-400"></i> Unlimited projects</li>
+                        <li><i class="fas fa-layer-group mr-2 text-pink-400"></i> Unlimited workspaces</li>
+                        <li><i class="fas fa-hdd mr-2 text-pink-400"></i> 1 TB storage</li>
+                    </ul>
+                    <div class="mt-auto">
+                        <span class="text-3xl font-bold text-pink-400 line-through">$19/mo</span>
+                        <span class="ml-2 text-lg text-white bg-pink-600 px-2 py-1 rounded">Free until 2025</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <span class="inline-block bg-pink-600 text-white px-6 py-3 rounded-full shadow-lg font-bold text-lg">
+                    All features of Team Multiverse are <u>completely FREE</u> for everyone until the end of 2025!
+                </span>
             </div>
         </div>
     </section>
