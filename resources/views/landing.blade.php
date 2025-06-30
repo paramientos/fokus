@@ -88,6 +88,11 @@
     </style>
 </head>
 <body class="min-h-screen">
+    <div class="sticky top-0 left-0 w-full z-50">
+        <div class="bg-gradient-to-r from-green-500 to-teal-500 text-white text-center py-3 font-bold text-base md:text-lg shadow-lg tracking-wide uppercase">
+            <i class="fas fa-gift mr-2"></i> All Fokus modules are <span class="underline decoration-2">FREE until the end of 2025</span> for everyone! <span class="ml-2">🚀</span>
+        </div>
+    </div>
 <header class="container mx-auto px-4 py-6">
     <div class="flex justify-between items-center">
         <div class="flex items-center">
@@ -117,7 +122,12 @@
 
 <main>
     <!-- Hero Section -->
-    <section class="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center">
+    <section class="container mx-auto px-4 py-20 flex flex-col md:flex-row items-center relative">
+        {{--<div class="absolute top-4 left-1/2 -translate-x-1/2 z-20">
+            <span class="px-6 py-2 rounded-full bg-gradient-to-r from-green-500 to-teal-500 text-white text-base md:text-lg font-bold shadow-lg border-2 border-green-400 animate-pulse uppercase tracking-wide">
+                🎉 All Fokus features are <span class="underline decoration-2">FREE until 2026!</span>
+            </span>
+        </div>--}}
         <div class="md:w-1/2 mb-10 md:mb-0">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Stop Tab Switching <span class="gradient-text"><br>Start Shipping...</span>
@@ -151,7 +161,12 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1: Project Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-project-diagram text-2xl text-blue-400"></i>
                     </div>
@@ -161,7 +176,12 @@
                 </div>
 
                 <!-- Feature 2: Task Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-tasks text-2xl text-purple-400"></i>
                     </div>
@@ -171,7 +191,12 @@
                 </div>
 
                 <!-- Feature 3: Sprint Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-chart-line text-2xl text-green-400"></i>
                     </div>
@@ -181,7 +206,12 @@
                 </div>
 
                 <!-- Feature 4: Kanban Board -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-yellow-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-columns text-2xl text-yellow-400"></i>
                     </div>
@@ -191,7 +221,12 @@
                 </div>
 
                 <!-- Feature 5: Meeting Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-red-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-calendar-alt text-2xl text-red-400"></i>
                     </div>
@@ -201,7 +236,12 @@
                 </div>
 
                 <!-- Feature 6: Wiki -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-indigo-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-book text-2xl text-indigo-400"></i>
                     </div>
@@ -211,7 +251,12 @@
                 </div>
 
                 <!-- Feature 7: Password Vault -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-landmark text-2xl text-blue-400"></i>
                     </div>
@@ -221,7 +266,12 @@
                 </div>
 
                 <!-- Feature 8: API Tester -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-code text-2xl text-purple-400"></i>
                     </div>
@@ -231,7 +281,12 @@
                 </div>
 
                 <!-- Feature 9: Asset Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-laptop text-2xl text-green-400"></i>
                     </div>
@@ -241,7 +296,12 @@
                 </div>
 
                 <!-- Feature 10: Activity Timeline -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-yellow-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-history text-2xl text-yellow-400"></i>
                     </div>
@@ -251,7 +311,12 @@
                 </div>
 
                 <!-- Feature 11: Workspace Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-red-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-users text-2xl text-red-400"></i>
                     </div>
@@ -261,7 +326,12 @@
                 </div>
 
                 <!-- Feature 12: Git Integration -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-indigo-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fab fa-git-alt text-2xl text-indigo-400"></i>
                     </div>
@@ -271,7 +341,12 @@
                 </div>
 
                 <!-- Feature 13: HR Management -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-id-card text-2xl text-blue-400"></i>
                     </div>
@@ -281,7 +356,12 @@
                 </div>
 
                 <!-- Feature 14: Video Conferencing -->
-                <div class="feature-card rounded-xl p-6">
+                <div class="feature-card rounded-xl p-6 relative">
+                    <span class="absolute top-4 right-4 z-10">
+                        <span class="px-3 py-1 rounded-full bg-green-600/80 text-xs text-white shadow-lg border border-green-400">
+                            Free until 2026
+                        </span>
+                    </span>
                     <div class="w-14 h-14 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center mb-6">
                         <i class="fas fa-video text-2xl text-purple-400"></i>
                     </div>
@@ -330,7 +410,7 @@
                 </div>
                 <!-- Unlimited Plan -->
                 <div class="feature-card rounded-xl p-8 flex-1 max-w-sm mx-auto flex flex-col border-2 border-pink-500 relative">
-                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-pink-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow">FREE for everyone until 2025 ends!</div>
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-pink-600 text-white px-4 py-1 rounded-full text-xs shadow">FREE for everyone until 2026 ends!</div>
                     <h3 class="text-2xl font-bold text-pink-400 mb-2"><i class="fas fa-infinity mr-2"></i> Team Multiverse</h3>
                     <p class="text-gray-300 mb-6">For organizations who want it all (and then some).</p>
                     <ul class="mb-8 space-y-2 text-gray-200">
@@ -341,7 +421,7 @@
                     </ul>
                     <div class="mt-auto">
                         <span class="text-3xl font-bold text-pink-400 line-through">$19/mo</span>
-                        <span class="ml-2 text-lg text-white bg-pink-600 px-2 py-1 rounded">Free until 2025</span>
+                        <span class="ml-2 text-lg text-white bg-pink-600 px-2 py-1 rounded">Free until 2026</span>
                     </div>
                 </div>
             </div>
