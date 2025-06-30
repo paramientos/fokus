@@ -12,7 +12,7 @@ new class extends Livewire\Volt\Component {
     protected $rules = [
         'name' => 'required|min:3|max:255',
         'key' => 'required|min:2|max:10|alpha_num',
-        'description' => 'nullable|max:1000',
+        'description' => 'nullable|max:10000',
         'avatar' => 'nullable|url|max:255',
         'is_active' => 'boolean',
     ];
@@ -74,20 +74,20 @@ new class extends Livewire\Volt\Component {
 
         return $this->redirect('/projects/' . $this->project->id, navigate: true);
     }
-    
+
     public function removeRepository($repositoryId)
     {
         try {
             $repository = \App\Models\GitRepository::findOrFail($repositoryId);
-            
+
             if ($repository->project_id !== $this->project->id) {
                 $this->error('Bu repository bu projeye ait değil!');
                 return;
             }
-            
+
             $repositoryName = $repository->name;
             $repository->delete();
-            
+
             $this->gitRepositories = $this->project->gitRepositories()->get();
             $this->success('Git repository başarıyla kaldırıldı: ' . $repositoryName);
         } catch (\Exception $e) {
@@ -153,16 +153,16 @@ new class extends Livewire\Volt\Component {
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
                 <h2 class="card-title text-xl font-bold mb-4">Git Repository Integration</h2>
-                
+
                 <!-- Connect with SSO -->
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold mb-3">Connect with Single Sign-On</h3>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('git.sso.redirect', ['provider' => 'github', 'projectId' => $project->id]) }}" 
+                        <a href="{{ route('git.sso.redirect', ['provider' => 'github', 'projectId' => $project->id]) }}"
                            class="btn btn-outline">
                             <i class="fas fa-github mr-2"></i> Connect with GitHub
                         </a>
-                        <a href="{{ route('git.sso.redirect', ['provider' => 'gitlab', 'projectId' => $project->id]) }}" 
+                        <a href="{{ route('git.sso.redirect', ['provider' => 'gitlab', 'projectId' => $project->id]) }}"
                            class="btn btn-outline">
                             <i class="fas fa-gitlab mr-2"></i> Connect with GitLab
                         </a>
@@ -172,11 +172,11 @@ new class extends Livewire\Volt\Component {
                         This will allow Fokus to access your repositories and create webhooks.
                     </p>
                 </div>
-                
+
                 <!-- Connected Repositories -->
                 <div>
                     <h3 class="text-lg font-semibold mb-3">Connected Repositories</h3>
-                    
+
                     @if($gitRepositories->isEmpty())
                         <div class="alert">
                             <i class="fas fa-info-circle"></i>
@@ -221,7 +221,7 @@ new class extends Livewire\Volt\Component {
                                                 @endif
                                             </td>
                                             <td>
-                                                <button wire:click="removeRepository({{ $repo->id }})" 
+                                                <button wire:click="removeRepository({{ $repo->id }})"
                                                         wire:confirm="Are you sure you want to remove this repository?"
                                                         class="btn btn-error btn-sm">
                                                     <i class="fas fa-trash"></i>
