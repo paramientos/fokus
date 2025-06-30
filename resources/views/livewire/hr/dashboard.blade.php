@@ -191,54 +191,60 @@ new class extends Component {
                 link="/hr/employees"
                 class="btn-primary flex-col h-20"
             />
-
             <x-button
                 label="Create Review"
                 icon="fas.clipboard-list"
                 link="/hr/performance/create"
                 class="btn-secondary flex-col h-20"
             />
-
             <x-button
                 label="Process Payroll"
                 icon="fas.calculator"
                 link="/hr/payroll/create"
                 class="btn-accent flex-col h-20"
             />
-
             <x-button
                 label="Schedule Training"
                 icon="fas.chalkboard-teacher"
                 link="/hr/trainings/create"
                 class="btn-info flex-col h-20"
             />
-
             <x-button
                 label="Leave Requests"
                 icon="fas.calendar-alt"
                 link="/hr/leaves"
                 class="btn-warning flex-col h-20"
             />
-
             <x-button
                 label="Manage OKRs"
                 icon="fas.bullseye"
                 link="/hr/okr"
                 class="btn-ghost flex-col h-20"
             />
-
             <x-button
                 label="Certifications"
                 icon="fas.certificate"
                 link="/hr/certifications"
                 class="btn-outline flex-col h-20"
             />
-
             <x-button
                 label="HR Reports"
                 icon="fas.chart-bar"
                 link="/hr/reports"
                 class="btn-success flex-col h-20"
+            />
+            <!-- Randevu Yönetimi (Admin) -->
+            <x-button
+                label="Appointment Management"
+                icon="fas.calendar-check"
+                link="/admin/appointments"
+                class="btn-info flex-col h-20"
+            />
+            <x-button
+                label="Slot Management"
+                icon="fas.calendar-plus"
+                link="/admin/appointment-slots"
+                class="btn-accent flex-col h-20"
             />
         </div>
     </x-card>

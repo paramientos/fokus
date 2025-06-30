@@ -16,6 +16,10 @@ Route::view('/', 'landing')->name('landing');
 Volt::route('/login', 'auth.login')->name('login');
 Volt::route('/register', 'auth.register')->name('register');
 
+// Public appointment booking routes
+Volt::route('/book-appointment', 'appointments.booking-calendar')->name('appointments.book');
+Volt::route('/appointment-confirmation/{appointment}', 'appointments.confirmation')->name('appointments.confirmation');
+
 Route::get('/workspaces/invitation/{token}', function ($token) {
     $invitation = WorkspaceInvitation::where('token', $token)->firstOrFail();
 
@@ -54,7 +58,12 @@ Route::get('/workspaces/invitation/{token}', function ($token) {
     return redirect()->route('dashboard')->with('success', 'Welcome to ' . $invitation->workspace->name . '!');
 })->name('workspaces.invitation.accept');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Volt::route('/appointments', 'admin.appointments.index')->name('appointments.admin.index');
+        Volt::route('/appointment-slots', 'admin.appointments.slots')->name('appointments.admin.slots');
+    });
+
     Route::get('/home', function () {
         if (session()->hasAny(['info', 'warning', 'error', 'success'])) {
             return redirect()->route('dashboard.show')->with([
@@ -193,6 +202,7 @@ Route::middleware('auth')->group(function () {
 
     Volt::route('/admin/storage-management', 'admin.storage-management')->name('admin.storage-management');
 });
+
 // Git webhook routes (no auth middleware)
 Route::post('/webhooks/github/{token}', [GitWebhookController::class, 'handleGitHub']);
 Route::post('/webhooks/gitlab/{token}', [GitWebhookController::class, 'handleGitLab']);

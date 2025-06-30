@@ -17,9 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string $formatted_limit
  * @property-read string $formatted_used
+ * @property-read int $usage_percent
  * @property-read float $usage_percentage
  * @property-read \App\Models\Workspace $workspace
- * @property-read int $usage_percent
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage query()
