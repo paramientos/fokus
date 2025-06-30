@@ -5,7 +5,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title.' - '.config('app.name') : config('app.name') }}</title>
+    <title>Fokus - Modern Project Management</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://usefokus.com/">
+    <meta property="og:title" content="Fokus - Modern Project Management">
+    <meta property="og:description" content="Fokus is a project management tool that helps you focus on what matters.">
+    <meta property="og:image" content="{{ asset('/assets/images/og/usefokus-sprint-overview.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://usefokus.com/">
+    <meta property="twitter:title" content="Fokus - Modern Project Management">
+    <meta property="twitter:description" content="Fokus is a project management tool that helps you focus on what matters.">
+    <meta property="twitter:image" content="{{ asset('/assets/images/og/usefokus-sprint-overview.png') }}">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#ff2d20">
+    <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ff2d20">
+    <meta name="msapplication-config" content="/assets/images/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="color-scheme" content="light">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
