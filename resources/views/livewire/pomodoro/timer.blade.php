@@ -65,7 +65,7 @@ new class extends Livewire\Volt\Component {
         <div class="flex justify-end w-full mb-2 gap-2">
             <x-toggle label="🔔" :checked="$notification" disabled size="sm"/>
             <x-toggle label="🔊" :checked="$sound" disabled size="sm"/>
-            <x-button href="{{ route('pomodoro.settings') }}" wire:navigate icon="fas.cog" color="secondary" size="sm">
+            <x-button link="{{ route('pomodoro.settings') }}" wire:navigate icon="fas.cog" color="secondary" size="sm">
                 Settings
             </x-button>
         </div>
@@ -98,7 +98,7 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
         <div class="mt-8">
-            <x-button href="{{ route('pomodoro.dashboard') }}" wire:navigate color="secondary" size="sm"
+            <x-button link="{{ route('pomodoro.dashboard') }}" wire:navigate color="secondary" size="sm"
                       icon="fas.arrow-left">Back to Dashboard
             </x-button>
         </div>

@@ -21,7 +21,7 @@ class extends Livewire\Volt\Component {
 
     public function mount(): void
     {
-        $this->redirectRoute('landing');
+        //$this->redirectRoute('landing');
         return;
 
         /*if (auth()->check()) {
@@ -33,24 +33,26 @@ class extends Livewire\Volt\Component {
     {
         $this->validate();
 
-        if ($this->turnstileToken === '') {
-            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
-            $this->dispatch('reset-turnstile');
-            return;
-        }
+        if (app()->environment(['staging', 'production'])) {
+            if ($this->turnstileToken === '') {
+                $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+                $this->dispatch('reset-turnstile');
+                return;
+            }
 
-        // Verify Turnstile token
-        $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-            'secret' => config('services.turnstile.secret_key'),
-            'response' => $this->turnstileToken,
-            'remoteip' => get_real_ip(),
-        ]);
+            // Verify Turnstile token
+            $response = Http::post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                'secret' => config('services.turnstile.secret_key'),
+                'response' => $this->turnstileToken,
+                'remoteip' => get_real_ip(),
+            ]);
 
-        if (!$response->json('success')) {
-            $this->addError('turnstileToken', 'Security verification failed. Please try again.');
-            $this->dispatch('reset-turnstile');
-            $this->turnstileToken = '';
-            return;
+            if (!$response->json('success')) {
+                $this->addError('turnstileToken', 'Security verification failed. Please try again.');
+                $this->dispatch('reset-turnstile');
+                $this->turnstileToken = '';
+                return;
+            }
         }
 
         $user = User::create([
@@ -63,7 +65,7 @@ class extends Livewire\Volt\Component {
 
         session()->flash('message', 'Account created successfully!');
 
-        return $this->redirect('/', navigate: true);
+        $this->redirectRoute('workspaces.index');
     }
 }
 
@@ -111,12 +113,15 @@ class extends Livewire\Volt\Component {
                                      placeholder="••••••••" required/>
                         </div>
 
-                        <div class="form-control">
-                            <div class="cf-turnstile" wire:ignore
-                                 data-sitekey="{{ config('services.turnstile.site_key') }}"
-                                 data-callback="turnstileCallback"></div>
-                            @error('turnstileToken') <span class="text-error text-sm">{{ $message }}</span> @enderror
-                        </div>
+                        @env(['staging', 'production'])
+                            <div class="form-control">
+                                <div class="cf-turnstile" wire:ignore
+                                     data-sitekey="{{ config('services.turnstile.site_key') }}"
+                                     data-callback="turnstileCallback"></div>
+                                @error('turnstileToken') <span
+                                    class="text-error text-sm">{{ $message }}</span> @enderror
+                            </div>
+                        @endenv
 
                         <div class="form-control mt-6">
                             <x-button type="submit" label="Register" class="btn-primary w-full"/>
@@ -134,24 +139,26 @@ class extends Livewire\Volt\Component {
         </div>
     </div>
 
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @env(['staging', 'production'])
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                window.turnstileCallback = function (token) {
-                    @this.
-                    set('turnstileToken', token);
-                };
+        @push('scripts')
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    window.turnstileCallback = function (token) {
+                        @this.
+                        set('turnstileToken', token);
+                    };
 
-                document.addEventListener('livewire:init', () => {
-                    Livewire.on('reset-turnstile', () => {
-                        if (window.turnstile) {
-                            window.turnstile.reset();
-                        }
+                    document.addEventListener('livewire:init', () => {
+                        Livewire.on('reset-turnstile', () => {
+                            if (window.turnstile) {
+                                window.turnstile.reset();
+                            }
+                        });
                     });
                 });
-            });
-        </script>
-    @endpush
+            </script>
+        @endpush
+    @endenv
 </div>

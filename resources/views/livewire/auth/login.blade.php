@@ -27,7 +27,7 @@ class extends Livewire\Volt\Component {
     {
         $this->validate();
 
-        if (!app()->isLocal()) {
+        if (app()->environment(['staging', 'production'])) {
             if ($this->turnstileToken === '') {
                 $this->addError('turnstileToken', 'Security verification failed. Please try again.');
                 $this->dispatch('reset-turnstile');
@@ -96,7 +96,7 @@ class extends Livewire\Volt\Component {
                             @error('password') <span class="text-error text-sm">{{ $message }}</span> @enderror
                         </div>
 
-                        @env('production')
+                        @env(['staging', 'production'])
                             <div class="form-control">
                                 <div class="turnstile"
                                      data-sitekey="{{ config('services.turnstile.site_key') }}"
@@ -134,7 +134,7 @@ class extends Livewire\Volt\Component {
         </div>
     </div>
 
-    @if (!app()->isLocal())
+    @env(['staging', 'production'])
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
         @push('scripts')
@@ -156,5 +156,5 @@ class extends Livewire\Volt\Component {
                 });
             </script>
         @endpush
-    @endif
+    @endenv
 </div>

@@ -211,4 +211,5 @@ Route::post('/webhooks/bitbucket/{token}', [GitWebhookController::class, 'handle
 require __DIR__ . '/hr.php';
 require __DIR__ . '/password-manager.php';
 require __DIR__ . '/pomodoro.php';
+require __DIR__ . '/workflow.php';
 /*  require __DIR__.'/gamification.php';*/

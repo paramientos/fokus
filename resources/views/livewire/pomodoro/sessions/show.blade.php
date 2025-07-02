@@ -50,7 +50,7 @@ new class extends Livewire\Volt\Component {
         </ul>
     </x-card>
     <div class="flex gap-2">
-        <x-button href="{{ route('pomodoro.sessions.edit', ['session' => $session->id]) }}" wire:navigate color="secondary" icon="fas.edit">Edit</x-button>
-        <x-button href="{{ route('pomodoro.sessions.index') }}" wire:navigate color="primary" icon="fas.arrow-left">Back</x-button>
+        <x-button link="{{ route('pomodoro.sessions.edit', ['session' => $session->id]) }}" wire:navigate color="secondary" icon="fas.edit">Edit</x-button>
+        <x-button link="{{ route('pomodoro.sessions.index') }}" wire:navigate color="primary" icon="fas.arrow-left">Back</x-button>
     </div>
 </div>

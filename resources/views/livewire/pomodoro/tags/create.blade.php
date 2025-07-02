@@ -31,7 +31,7 @@ new class extends Livewire\Volt\Component {
         <x-input label="Color" wire:model.defer="color" type="color" icon="fas.palette" />
         <div class="flex gap-2 mt-4">
             <x-button type="submit" color="primary" icon="fas.save">Save</x-button>
-            <x-button href="{{ route('pomodoro.tags.index') }}" wire:navigate color="secondary" icon="fas.arrow-left">Cancel</x-button>
+            <x-button link="{{ route('pomodoro.tags.index') }}" wire:navigate color="secondary" icon="fas.arrow-left">Cancel</x-button>
         </div>
     </form>
 </div>

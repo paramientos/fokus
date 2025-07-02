@@ -28,6 +28,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Project> $projects
  * @property-read int|null $projects_count
  * @property-read \App\Models\StorageUsage|null $storageUsage
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkspaceWorkflowInstance> $workflowInstances
+ * @property-read int|null $workflow_instances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkspaceWorkflow> $workflows
+ * @property-read int|null $workflows_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace query()
@@ -95,6 +99,22 @@ class Workspace extends Model
     public function storageUsage(): HasOne
     {
         return $this->hasOne(StorageUsage::class);
+    }
+
+    /**
+     * Get the workflows for the workspace.
+     */
+    public function workflows(): HasMany
+    {
+        return $this->hasMany(WorkspaceWorkflow::class);
+    }
+
+    /**
+     * Get the workflow instances for the workspace.
+     */
+    public function workflowInstances(): HasMany
+    {
+        return $this->hasMany(WorkspaceWorkflowInstance::class);
     }
 
     /**

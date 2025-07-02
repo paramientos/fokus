@@ -66,7 +66,7 @@ new class extends Livewire\Volt\Component {
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Create Password Vault</h1>
         <div>
-            <x-button href="{{ route('password-manager.vaults.index') }}" icon="fas.arrow-left" variant="outline">
+            <x-button link="{{ route('password-manager.vaults.index') }}" icon="fas.arrow-left" variant="outline">
                 Back to Vaults
             </x-button>
         </div>

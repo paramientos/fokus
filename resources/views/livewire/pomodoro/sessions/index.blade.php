@@ -17,7 +17,7 @@ new class extends Livewire\Volt\Component {
 <div>
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold">Pomodoro Sessions</h1>
-        <x-button href="{{ route('pomodoro.sessions.create') }}" wire:navigate icon="fas.plus" color="primary">New Session</x-button>
+        <x-button link="{{ route('pomodoro.sessions.create') }}" wire:navigate icon="fas.plus" color="primary">New Session</x-button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse($sessions as $session)
@@ -41,8 +41,8 @@ new class extends Livewire\Volt\Component {
                     @endforeach
                 </div>
                 <div class="flex gap-2 mt-2">
-                    <x-button href="{{ route('pomodoro.timer', ['session' => $session->id]) }}" wire:navigate size="sm" icon="fas.play" color="success">Start</x-button>
-                    <x-button href="{{ route('pomodoro.sessions.edit', ['session' => $session->id]) }}" wire:navigate size="sm" icon="fas.edit" color="secondary">Edit</x-button>
+                    <x-button link="{{ route('pomodoro.timer', ['session' => $session->id]) }}" wire:navigate size="sm" icon="fas.play" color="success">Start</x-button>
+                    <x-button link="{{ route('pomodoro.sessions.edit', ['session' => $session->id]) }}" wire:navigate size="sm" icon="fas.edit" color="secondary">Edit</x-button>
                 </div>
             </x-card>
         @empty
