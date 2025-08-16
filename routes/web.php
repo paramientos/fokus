@@ -142,7 +142,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('/projects/{project}/kanban-board', 'tasks.kanban-board')->name('tasks.kanban-board');
 
 // Gantt Şeması
-    Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');
+  /*  Volt::route('/projects/{project}/gantt', 'tasks.gantt-chart')->name('tasks.gantt-chart');*/
 
 // Asset Management
     Volt::route('/assets', 'assets.index')->name('assets.index');
