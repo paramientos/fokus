@@ -204,13 +204,27 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <x-button
-                                        wire:click="addWorkspaceMember({{ $member->id }})"
-                                        class="btn-sm btn-primary w-full"
-                                        icon="fas.user-plus"
-                                    >
-                                        Add to Project
-                                    </x-button>
+                                    <x-dropdown class="w-full">
+                                        <x-slot:trigger>
+                                            <x-button
+                                                class="btn-sm btn-primary w-full"
+                                                icon="fas.user-plus"
+                                            >
+                                                Add to Project <i class="fas fa-chevron-down ml-2"></i>
+                                            </x-button>
+                                        </x-slot:trigger>
+                                        <x-menu>
+                                            <x-menu-item wire:click="addWorkspaceMember({{ $member->id }}, 'admin')">
+                                                <i class="fas fa-user-shield mr-2"></i> Add as Administrator
+                                            </x-menu-item>
+                                            <x-menu-item wire:click="addWorkspaceMember({{ $member->id }}, 'member')">
+                                                <i class="fas fa-user mr-2"></i> Add as Team Member
+                                            </x-menu-item>
+                                            <x-menu-item wire:click="addWorkspaceMember({{ $member->id }}, 'viewer')">
+                                                <i class="fas fa-eye mr-2"></i> Add as Viewer
+                                            </x-menu-item>
+                                        </x-menu>
+                                    </x-dropdown>
                                 </div>
                             </div>
                         </div>
@@ -233,7 +247,6 @@ new class extends Livewire\Volt\Component {
                         <thead>
                         <tr>
                             <th>Email</th>
-                            <th>Role</th>
                             <th>Invited By</th>
                             <th>Expires</th>
                             <th>Status</th>
@@ -243,9 +256,6 @@ new class extends Livewire\Volt\Component {
                         @foreach($project->workspace->invitations->where('accepted_at', null) as $invitation)
                             <tr>
                                 <td>{{ $invitation->email }}</td>
-                                <td>
-                                    <div class="badge badge-outline">{{ ucfirst($invitation->role) }}</div>
-                                </td>
                                 <td>{{ $invitation->invitedBy->name }}</td>
                                 <td>{{ $invitation->expires_at->format('M d, Y') }}</td>
                                 <td>

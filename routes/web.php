@@ -50,7 +50,7 @@ Route::get('/workspaces/invitation/{token}', function ($token) {
     $invitation->update(['accepted_at' => now()]);
 
     $invitation->workspace->members()->attach(auth()->id(), [
-        'role' => $invitation->role
+        'role' => 'member'
     ]);
 
     session(['workspace_id' => $invitation->workspace_id]);
@@ -83,6 +83,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('/workspaces', 'workspaces.index')->name('workspaces.index');
     Volt::route('/workspaces/{id}', 'workspaces.show')->name('workspaces.show');
     Volt::route('/workspaces/{workspace}/members', 'workspaces.members')->name('workspaces.members');
+    Volt::route('/workspaces/{workspace}/teams', 'workspaces.teams.index')->name('workspaces.teams.index');
+    Volt::route('/workspaces/{workspace}/teams/create', 'workspaces.teams.create')->name('workspaces.teams.create');
+    Volt::route('/workspaces/{workspace}/teams/{team}', 'workspaces.teams.show')->name('workspaces.teams.show');
 
     // Workspace Danger Zone actions
     Route::delete('/workspaces/{workspace}', [WorkspaceController::class, 'destroy'])->name('workspaces.destroy');

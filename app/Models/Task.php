@@ -110,6 +110,8 @@ class Task extends Model
         'started_at',
         'completed_at',
         'order',
+        'parent_id',
+        'is_subtask',
     ];
 
     /**
@@ -124,6 +126,7 @@ class Task extends Model
         'task_type' => TaskType::class,
         'priority' => Priority::class,
         'story_points' => 'integer',
+        'is_subtask' => 'boolean',
     ];
 
     /**
@@ -254,6 +257,22 @@ class Task extends Model
     public function conversations()
     {
         return $this->morphMany(Conversation::class, 'context');
+    }
+
+    /**
+     * Get the parent task.
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Task::class, 'parent_id');
+    }
+
+    /**
+     * Get the subtasks for this task.
+     */
+    public function subtasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'parent_id')->orderBy('order');
     }
 
     public function scopeOrdered($query)

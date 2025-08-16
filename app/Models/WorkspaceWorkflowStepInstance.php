@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $workspace_workflow_instance_id
@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $completed_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property array<array-key, mixed>|null $form_data
+ * @property string|null $comments
  * @property-read \App\Models\User|null $assignee
  * @property-read \App\Models\User|null $completedByUser
  * @property-read \App\Models\WorkspaceWorkflowStep $step
@@ -29,10 +31,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereAssignedTo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereComments($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereCompletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereCompletedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereFormData($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereNotes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereStartedAt($value)

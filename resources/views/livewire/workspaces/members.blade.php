@@ -15,12 +15,6 @@ new class extends Component {
 
     public Workspace $workspace;
     public string $newMemberEmail = '';
-    public string $newMemberRole = 'member';
-    public array $roles = [
-        'admin' => 'Administrator',
-        'member' => 'Member',
-        'viewer' => 'Viewer'
-    ];
 
     public function mount(): void
     {
@@ -31,7 +25,6 @@ new class extends Component {
     {
         $this->validate([
             'newMemberEmail' => 'required|email',
-            'newMemberRole' => 'required|in:admin,member,viewer',
         ]);
 
         // Check if user already exists and is workspace member
@@ -61,7 +54,6 @@ new class extends Component {
         // Create workspace invitation
         $invitation = $this->workspace->invitations()->create([
             'email' => $this->newMemberEmail,
-            'role' => $this->newMemberRole,
             'token' => Str::random(64),
             'expires_at' => now()->addDays(7),
             'invited_by' => auth()->id(),
@@ -72,7 +64,6 @@ new class extends Component {
             ->notify(new WorkspaceInvitationNotification($invitation, $this->workspace));
 
         $this->newMemberEmail = '';
-        $this->newMemberRole = 'member';
 
         $this->workspace = Workspace::with(['members', 'invitations'])->findOrFail($this->workspace->id);
 
@@ -126,22 +117,12 @@ new class extends Component {
 
                 <form wire:submit="inviteMember" class="mt-4">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-2">
+                        <div class="md:col-span-3">
                             <x-input
                                 wire:model="newMemberEmail"
                                 placeholder="Email address"
                                 label="Email Address"
                                 error="{{ $errors->first('newMemberEmail') }}"
-                            />
-                        </div>
-                        <div>
-                            <x-select
-                                wire:model="newMemberRole"
-                                label="Role"
-                                error="{{ $errors->first('newMemberRole') }}"
-                                :options="collect($roles)->map(function($label, $value) {
-                                return ['name' => $label, 'id' => $value];
-                            })->values()"
                             />
                         </div>
                     </div>
@@ -164,7 +145,6 @@ new class extends Component {
                             <thead>
                             <tr>
                                 <th>Email</th>
-                                <th>Role</th>
                                 <th>Invited By</th>
                                 <th>Expires</th>
                                 <th>Status</th>
@@ -174,9 +154,6 @@ new class extends Component {
                             @foreach($workspace->invitations->where('accepted_at', null) as $invitation)
                                 <tr>
                                     <td>{{ $invitation->email }}</td>
-                                    <td>
-                                        <div class="badge badge-outline">{{ ucfirst($invitation->role) }}</div>
-                                    </td>
                                     <td>{{ $invitation->invitedBy->name }}</td>
                                     <td>{{ $invitation->expires_at->format('M d, Y') }}</td>
                                     <td>
@@ -227,20 +204,30 @@ new class extends Component {
                                     <x-dropdown>
                                         <x-slot:trigger>
                                             <x-button class="btn-sm">
-                                                {{ $roles[$member->pivot->role] ?? 'Member' }}
+                                                {{ $member->pivot->role ?? 'Member' }}
                                                 <i class="fas fa-chevron-down ml-2"></i>
                                             </x-button>
                                         </x-slot:trigger>
 
                                         <x-menu>
-                                            @foreach($roles as $value => $label)
-                                                <x-menu-item
-                                                    wire:click="updateRole({{ $member->id }}, '{{ $value }}')"
-                                                    class="{{ $member->pivot->role === $value ? 'bg-primary/10' : '' }}"
-                                                >
-                                                    {{ $label }}
-                                                </x-menu-item>
-                                            @endforeach
+                                            <x-menu-item
+                                                wire:click="updateRole({{ $member->id }}, 'admin')"
+                                                class="{{ $member->pivot->role === 'admin' ? 'bg-primary/10' : '' }}"
+                                            >
+                                                Administrator
+                                            </x-menu-item>
+                                            <x-menu-item
+                                                wire:click="updateRole({{ $member->id }}, 'member')"
+                                                class="{{ $member->pivot->role === 'member' ? 'bg-primary/10' : '' }}"
+                                            >
+                                                Member
+                                            </x-menu-item>
+                                            <x-menu-item
+                                                wire:click="updateRole({{ $member->id }}, 'viewer')"
+                                                class="{{ $member->pivot->role === 'viewer' ? 'bg-primary/10' : '' }}"
+                                            >
+                                                Viewer
+                                            </x-menu-item>
                                         </x-menu>
                                     </x-dropdown>
                                 @endif

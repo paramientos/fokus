@@ -43,6 +43,8 @@ use App\Models\GitRepository;
  * @property-read int|null $tasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $teamMembers
  * @property-read int|null $team_members_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
+ * @property-read int|null $teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectAlert> $unresolvedAlerts
  * @property-read int|null $unresolved_alerts_count
  * @property-read \App\Models\User $user
@@ -259,6 +261,16 @@ class Project extends Model
     public function members()
     {
         return $this->teamMembers();
+    }
+
+    /**
+     * Get the teams that are assigned to this project.
+     */
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_projects')
+            ->withPivot(['assigned_by', 'assigned_at', 'notes'])
+            ->withTimestamps();
     }
 
     public function scopeActive($query)
