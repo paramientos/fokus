@@ -192,11 +192,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('/logout', 'auth.logout')->name('logout');
 
     // API Test Aracı (Workspace)
-    Volt::route('/api-tester', 'api-tester.workspace')->name('api-tester.workspace');
+   /* Volt::route('/api-tester', 'api-tester.workspace')->name('api-tester.workspace');
     Volt::route('/api-tester/{apiEndpoint}/history', 'api-tester.history')->name('api-tester.history');
-    Volt::route('/api-tester/history/{historyEntry}', 'api-tester.history-detail')->name('api-tester.history-detail');
+    Volt::route('/api-tester/history/{historyEntry}', 'api-tester.history-detail')->name('api-tester.history-detail');*/
+
     // Task ile ilişkili API test aracı
-    Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
+    //Volt::route('/projects/{project}/tasks/{task}/api-tester', 'api-tester.task')->name('api-tester.task');
 
     // Git SSO Routes
     Route::get('/git/sso/{provider}/callback', [GitSSOController::class, 'callback'])->name('git.sso.callback');
@@ -213,6 +214,6 @@ Route::post('/webhooks/bitbucket/{token}', [GitWebhookController::class, 'handle
 
 require __DIR__ . '/hr.php';
 require __DIR__ . '/password-manager.php';
-require __DIR__ . '/pomodoro.php';
-require __DIR__ . '/workflow.php';
+//require __DIR__ . '/pomodoro.php';
+//require __DIR__ . '/workflow.php';
 /*  require __DIR__.'/gamification.php';*/
