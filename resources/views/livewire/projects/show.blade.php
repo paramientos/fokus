@@ -88,9 +88,9 @@ new class extends Livewire\Volt\Component {
                 <x-button link="/projects/{{ $project->id }}/edit" label="Edit" icon="o-pencil" class="btn-outline"/>
                 <x-button link="/projects/{{ $project->id }}/board" label="Board" icon="o-view-columns"
                           class="btn-primary"/>
-                <x-button link="{{ route('tasks.gantt-chart', ['project' => $project->id]) }}" icon="fas.chart-gantt" class="btn-primary">
+              {{--  <x-button link="{{ route('tasks.gantt-chart', ['project' => $project->id]) }}" icon="fas.chart-gantt" class="btn-primary">
                     Gantt Chart
-                </x-button>
+                </x-button>--}}
                 @if($project->is_archived)
                     <x-button wire:click="unarchiveProject" label="Unarchive" icon="o-folder-open" class="btn-primary"/>
                 @else

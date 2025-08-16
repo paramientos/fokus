@@ -14,9 +14,9 @@ new class extends Livewire\Volt\Component {
     public function mount(): void
     {
         // Reset workspace session if requested
-        if (request()->has('reset_workspace')) {
+        /*if (request()->has('reset_workspace')) {
             session()->forget('workspace_id');
-        }
+        }*/
 
         $this->loadWorkspaces();
     }
