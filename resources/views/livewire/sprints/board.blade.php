@@ -171,26 +171,97 @@ new class extends Livewire\Volt\Component {
 
 ?>
 
-<div>
+<div class="bg-gradient-to-br from-base-100 to-base-200 min-h-screen">
     <x-slot:title>Sprint Board - {{ $sprint->name }}</x-slot:title>
 
-    <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex items-center gap-2">
-                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" icon="o-arrow-left"
-                          class="btn-ghost btn-sm"/>
-                <h1 class="text-2xl font-bold text-primary">Sprint Board: {{ $sprint->name }}</h1>
-                <div
-                    class="badge {{ $sprint->is_completed ? 'badge-info' : ($sprint->is_active ? 'badge-success' : 'badge-warning') }}">
-                    {{ $sprint->is_completed ? 'Completed' : ($sprint->is_active ? 'Active' : 'Planned') }}
+    <div class="max-w-full mx-auto p-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div class="flex items-center gap-3">
+                <x-button 
+                    link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" 
+                    icon="fas.arrow-left"
+                    class="btn-ghost btn-sm hover:bg-base-200 transition-all duration-200"
+                    tooltip="Back to Sprint"
+                />
+                <div>
+                    <h1 class="text-2xl font-bold text-primary">Sprint Board</h1>
+                    <div class="flex items-center gap-2 text-base-content/70">
+                        <span class="font-medium">{{ $sprint->name }}</span>
+                        <div class="badge {{ $sprint->is_completed ? 'badge-info' : ($sprint->is_active ? 'badge-success' : 'badge-warning') }}">
+                            @if($sprint->is_completed)
+                                <i class="fas fa-check-circle mr-1"></i> Completed
+                            @elseif($sprint->is_active)
+                                <i class="fas fa-play-circle mr-1"></i> Active
+                            @else
+                                <i class="fas fa-clock mr-1"></i> Planned
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex gap-2">
-                <x-button link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/report" label="View Report"
-                          icon="o-chart-bar" class="btn-outline"/>
-                <x-button link="/projects/{{ $project->id }}/tasks/create" label="Add Task" icon="o-plus"
-                          class="btn-primary"/>
+            <div class="flex flex-wrap gap-2">
+                <x-button 
+                    link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/burndown" 
+                    label="Burndown" 
+                    icon="fas.chart-line" 
+                    class="btn-outline btn-sm hover:bg-base-200 transition-all duration-200"
+                    tooltip="View Burndown Chart"
+                />
+                <x-button 
+                    link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}/report" 
+                    label="Report" 
+                    icon="fas.chart-bar" 
+                    class="btn-outline btn-sm hover:bg-base-200 transition-all duration-200"
+                    tooltip="View Sprint Report"
+                />
+                <x-button 
+                    link="/projects/{{ $project->id }}/tasks/create" 
+                    label="Add Task" 
+                    icon="fas.plus" 
+                    class="btn-primary btn-sm hover:shadow-md transition-all duration-300"
+                />
+            </div>
+        </div>
+        
+        <div class="bg-base-100 rounded-xl shadow-xl border border-base-300 overflow-hidden mb-6 p-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 rounded-full bg-primary/10 text-primary">
+                        <i class="fas fa-columns text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold">Sprint Progress</h2>
+                        <p class="text-sm text-base-content/70">{{ $sprint->start_date ? $sprint->start_date->format('M d') : 'No start date' }} - {{ $sprint->end_date ? $sprint->end_date->format('M d') : 'No end date' }}</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2">
+                        <div class="p-2 rounded-full bg-success/10 text-success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-base-content/70">Completed</div>
+                            @php
+                                $completedTasks = collect($tasksByStatus)
+                                    ->flatten(1)
+                                    ->filter(function($task) use ($statuses) {
+                                        $status = $statuses->firstWhere('id', $task['status_id']);
+                                        return $status && $status->is_completed;
+                                    })
+                                    ->count();
+                                $totalTasks = collect($tasksByStatus)->flatten(1)->count();
+                                $completionPercentage = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
+                            @endphp
+                            <div class="font-medium">{{ $completedTasks }}/{{ $totalTasks }} tasks ({{ $completionPercentage }}%)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-48 h-2 bg-base-200 rounded-full overflow-hidden">
+                        <div class="bg-success h-full" style="width: {{ $completionPercentage }}%"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -198,19 +269,30 @@ new class extends Livewire\Volt\Component {
         <div
             x-data="{
                 draggingTask: null,
+                draggedOverColumn: null,
                 handleDragStart(event, taskId) {
                     this.draggingTask = taskId;
                     event.dataTransfer.effectAllowed = 'move';
+                    event.target.classList.add('opacity-50');
                 },
-                handleDragOver(event) {
+                handleDragEnd(event) {
+                    event.target.classList.remove('opacity-50');
+                    this.draggedOverColumn = null;
+                },
+                handleDragOver(event, statusId) {
                     event.preventDefault();
                     event.dataTransfer.dropEffect = 'move';
+                    this.draggedOverColumn = statusId;
+                },
+                handleDragLeave() {
+                    this.draggedOverColumn = null;
                 },
                 handleDrop(event, statusId) {
                     event.preventDefault();
                     if (this.draggingTask) {
                         $wire.updateTaskStatus(this.draggingTask, statusId);
                         this.draggingTask = null;
+                        this.draggedOverColumn = null;
                     }
                 }
             }"
@@ -218,75 +300,115 @@ new class extends Livewire\Volt\Component {
         >
             @foreach($statuses as $status)
                 <div
-                    class="card bg-base-100 shadow-xl"
-                    x-on:dragover="handleDragOver($event)"
+                    class="bg-base-100 rounded-xl shadow-md border border-base-300 overflow-hidden transition-all duration-300"
+                    :class="{ 'border-primary shadow-lg': draggedOverColumn === {{ $status->id }} }"
+                    x-on:dragover="handleDragOver($event, {{ $status->id }})"
+                    x-on:dragleave="handleDragLeave()"
                     x-on:drop="handleDrop($event, {{ $status->id }})"
                 >
-                    <div class="card-body p-4">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="card-title" style="color: {{ $status->color }}">
-                                {{ $status->name }}
-                                <span class="badge badge-sm">{{ count($tasksByStatus[$status->id] ?? []) }}</span>
-                            </h2>
+                    <div class="p-3 border-b border-base-300" style="background-color: {{ $status->color }}15;">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full" style="background-color: {{ $status->color }}"></div>
+                                <h2 class="font-semibold" style="color: {{ $status->color }}">
+                                    {{ $status->name }}
+                                </h2>
+                            </div>
+                            <span class="badge badge-sm bg-base-200 text-base-content border-0">
+                                {{ count($tasksByStatus[$status->id] ?? []) }}
+                            </span>
                         </div>
+                    </div>
 
-                        <div class="overflow-y-auto max-h-[calc(100vh-250px)] space-y-2">
-                            @foreach($tasksByStatus[$status->id] ?? [] as $task)
-                                <div
-                                    class="card bg-base-200 shadow-sm cursor-move"
-                                    draggable="true"
-                                    x-on:dragstart="handleDragStart($event, {{ $task['id'] }})"
-                                    wire:click="viewTask({{ $task['id'] }})"
-                                >
-                                    <div class="card-body p-3">
-                                        <div class="flex justify-between items-start">
-                                            <h3 class="font-medium text-sm">
+                    <div class="overflow-y-auto max-h-[calc(100vh-300px)] p-2 space-y-2">
+                        @foreach($tasksByStatus[$status->id] ?? [] as $task)
+                            <div
+                                class="bg-base-200/70 hover:bg-base-200 border border-base-300 rounded-lg shadow-sm cursor-move transition-all duration-200 hover:shadow-md"
+                                draggable="true"
+                                x-on:dragstart="handleDragStart($event, {{ $task['id'] }})"
+                                x-on:dragend="handleDragEnd($event)"
+                                wire:click="viewTask({{ $task['id'] }})"
+                            >
+                                <div class="p-3">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-xs font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded">
                                                 {{ $project->key }}-{{ $task['id'] }}
-                                            </h3>
-
-                                            @if($task['priority'])
-                                                <div class="badge {{
-                                                    $task['priority'] === 'high' ? 'badge-error' :
-                                                    ($task['priority'] === 'medium' ? 'badge-warning' : 'badge-info')
-                                                }} badge-sm">
-                                                    {{ ucfirst($task['priority']) }}
+                                            </span>
+                                            
+                                            @if($task['task_type'])
+                                                <div class="text-xs">
+                                                    @if($task['task_type'] === 'bug')
+                                                        <i class="fas fa-bug text-error"></i>
+                                                    @elseif($task['task_type'] === 'feature')
+                                                        <i class="fas fa-star text-primary"></i>
+                                                    @elseif($task['task_type'] === 'improvement')
+                                                        <i class="fas fa-arrow-up text-success"></i>
+                                                    @else
+                                                        <i class="fas fa-tasks text-info"></i>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
 
-                                        <p class="text-sm">{{ $task['title'] }}</p>
+                                        @if($task['priority'])
+                                            <div class="badge badge-sm {{
+                                                $task['priority'] === 'high' ? 'badge-error' :
+                                                ($task['priority'] === 'medium' ? 'badge-warning' : 'badge-info')
+                                            }}">
+                                                @if($task['priority'] === 'high')
+                                                    <i class="fas fa-arrow-up mr-1"></i>
+                                                @elseif($task['priority'] === 'medium')
+                                                    <i class="fas fa-equals mr-1"></i>
+                                                @else
+                                                    <i class="fas fa-arrow-down mr-1"></i>
+                                                @endif
+                                                {{ ucfirst($task['priority']) }}
+                                            </div>
+                                        @endif
+                                    </div>
 
-                                        <div class="flex justify-between items-center mt-2">
-                                            @if(isset($task['user']) && $task['user'])
-                                                <div class="flex items-center gap-1">
-                                                    <div class="avatar placeholder">
-                                                        <div
-                                                            class="bg-neutral text-neutral-content rounded-full w-5 h-5">
-                                                            <span
-                                                                class="text-xs">{{ substr($task['user']['name'], 0, 1) }}</span>
-                                                        </div>
-                                                    </div>
-                                                    <span class="text-xs">{{ $task['user']['name'] }}</span>
+                                    <p class="font-medium text-sm mb-3">{{ $task['title'] }}</p>
+
+                                    <div class="flex justify-between items-center">
+                                        @if(isset($task['user']) && $task['user'])
+                                            <div class="flex items-center gap-1.5">
+                                                <div class="bg-primary/10 text-primary rounded-lg w-5 h-5 flex items-center justify-center">
+                                                    <span class="text-xs font-medium">{{ substr($task['user']['name'], 0, 1) }}</span>
                                                 </div>
-                                            @else
-                                                <span class="text-xs text-gray-500">Unassigned</span>
-                                            @endif
+                                                <span class="text-xs text-base-content/70">{{ $task['user']['name'] }}</span>
+                                            </div>
+                                        @else
+                                            <span class="text-xs text-base-content/50 flex items-center gap-1">
+                                                <i class="fas fa-user-slash"></i> Unassigned
+                                            </span>
+                                        @endif
 
+                                        <div class="flex items-center gap-2">
+                                            @if(isset($task['comments_count']) && $task['comments_count'] > 0)
+                                                <span class="text-xs text-base-content/70 flex items-center gap-1">
+                                                    <i class="fas fa-comment"></i> {{ $task['comments_count'] }}
+                                                </span>
+                                            @endif
+                                            
                                             @if($task['story_points'])
-                                                <div class="badge badge-sm">{{ $task['story_points'] }} pts</div>
+                                                <span class="text-xs bg-info/10 text-info px-1.5 py-0.5 rounded-full">
+                                                    {{ $task['story_points'] }} pts
+                                                </span>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
+                            </div>
+                        @endforeach
 
-                            @if(empty($tasksByStatus[$status->id]))
-                                <div class="flex flex-col items-center justify-center py-6 text-gray-400">
-                                    <x-icon name="o-inbox" class="w-8 h-8"/>
-                                    <p class="text-sm mt-2">No tasks</p>
-                                </div>
-                            @endif
-                        </div>
+                        @if(empty($tasksByStatus[$status->id]))
+                            <div class="flex flex-col items-center justify-center py-8 text-base-content/40">
+                                <i class="fas fa-inbox text-2xl mb-2"></i>
+                                <p class="text-sm">No tasks</p>
+                                <p class="text-xs text-base-content/30 mt-1">Drag tasks here</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
