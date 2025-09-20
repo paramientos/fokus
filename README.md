@@ -1,61 +1,148 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://usefokus.com/asset/images/sprint-overview-chart-fokus.png" alt="Fokus Logo" width="200">
 </p>
 
-## About Laravel
+<h1 align="center">Fokus - Project Management System</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  A modern, all-in-one project management solution built with Laravel 12 and the TALL stack
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12.0-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel Version">
+  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP Version">
+  <img src="https://img.shields.io/badge/Livewire-3.0-FB70A9?style=for-the-badge&logo=livewire&logoColor=white" alt="Livewire Version">
+  <img src="https://img.shields.io/badge/Postgres-15-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres Version">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## About Fokus
 
-## Learning Laravel
+Fokus is a comprehensive project management system inspired by tools like Jira, Asana, and Trello. It aims to consolidate all team collaboration needs into a single platform, eliminating the need for multiple tools.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Key Features
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Project Management**: Create and manage projects with customizable workflows
+- **Task Tracking**: Organize tasks with priorities, assignments, and deadlines
+- **Sprint Planning**: Plan and track sprints with burndown charts and retrospectives
+- **Team Collaboration**: Built-in communication tools and screen sharing
+- **Kanban Boards**: Visual task management with drag-and-drop functionality
+- **Time Tracking**: Monitor time spent on tasks and projects
+- **Reporting**: Generate comprehensive reports and analytics
+- **User Management**: Role-based access control and team organization
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Tech Stack
 
-## Laravel Sponsors
+- **Backend**: Laravel 12, PHP 8.3
+- **Frontend**: TALL Stack (Tailwind CSS, Alpine.js, Laravel, Livewire 3)
+- **Database**: PostgreSQL 15
+- **Real-time Features**: Laravel Reverb
+- **UI Components**: MaryUI 2
+- **Package Management**: Yarn
+- **Icons**: Font Awesome (with fas.icon format)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+### Prerequisites
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP 8.3 or higher
+- Composer
+- PostgreSQL 15
+- Node.js and Yarn
+- Redis (for queues and broadcasting)
 
-## Contributing
+### Setup Instructions
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/fokus.git
+   cd fokus
+   ```
 
-## Code of Conduct
+2. Install PHP dependencies:
+   ```bash
+   composer install
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Install JavaScript dependencies:
+   ```bash
+   yarn install
+   ```
 
-## Security Vulnerabilities
+4. Copy the environment file and configure your database:
+   ```bash
+   cp .env.example .env
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. Generate application key:
+   ```bash
+   php artisan key:generate
+   ```
+
+6. Run migrations and seed the database:
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. Build assets:
+   ```bash
+   yarn build
+   ```
+
+8. Start the development server:
+   ```bash
+   php artisan serve
+   ```
+
+## Project Structure
+
+- `app/` - Contains the core code of the application
+  - `Models/` - Eloquent models
+  - `Http/Controllers/` - Request handlers
+  - `Http/Livewire/` - Livewire components
+  - `Enums/` - PHP enumerations
+  - `Events/` - Event classes
+  - `Listeners/` - Event listeners
+  - `Concerns/` - Shared traits
+  
+- `resources/`
+  - `views/` - Blade templates
+    - `livewire/` - Livewire component templates
+    - `components/` - Blade components
+  - `css/` - Stylesheets
+  - `js/` - JavaScript files
+
+- `database/`
+  - `migrations/` - Database migrations
+  - `seeders/` - Database seeders
+  - `factories/` - Model factories
+
+## Recent UI Modernization
+
+Fokus has undergone significant UI/UX improvements across various sections:
+
+- **Dashboard**: Redesigned with statistics cards at the top, workspaces and activity info in the left column, and projects and tasks in the right column. Implemented tab structure for better organization.
+
+- **Projects**: Modernized project cards, team lists, task lists, and project settings with improved visual design.
+
+- **Sprints**: Enhanced sprint information cards, task lists, and sprint progress indicators with a modern design approach.
+
+- **Workspaces**: Updated workspace management pages including workspace cards, team lists, and project creation modals.
+
+All sections feature:
+- Modern MaryUI 2 components
+- Properly formatted Font Awesome icons (fas.icon-name)
+- Updated color palette and typography
+- Improved responsive design
+- Animation and transition effects
+
+## Development Guidelines
+
+- Follow PSR coding standards
+- Use Laravel Livewire Volt for components
+- Use MaryUI 2 components with `<x-component>` syntax
+- Use Font Awesome icons with `fas.icon-name` format
+- Implement toast notifications using `\Mary\Traits\Toast`
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Fokus project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

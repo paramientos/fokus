@@ -62,55 +62,142 @@ new class extends Livewire\Volt\Component {
 
 ?>
 
-<div>
+<div class="bg-gradient-to-br from-base-100 to-base-200 min-h-screen">
     <x-slot:title>{{ $project->name }}</x-slot:title>
 
-    <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
+    <div class="p-6 max-w-7xl mx-auto">
+        <!-- Project Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div class="flex items-center gap-4">
-                @if($project->avatar)
-                    <img src="{{ $project->avatar }}" alt="{{ $project->name }}" class="w-12 h-12 rounded-full">
-                @else
-                    <div class="avatar placeholder">
-                        <div class="bg-neutral text-neutral-content rounded-full w-12">
-                            <span class="text-xl">{{ substr($project->name, 0, 1) }}</span>
+                <div class="relative">
+                    @if($project->avatar)
+                        <img src="{{ $project->avatar }}" alt="{{ $project->name }}" class="w-16 h-16 rounded-xl shadow-md border-2 border-primary/20">
+                    @else
+                        <div class="avatar placeholder">
+                            <div class="bg-primary text-primary-content rounded-xl w-16 h-16 shadow-md flex items-center justify-center">
+                                <span class="text-2xl font-bold">{{ substr($project->name, 0, 1) }}</span>
+                            </div>
                         </div>
+                    @endif
+                    
+                    <div class="absolute -bottom-2 -right-2 bg-{{ $project->is_active ? 'success' : 'error' }} text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md border-2 border-base-100">
+                        <i class="fas fa-{{ $project->is_active ? 'check' : 'times' }} text-xs"></i>
                     </div>
-                @endif
+                </div>
+                
                 <div>
-                    <h1 class="text-2xl font-bold text-primary">{{ $project->name }}</h1>
-                    <p class="text-sm text-gray-500">{{ $project->key }} ·
-                        Created {{ $project->created_at->format('M d, Y') }}</p>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-3xl font-bold text-primary">{{ $project->name }}</h1>
+                        @if($project->is_archived)
+                            <span class="badge badge-warning">Archived</span>
+                        @endif
+                    </div>
+                    <div class="flex items-center gap-2 text-base-content/70">
+                        <span class="badge badge-primary badge-sm">{{ $project->key }}</span>
+                        <span class="text-sm">Created {{ $project->created_at->format('M d, Y') }}</span>
+                        <span class="text-sm">·</span>
+                        <span class="text-sm">{{ $project->tasks->count() }} tasks</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex gap-2">
-                <x-button link="/projects/{{ $project->id }}/edit" label="Edit" icon="o-pencil" class="btn-outline"/>
-                <x-button link="/projects/{{ $project->id }}/board" label="Board" icon="o-view-columns"
-                          class="btn-primary"/>
-              {{--  <x-button link="{{ route('tasks.gantt-chart', ['project' => $project->id]) }}" icon="fas.chart-gantt" class="btn-primary">
-                    Gantt Chart
-                </x-button>--}}
+            <div class="flex flex-wrap gap-2">
+                <x-button 
+                    link="/projects/{{ $project->id }}/edit" 
+                    label="Edit" 
+                    icon="fas.edit" 
+                    class="btn-outline btn-primary hover:shadow-md transition-all duration-300"
+                />
+                <x-button 
+                    link="/projects/{{ $project->id }}/board" 
+                    label="Board" 
+                    icon="fas.columns"
+                    class="btn-primary hover:shadow-lg transition-all duration-300"
+                />
                 @if($project->is_archived)
-                    <x-button wire:click="unarchiveProject" label="Unarchive" icon="o-folder-open" class="btn-primary"/>
+                    <x-button 
+                        wire:click="unarchiveProject" 
+                        label="Unarchive" 
+                        icon="fas.box-archive" 
+                        class="btn-warning hover:shadow-md transition-all duration-300"
+                    />
                 @else
-                    <x-button wire:click="archiveProject" label="Archive" icon="o-folder" class="btn-error"/>
+                    <x-button 
+                        wire:click="archiveProject" 
+                        label="Archive" 
+                        icon="fas.archive" 
+                        class="btn-error hover:shadow-md transition-all duration-300"
+                    />
                 @endif
             </div>
         </div>
 
         <!-- Project Navigation -->
-        <div class="tabs tabs-boxed mb-6">
-            <a wire:click="setTab('overview')" class="tab {{ $selectedTab === 'overview' ? 'tab-active' : '' }}">Overview</a>
-            <a wire:click="setTab('tasks')" class="tab {{ $selectedTab === 'tasks' ? 'tab-active' : '' }}">Tasks</a>
-            <a wire:click="setTab('sprints')"
-               class="tab {{ $selectedTab === 'sprints' ? 'tab-active' : '' }}">Sprints</a>
-            <a wire:click="setTab('team')" class="tab {{ $selectedTab === 'team' ? 'tab-active' : '' }}">Team Members</a>
-            <a wire:click="setTab('status')" onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" class="tab {{ $selectedTab === 'status' ? 'tab-active' : '' }}">Status</a>
-            <a wire:click="setTab('health')" class="tab {{ $selectedTab === 'health' ? 'tab-active' : '' }}">Health</a>
-            <a wire:click="setTab('wiki')" class="tab {{ $selectedTab === 'wiki' ? 'tab-active' : '' }}">Wiki</a>
-            <a wire:click="setTab('files')" class="tab {{ $selectedTab === 'files' ? 'tab-active' : '' }}">Files</a>
-            <a wire:click="setTab('settings')" class="tab {{ $selectedTab === 'settings' ? 'tab-active' : '' }}">Settings</a>
+        <div class="tabs tabs-boxed p-1 bg-base-200/50 rounded-xl mb-6 border border-base-300 overflow-x-auto flex-nowrap">
+            <a 
+                wire:click="setTab('overview')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'overview' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-home text-sm"></i>
+                <span>Overview</span>
+            </a>
+            <a 
+                wire:click="setTab('tasks')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'tasks' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-tasks text-sm"></i>
+                <span>Tasks</span>
+            </a>
+            <a 
+                wire:click="setTab('sprints')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'sprints' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-flag text-sm"></i>
+                <span>Sprints</span>
+            </a>
+            <a 
+                wire:click="setTab('team')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'team' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-users text-sm"></i>
+                <span>Team Members</span>
+            </a>
+            <a 
+                wire:click="setTab('status')" 
+                onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'status' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-list-ul text-sm"></i>
+                <span>Status</span>
+            </a>
+            <a 
+                wire:click="setTab('health')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'health' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-heartbeat text-sm"></i>
+                <span>Health</span>
+            </a>
+            <a 
+                wire:click="setTab('wiki')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'wiki' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-book text-sm"></i>
+                <span>Wiki</span>
+            </a>
+            <a 
+                wire:click="setTab('files')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'files' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-file text-sm"></i>
+                <span>Files</span>
+            </a>
+            <a 
+                wire:click="setTab('settings')" 
+                class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'settings' ? 'tab-active' : 'hover:bg-base-300' }}"
+            >
+                <i class="fas fa-cog text-sm"></i>
+                <span>Settings</span>
+            </a>
         </div>
 
         <!-- Tab Content -->
@@ -123,161 +210,288 @@ new class extends Livewire\Volt\Component {
             @endif
             <!-- Overview Tab -->
             @if($selectedTab === 'overview')
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Project Description -->
-                    <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body">
-                            <h2 class="card-title">Description</h2>
-                            <div class="prose">
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden lg:col-span-2">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-align-left text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Project Description</h2>
+                        </div>
+                        <div class="card-body p-5">
+                            <div class="prose max-w-none">
                                 @if($project->description)
-                                    <p>{{ $project->description }}</p>
+                                    <p class="text-base-content/90">{{ $project->description }}</p>
                                 @else
-                                    <p class="text-gray-500 italic">No description provided</p>
+                                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                                        <div class="p-4 rounded-full bg-base-200 mb-3">
+                                            <i class="fas fa-file-alt text-2xl text-base-content/50"></i>
+                                        </div>
+                                        <p class="text-base-content/50 italic">No description provided</p>
+                                        <x-button 
+                                            link="/projects/{{ $project->id }}/edit" 
+                                            label="Add Description" 
+                                            icon="fas.edit" 
+                                            class="btn-sm btn-outline mt-4 hover:shadow-md transition-all duration-300"
+                                        />
+                                    </div>
                                 @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Project Stats -->
-                    <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body">
-                            <h2 class="card-title">Statistics</h2>
-                            <div class="stats stats-vertical shadow">
-                                <div class="stat">
-                                    <div class="stat-title">Total Tasks</div>
-                                    <div class="stat-value">{{ $project->tasks->count() }}</div>
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-chart-pie text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Project Statistics</h2>
+                        </div>
+                        <div class="card-body p-5">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="p-4 bg-primary/5 rounded-lg text-center">
+                                    <div class="text-3xl font-bold text-primary mb-1">{{ $project->tasks->count() }}</div>
+                                    <div class="text-sm text-base-content/70">Total Tasks</div>
                                 </div>
-
-                                <div class="stat">
-                                    <div class="stat-title">Active Sprints</div>
-                                    <div
-                                        class="stat-value">{{ $project->sprints->where('is_active', true)->count() }}</div>
-                                </div>
-
-                                <div class="stat">
-                                    <div class="stat-title">Completed Tasks</div>
-                                    <div class="stat-value">
+                                
+                                <div class="p-4 bg-success/5 rounded-lg text-center">
+                                    <div class="text-3xl font-bold text-success mb-1">
                                         {{ $project->tasks->whereNotNull('status_id')->where(function($query) {
                                             return $query->whereHas('status', function($q) {
                                                 return $q->where('slug', 'done');
                                             });
                                         })->count() }}
                                     </div>
+                                    <div class="text-sm text-base-content/70">Completed</div>
                                 </div>
+                                
+                                <div class="p-4 bg-warning/5 rounded-lg text-center">
+                                    <div class="text-3xl font-bold text-warning mb-1">{{ $project->sprints->where('is_active', true)->count() }}</div>
+                                    <div class="text-sm text-base-content/70">Active Sprints</div>
+                                </div>
+                                
+                                <div class="p-4 bg-info/5 rounded-lg text-center">
+                                    <div class="text-3xl font-bold text-info mb-1">{{ $project->statuses->count() }}</div>
+                                    <div class="text-sm text-base-content/70">Statuses</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-base-200">
+                                <h3 class="font-medium mb-2 flex items-center gap-2">
+                                    <i class="fas fa-tasks text-primary"></i>
+                                    <span>Tasks by Status</span>
+                                </h3>
+                                
+                                @if($tasksByStatus->isEmpty())
+                                    <p class="text-base-content/50 text-sm italic">No tasks data available</p>
+                                @else
+                                    <div class="space-y-2">
+                                        @foreach($tasksByStatus as $status => $count)
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-sm">{{ $status }}</span>
+                                                <span class="text-sm font-medium">{{ $count }}</span>
+                                            </div>
+                                            <div class="w-full bg-base-200 rounded-full h-1.5">
+                                                <div class="bg-primary h-1.5 rounded-full" style="width: {{ ($count / $project->tasks->count()) * 100 }}%"></div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Recent Tasks -->
-                    <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body">
-                            <div class="flex justify-between items-center">
-                                <h2 class="card-title">Recent Tasks</h2>
-                                <x-button link="/projects/{{ $project->id }}/tasks" label="View All"
-                                          icon="o-arrow-right" class="btn-sm btn-ghost"/>
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-tasks text-lg"></i>
+                                </span>
+                                <h2 class="text-xl font-semibold">Recent Tasks</h2>
                             </div>
+                            <x-button 
+                                link="/projects/{{ $project->id }}/tasks" 
+                                icon="fas.arrow-right" 
+                                class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                                tooltip="View All"
+                            />
+                        </div>
 
+                        <div class="card-body p-0">
                             @if($tasks->isEmpty())
-                                <div class="py-4 text-center text-gray-500">
-                                    <p>No tasks found</p>
-                                    <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task"
-                                              icon="o-plus" class="btn-primary mt-2"/>
+                                <div class="flex flex-col items-center justify-center py-12 text-center p-5">
+                                    <div class="p-6 rounded-full bg-base-200 mb-4">
+                                        <i class="fas fa-clipboard-list text-3xl text-base-content/50"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-2">No tasks yet</h3>
+                                    <p class="text-base-content/70 max-w-md mb-6">Create your first task to start tracking your project progress</p>
+                                    <x-button 
+                                        no-wire-navigate 
+                                        link="/projects/{{ $project->id }}/tasks/create" 
+                                        label="Create Task" 
+                                        icon="fas.plus"
+                                        class="btn-primary hover:shadow-lg transition-all duration-300"
+                                    />
                                 </div>
                             @else
                                 <div class="overflow-x-auto">
-                                    <table class="table table-zebra w-full">
-                                        <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Title</th>
-                                            <th>Status</th>
-                                            <th>Created</th>
-                                        </tr>
+                                    <table class="table w-full">
+                                        <thead class="bg-base-200/50">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Title</th>
+                                                <th>Status</th>
+                                                <th>Created</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($tasks as $task)
-                                            <tr>
-                                                <td>{{ $project->key }}-{{ $task->id }}</td>
-                                                <td>
-                                                    <a href="/projects/{{ $project->id }}/tasks/{{ $task->id }}"
-                                                       class="link link-hover">
-                                                        {{ $task->title }}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    @if($task->status)
-                                                        <div class="badge"
-                                                             style="background-color: {{ $task->status->color }}">
-                                                            {{ $task->status->name }}
+                                            @foreach($tasks as $task)
+                                                <tr class="hover:bg-base-200/30 transition-colors duration-150">
+                                                    <td>
+                                                        <span class="font-medium">{{ $project->key }}-{{ $task->id }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a 
+                                                            href="/projects/{{ $project->id }}/tasks/{{ $task->id }}" 
+                                                            class="font-medium text-primary hover:underline transition-colors duration-200"
+                                                        >
+                                                            {{ $task->title }}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        @if($task->status)
+                                                            <div class="badge" style="background-color: {{ $task->status->color }}; color: white;">
+                                                                {{ $task->status->name }}
+                                                            </div>
+                                                        @else
+                                                            <span class="text-base-content/50 italic">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="flex flex-col">
+                                                            <span>{{ $task->created_at->format('M d, Y') }}</span>
+                                                            <span class="text-xs text-base-content/70">{{ $task->created_at->diffForHumans() }}</span>
                                                         </div>
-                                                    @else
-                                                        <span class="text-gray-500">-</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $task->created_at->format('M d, Y') }}</td>
-                                            </tr>
-                                        @endforeach
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="p-4 border-t border-base-200 flex justify-center">
+                                    <x-button 
+                                        no-wire-navigate 
+                                        link="/projects/{{ $project->id }}/tasks/create" 
+                                        label="Create New Task" 
+                                        icon="fas.plus"
+                                        class="btn-sm btn-outline hover:shadow-md transition-all duration-300"
+                                    />
                                 </div>
                             @endif
                         </div>
                     </div>
 
                     <!-- Recent Sprints -->
-                    <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body">
-                            <div class="flex justify-between items-center">
-                                <h2 class="card-title">Recent Sprints</h2>
-                                <x-button link="/projects/{{ $project->id }}/sprints" label="View All"
-                                          icon="o-arrow-right" class="btn-sm btn-ghost"/>
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden lg:col-span-2">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-flag text-lg"></i>
+                                </span>
+                                <h2 class="text-xl font-semibold">Recent Sprints</h2>
                             </div>
+                            <x-button 
+                                link="/projects/{{ $project->id }}/sprints" 
+                                icon="fas.arrow-right" 
+                                class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                                tooltip="View All"
+                            />
+                        </div>
 
+                        <div class="card-body p-0">
                             @if($sprints->isEmpty())
-                                <div class="py-4 text-center text-gray-500">
-                                    <p>No sprints found</p>
-                                    <x-button link="/projects/{{ $project->id }}/sprints/create" label="Create Sprint"
-                                              icon="o-plus" class="btn-primary mt-2"/>
+                                <div class="flex flex-col items-center justify-center py-12 text-center p-5">
+                                    <div class="p-6 rounded-full bg-base-200 mb-4">
+                                        <i class="fas fa-flag-checkered text-3xl text-base-content/50"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold mb-2">No sprints yet</h3>
+                                    <p class="text-base-content/70 max-w-md mb-6">Create your first sprint to organize your project timeline</p>
+                                    <x-button 
+                                        link="/projects/{{ $project->id }}/sprints/create" 
+                                        label="Create Sprint" 
+                                        icon="fas.plus"
+                                        class="btn-primary hover:shadow-lg transition-all duration-300"
+                                    />
                                 </div>
                             @else
                                 <div class="overflow-x-auto">
-                                    <table class="table table-zebra w-full">
-                                        <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Duration</th>
-                                            <th>Tasks</th>
-                                        </tr>
+                                    <table class="table w-full">
+                                        <thead class="bg-base-200/50">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Status</th>
+                                                <th>Duration</th>
+                                                <th>Tasks</th>
+                                                <th>Actions</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($sprints as $sprint)
-                                            <tr>
-                                                <td>
-                                                    <a href="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}"
-                                                       class="link link-hover">
-                                                        {{ $sprint->name }}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        class="badge {{ $sprint->is_active ? 'badge-success' : ($sprint->is_completed ? 'badge-info' : 'badge-warning') }}">
-                                                        {{ $sprint->is_completed ? 'Completed' : ($sprint->is_active ? 'Active' : 'Planned') }}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if($sprint->start_date && $sprint->end_date)
-                                                        {{ $sprint->start_date->format('M d') }}
-                                                        - {{ $sprint->end_date->format('M d') }}
-                                                    @else
-                                                        <span class="text-gray-500">-</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $sprint->tasks->count() }}</td>
-                                            </tr>
-                                        @endforeach
+                                            @foreach($sprints as $sprint)
+                                                <tr class="hover:bg-base-200/30 transition-colors duration-150">
+                                                    <td>
+                                                        <a 
+                                                            href="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" 
+                                                            class="font-medium text-primary hover:underline transition-colors duration-200"
+                                                        >
+                                                            {{ $sprint->name }}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <div class="badge {{ $sprint->is_active ? 'badge-success' : ($sprint->is_completed ? 'badge-info' : 'badge-warning') }}">
+                                                            {{ $sprint->is_completed ? 'Completed' : ($sprint->is_active ? 'Active' : 'Planned') }}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if($sprint->start_date && $sprint->end_date)
+                                                            <div class="flex flex-col">
+                                                                <span class="font-medium">{{ $sprint->start_date->format('M d') }} - {{ $sprint->end_date->format('M d') }}</span>
+                                                                <span class="text-xs text-base-content/70">{{ $sprint->start_date->diffInDays($sprint->end_date) + 1 }} days</span>
+                                                            </div>
+                                                        @else
+                                                            <span class="text-base-content/50 italic">Not scheduled</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="flex items-center gap-1">
+                                                            <span class="font-medium">{{ $sprint->tasks->count() }}</span>
+                                                            <span class="text-xs text-base-content/70">{{ Str::plural('task', $sprint->tasks->count()) }}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="flex gap-1">
+                                                            <x-button 
+                                                                link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" 
+                                                                icon="fas.eye"
+                                                                class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                                                                tooltip="View Sprint"
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="p-4 border-t border-base-200 flex justify-center">
+                                    <x-button 
+                                        link="/projects/{{ $project->id }}/sprints/create" 
+                                        label="Create New Sprint" 
+                                        icon="fas.plus"
+                                        class="btn-sm btn-outline hover:shadow-md transition-all duration-300"
+                                    />
                                 </div>
                             @endif
                         </div>
@@ -287,14 +501,24 @@ new class extends Livewire\Volt\Component {
 
             <!-- Tasks Tab -->
             @if($selectedTab === 'tasks')
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="card-title">All Tasks</h2>
-                            <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
-                                      class="btn-primary"/>
+                <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden">
+                    <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-tasks text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Project Tasks</h2>
                         </div>
+                        <x-button 
+                            no-wire-navigate 
+                            link="/projects/{{ $project->id }}/tasks/create" 
+                            label="Create Task" 
+                            icon="fas.plus"
+                            class="btn-primary hover:shadow-lg transition-all duration-300"
+                        />
+                    </div>
 
+                    <div class="card-body p-0">
                         <livewire:tasks.index :project="$project"/>
                     </div>
                 </div>
@@ -302,14 +526,23 @@ new class extends Livewire\Volt\Component {
 
             <!-- Sprints Tab -->
             @if($selectedTab === 'sprints')
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="card-title">All Sprints</h2>
-                            <x-button link="/projects/{{ $project->id }}/sprints/create" label="Create Sprint"
-                                      icon="o-plus" class="btn-primary"/>
+                <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden">
+                    <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-flag text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Project Sprints</h2>
                         </div>
+                        <x-button 
+                            link="/projects/{{ $project->id }}/sprints/create" 
+                            label="Create Sprint" 
+                            icon="fas.plus"
+                            class="btn-primary hover:shadow-lg transition-all duration-300"
+                        />
+                    </div>
 
+                    <div class="card-body p-0">
                         <livewire:sprints.index :project="$project"/>
                     </div>
                 </div>
@@ -317,6 +550,16 @@ new class extends Livewire\Volt\Component {
 
             <!-- Team Members Tab -->
             @if($selectedTab === 'team')
+                <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden mb-6">
+                    <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-users text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Team Members</h2>
+                        </div>
+                    </div>
+                </div>
                 <livewire:projects.team-members :project="$project" />
             @endif
 
@@ -412,97 +655,229 @@ new class extends Livewire\Volt\Component {
 
             <!-- Settings Tab -->
             @if($selectedTab === 'settings')
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title mb-4">Project Settings</h2>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Project Details -->
-                            <div>
-                                <h3 class="text-lg font-medium mb-2">Project Details</h3>
-                                <div class="overflow-x-auto">
-                                    <table class="table w-full">
-                                        <tbody>
-                                        <tr>
-                                            <td class="font-bold">Name</td>
-                                            <td>{{ $project->name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="font-bold">Key</td>
-                                            <td>{{ $project->key }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="font-bold">Status</td>
-                                            <td>
-                                                <div
-                                                    class="badge {{ $project->is_active ? 'badge-success' : 'badge-error' }}">
-                                                    {{ $project->is_active ? 'Active' : 'Inactive' }}
-                                                </div>
-                                                @if($project->is_archived)
-                                                    <div class="badge badge-warning ml-1">Archived</div>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="font-bold">Created</td>
-                                            <td>{{ $project->created_at->format('M d, Y H:i') }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="font-bold">Last Updated</td>
-                                            <td>{{ $project->updated_at->format('M d, Y H:i') }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Project Details -->
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-info-circle text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Project Details</h2>
+                        </div>
+                        <div class="card-body p-5">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                                    <span class="font-medium">Name</span>
+                                    <span>{{ $project->name }}</span>
                                 </div>
-
-                                <div class="mt-4">
-                                    <x-button link="/projects/{{ $project->id }}/edit" label="Edit Project"
-                                              icon="o-pencil" class="btn-outline"/>
-
-                                    @if($project->is_archived)
-                                        <x-button wire:click="unarchiveProject" label="Unarchive Project"
-                                                  icon="fas.box-archive" class="btn-warning ml-2"/>
-                                    @else
-                                        <x-button wire:click="archiveProject" label="Archive Project"
-                                                  icon="fas.archive" class="btn-warning ml-2"/>
-                                    @endif
+                                
+                                <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                                    <span class="font-medium">Key</span>
+                                    <span class="badge badge-primary">{{ $project->key }}</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                                    <span class="font-medium">Status</span>
+                                    <div class="flex gap-2">
+                                        <div class="badge {{ $project->is_active ? 'badge-success' : 'badge-error' }}">
+                                            {{ $project->is_active ? 'Active' : 'Inactive' }}
+                                        </div>
+                                        @if($project->is_archived)
+                                            <div class="badge badge-warning">Archived</div>
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                                    <span class="font-medium">Created</span>
+                                    <div class="flex flex-col items-end">
+                                        <span>{{ $project->created_at->format('M d, Y') }}</span>
+                                        <span class="text-xs text-base-content/70">{{ $project->created_at->format('H:i') }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                                    <span class="font-medium">Last Updated</span>
+                                    <div class="flex flex-col items-end">
+                                        <span>{{ $project->updated_at->format('M d, Y') }}</span>
+                                        <span class="text-xs text-base-content/70">{{ $project->updated_at->format('H:i') }}</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Project Statuses -->
-                            <div>
-                                <h3 class="text-lg font-medium mb-2">Project Statuses</h3>
-                                <div class="overflow-x-auto">
-                                    <table class="table w-full">
-                                        <thead>
+                            <div class="flex flex-wrap gap-2 mt-6 pt-4 border-t border-base-200">
+                                <x-button 
+                                    link="/projects/{{ $project->id }}/edit" 
+                                    label="Edit Project"
+                                    icon="fas.edit" 
+                                    class="btn-outline btn-primary hover:shadow-md transition-all duration-300"
+                                />
+
+                                @if($project->is_archived)
+                                    <x-button 
+                                        wire:click="unarchiveProject" 
+                                        label="Unarchive Project"
+                                        icon="fas.box-archive" 
+                                        class="btn-warning hover:shadow-md transition-all duration-300"
+                                    />
+                                @else
+                                    <x-button 
+                                        wire:click="archiveProject" 
+                                        label="Archive Project"
+                                        icon="fas.archive" 
+                                        class="btn-warning hover:shadow-md transition-all duration-300"
+                                    />
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Statuses -->
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden lg:col-span-2">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-list-ul text-lg"></i>
+                                </span>
+                                <h2 class="text-xl font-semibold">Project Statuses</h2>
+                            </div>
+                            <a 
+                                wire:click="setTab('status')" 
+                                onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" 
+                                class="btn btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                            >
+                                <i class="fas fa-cog text-sm mr-1"></i>
+                                <span>Manage</span>
+                            </a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="overflow-x-auto">
+                                <table class="table w-full">
+                                    <thead class="bg-base-200/50">
                                         <tr>
-                                            <th>Name</th>
+                                            <th>Status</th>
                                             <th>Color</th>
                                             <th>Order</th>
                                             <th>Tasks</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
+                                    </thead>
+                                    <tbody>
                                         @foreach($project->statuses->sortBy('order') as $status)
-                                            <tr>
-                                                <td>{{ $status->name }}</td>
+                                            <tr class="hover:bg-base-200/30 transition-colors duration-150">
+                                                <td class="font-medium">{{ $status->name }}</td>
                                                 <td>
-                                                    <div class="w-6 h-6 rounded"
-                                                         style="background-color: {{ $status->color }}"></div>
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="w-6 h-6 rounded-full border border-base-300"
+                                                            style="background-color: {{ $status->color }}"></div>
+                                                        <span class="text-xs">{{ $status->color }}</span>
+                                                    </div>
                                                 </td>
                                                 <td>{{ $status->order }}</td>
-                                                <td>{{ $status->tasks->count() }}</td>
+                                                <td>
+                                                    <div class="flex items-center gap-1">
+                                                        <span class="font-medium">{{ $status->tasks->count() }}</span>
+                                                        <span class="text-xs text-base-content/70">{{ Str::plural('task', $status->tasks->count()) }}</span>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        
+                                        @if($project->statuses->isEmpty())
+                                            <tr>
+                                                <td colspan="4" class="text-center py-6 text-base-content/50 italic">No statuses defined</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Git Repositories -->
-                            <div class="md:col-span-2">
-                                <h3 class="text-lg font-medium mb-2">Git Repositories</h3>
-                                <livewire:projects.settings.git-repositories :project="$project" />
+                    <!-- Git Repositories -->
+                    <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden lg:col-span-3">
+                        <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                            <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                <i class="fas fa-code-branch text-lg"></i>
+                            </span>
+                            <h2 class="text-xl font-semibold">Git Repositories</h2>
+                        </div>
+                        <div class="card-body">
+                            <livewire:projects.settings.git-repositories :project="$project" />
+                        </div>
+                    </div>
+                    
+                    <!-- Danger Zone -->
+                    <div class="card bg-base-100 shadow-xl border-2 border-error/50 overflow-hidden lg:col-span-3">
+                        <div class="bg-error/10 p-4 border-b border-error/30">
+                            <div class="flex items-center gap-3">
+                                <span class="p-2 rounded-full bg-error/20 text-error">
+                                    <i class="fas fa-exclamation-triangle text-lg"></i>
+                                </span>
+                                <h2 class="text-xl font-bold text-error">Danger Zone</h2>
+                            </div>
+                        </div>
+                        <div class="card-body p-5">
+                            <p class="mb-6 text-base-content/80">These actions are <b>irreversible</b> and should be used with caution.</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Archive Project -->
+                                <div class="p-4 border border-warning/30 rounded-lg bg-warning/5 flex flex-col items-center text-center">
+                                    <div class="p-3 rounded-full bg-warning/10 mb-3">
+                                        <i class="fas fa-archive text-warning text-xl"></i>
+                                    </div>
+                                    <h3 class="font-bold mb-2">{{ $project->is_archived ? 'Unarchive' : 'Archive' }} Project</h3>
+                                    <p class="text-sm text-base-content/70 mb-4">
+                                        {{ $project->is_archived ? 'Make this project available again' : 'Hide this project from active projects list' }}
+                                    </p>
+                                    @if($project->is_archived)
+                                        <x-button 
+                                            wire:click="unarchiveProject" 
+                                            class="btn-warning btn-sm hover:shadow-md transition-all duration-300 mt-auto"
+                                        >
+                                            Unarchive Project
+                                        </x-button>
+                                    @else
+                                        <x-button 
+                                            wire:click="archiveProject" 
+                                            class="btn-warning btn-sm hover:shadow-md transition-all duration-300 mt-auto"
+                                        >
+                                            Archive Project
+                                        </x-button>
+                                    @endif
+                                </div>
+                                
+                                <!-- Export Data -->
+                                <div class="p-4 border border-info/30 rounded-lg bg-info/5 flex flex-col items-center text-center">
+                                    <div class="p-3 rounded-full bg-info/10 mb-3">
+                                        <i class="fas fa-file-export text-info text-xl"></i>
+                                    </div>
+                                    <h3 class="font-bold mb-2">Export Project Data</h3>
+                                    <p class="text-sm text-base-content/70 mb-4">Download all project data in JSON format</p>
+                                    <form method="POST" action="#" class="mt-auto">
+                                        @csrf
+                                        <x-button 
+                                            type="submit" 
+                                            class="btn-info btn-sm hover:shadow-md transition-all duration-300"
+                                        >
+                                            Export Data
+                                        </x-button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Delete Project -->
+                                <div class="p-4 border border-error/30 rounded-lg bg-error/5 flex flex-col items-center text-center">
+                                    <div class="p-3 rounded-full bg-error/10 mb-3">
+                                        <i class="fas fa-trash-alt text-error text-xl"></i>
+                                    </div>
+                                    <h3 class="font-bold mb-2">Delete Project</h3>
+                                    <p class="text-sm text-base-content/70 mb-4">Permanently delete this project and all its data</p>
+                                    <x-button 
+                                        class="btn-error btn-sm hover:shadow-md transition-all duration-300 mt-auto"
+                                        disabled
+                                    >
+                                        Delete Project
+                                    </x-button>
+                                </div>
                             </div>
                         </div>
                     </div>

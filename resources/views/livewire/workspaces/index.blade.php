@@ -72,74 +72,118 @@ new class extends Livewire\Volt\Component {
 
 ?>
 
-<div>
+<div class="bg-gradient-to-br from-base-100 to-base-200 min-h-screen">
     <x-slot:title>My Workspaces</x-slot:title>
 
-    <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-primary">My Workspaces</h1>
+    <div class="p-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-primary mb-1">My Workspaces</h1>
+                <p class="text-base-content/70">Manage your teams and projects in dedicated workspaces</p>
+            </div>
 
-            <x-button @click="$wire.showCreateWorkspaceModal = true" icon="fas.plus" class="btn-primary">
+            <x-button 
+                @click="$wire.showCreateWorkspaceModal = true" 
+                icon="fas.plus" 
+                class="btn-primary hover:shadow-lg transition-all duration-300"
+            >
                 Create Workspace
             </x-button>
         </div>
 
         <livewire:components.all-info-component/>
 
-
         <!-- Workspace Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($workspaces as $workspace)
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ $workspace->name }}</h2>
-                        <p class="text-gray-500">{{ $workspace->description }}</p>
+                <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 border border-base-300 overflow-hidden">
+                    <div class="bg-primary/5 p-4 border-b border-base-300">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <div class="avatar placeholder">
+                                    <div class="bg-primary text-primary-content rounded-lg w-10 h-10 flex items-center justify-center">
+                                        <span class="text-lg font-bold">{{ substr($workspace->name, 0, 1) }}</span>
+                                    </div>
+                                </div>
+                                <h2 class="text-xl font-bold">{{ $workspace->name }}</h2>
+                            </div>
+                            
+                            @if($workspace->owner_id === auth()->id())
+                                <span class="badge badge-primary badge-sm">Owner</span>
+                            @else
+                                <span class="badge badge-outline badge-sm">Member</span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-5">
+                        @if($workspace->description)
+                            <p class="text-base-content/80 mb-4">{{ $workspace->description }}</p>
+                        @else
+                            <p class="text-base-content/50 italic mb-4">No description provided</p>
+                        @endif
 
-                        <div class="flex items-center gap-2 mt-2">
+                        <div class="flex items-center gap-2 mb-4 bg-base-200/50 p-3 rounded-lg">
                             <div class="avatar placeholder">
-                                <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                    <span class="text-xs">{{ substr($workspace->owner->name, 0, 1) }}</span>
+                                <div class="bg-primary/20 text-primary rounded-full w-8 h-8 flex items-center justify-center">
+                                    <i class="fas fa-user-tie text-sm"></i>
                                 </div>
                             </div>
-                            <span class="text-sm">{{ $workspace->owner->name }}</span>
+                            <div>
+                                <span class="text-xs text-base-content/70">Workspace Owner</span>
+                                <p class="text-sm font-medium">{{ $workspace->owner->name }}</p>
+                            </div>
                         </div>
 
-                        <div class="flex items-center gap-2 mt-4">
-                            <span class="text-sm">{{ $workspace->members->count() }} members</span>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-users text-base-content/60"></i>
+                                <span class="text-sm font-medium">{{ $workspace->members->count() }} members</span>
+                            </div>
 
-                            <div class="avatar-group -space-x-2">
+                            <div class="avatar-group -space-x-3">
                                 @foreach($workspace->members->take(3) as $member)
                                     <div class="avatar placeholder">
-                                        <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                            <span class="text-xs">{{ substr($member->name, 0, 1) }}</span>
+                                        <div class="bg-primary/10 text-primary rounded-full w-8 h-8 ring ring-base-100">
+                                            <span class="text-xs font-medium">{{ substr($member->name, 0, 1) }}</span>
                                         </div>
                                     </div>
                                 @endforeach
 
                                 @if($workspace->members->count() > 3)
                                     <div class="avatar placeholder">
-                                        <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                            <span class="text-xs">+{{ $workspace->members->count() - 3 }}</span>
+                                        <div class="bg-base-300 text-base-content rounded-full w-8 h-8 ring ring-base-100">
+                                            <span class="text-xs font-medium">+{{ $workspace->members->count() - 3 }}</span>
                                         </div>
                                     </div>
                                 @endif
                             </div>
                         </div>
 
-                        <div class="card-actions justify-end mt-4">
-                            <x-button wire:click="selectWorkspace('{{ $workspace->id }}')" icon="fas.check"
-                                      class="btn-sm btn-primary">
+                        <div class="card-actions justify-end mt-6 pt-4 border-t border-base-200">
+                            <x-button 
+                                wire:click="selectWorkspace('{{ $workspace->id }}')" 
+                                icon="fas.check"
+                                class="btn-primary btn-sm hover:shadow-md transition-all duration-300"
+                            >
                                 Select
                             </x-button>
-                            <x-button link="/workspaces/{{ $workspace->id }}" icon="fas.arrow-right"
-                                      class="btn-sm btn-outline">
+                            
+                            <x-button 
+                                link="/workspaces/{{ $workspace->id }}" 
+                                icon="fas.arrow-right"
+                                class="btn-outline btn-sm hover:bg-base-200 transition-all duration-300"
+                            >
                                 View Details
                             </x-button>
 
                             @if($workspace->owner_id === auth()->id())
-                                <x-button link="/workspaces/{{ $workspace->id }}/members" icon="fas.users"
-                                          class="btn-sm">
-                                    Manage Members
+                                <x-button 
+                                    link="/workspaces/{{ $workspace->id }}/members" 
+                                    icon="fas.users"
+                                    class="btn-ghost btn-sm hover:bg-base-200 transition-all duration-300"
+                                >
+                                    Manage
                                 </x-button>
                             @endif
                         </div>
@@ -148,14 +192,18 @@ new class extends Livewire\Volt\Component {
             @endforeach
 
             @if($workspaces->isEmpty())
-                <div
-                    class="col-span-full flex flex-col items-center justify-center py-12 bg-base-100 rounded-lg shadow-sm">
-                    <x-icon name="fas.building" class="w-16 h-16 text-gray-400"/>
-                    <p class="mt-4 text-lg font-medium">No workspaces found</p>
-                    <p class="text-gray-500">Create a new workspace or ask to be invited to one</p>
-                    <x-button @click="$wire.showCreateWorkspaceModal = true" icon="fas.plus"
-                              class="btn-primary mt-4">
-                        Create Workspace
+                <div class="col-span-full flex flex-col items-center justify-center py-16 bg-base-100 rounded-xl shadow-sm border border-base-300">
+                    <div class="p-6 rounded-full bg-primary/10 mb-4">
+                        <i class="fas fa-building text-4xl text-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">No workspaces found</h3>
+                    <p class="text-base-content/70 text-center max-w-md mb-6">Create a new workspace to organize your teams and projects, or ask to be invited to an existing one</p>
+                    <x-button 
+                        @click="$wire.showCreateWorkspaceModal = true" 
+                        icon="fas.plus"
+                        class="btn-primary hover:shadow-lg transition-all duration-300"
+                    >
+                        Create Your First Workspace
                     </x-button>
                 </div>
             @endif
@@ -164,28 +212,51 @@ new class extends Livewire\Volt\Component {
 
     <!-- Create Workspace Modal -->
     <x-modal wire:model="showCreateWorkspaceModal" name="create-workspace-modal">
-        <x-card title="Create New Workspace">
+        <x-card title="Create New Workspace" class="max-w-lg">
+            <div class="flex items-center gap-3 mb-6 p-4 bg-primary/5 rounded-lg border border-primary/10">
+                <div class="p-3 rounded-full bg-primary/10 text-primary">
+                    <i class="fas fa-building text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">New Workspace</h3>
+                    <p class="text-sm text-base-content/70">Create a dedicated space for your team and projects</p>
+                </div>
+            </div>
+            
             <form wire:submit="createWorkspace">
                 <x-input
                     wire:model="newWorkspaceName"
                     label="Workspace Name"
                     placeholder="Enter workspace name"
+                    icon="fas.building"
+                    class="transition-all duration-300 focus:ring-2 focus:ring-primary/30"
                     error="{{ $errors->first('newWorkspaceName') }}"
                 />
+                <p class="text-xs text-base-content/60 mt-1 mb-4">Choose a clear, descriptive name for your workspace</p>
 
                 <x-textarea
                     wire:model="newWorkspaceDescription"
                     label="Description (optional)"
                     placeholder="Enter workspace description"
-                    class="mt-4"
+                    icon="fas.align-left"
+                    class="transition-all duration-300 focus:ring-2 focus:ring-primary/30"
                     error="{{ $errors->first('newWorkspaceDescription') }}"
+                    rows="4"
                 />
+                <p class="text-xs text-base-content/60 mt-1">Provide details about the purpose of this workspace</p>
 
-                <div class="flex justify-end gap-2 mt-6">
-                    <x-button @click="$dispatch('close-modal', 'create-workspace-modal')" class="btn-ghost">
+                <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8 pt-4 border-t border-base-200">
+                    <x-button 
+                        @click="$dispatch('close-modal', 'create-workspace-modal')" 
+                        class="btn-ghost hover:bg-base-200 transition-all duration-300"
+                    >
                         Cancel
                     </x-button>
-                    <x-button type="submit" icon="fas.plus" class="btn-primary">
+                    <x-button 
+                        type="submit" 
+                        icon="fas.plus" 
+                        class="btn-primary hover:shadow-lg transition-all duration-300"
+                    >
                         Create Workspace
                     </x-button>
                 </div>

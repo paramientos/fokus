@@ -76,7 +76,7 @@ class StatusSeeder extends Seeder
                 "project_id" => "019967c2-21b8-71eb-8c39-97d796503d50",
                 "created_at" => "2025-09-20 15:35:48",
                 "updated_at" => "2025-09-20 15:36:03",
-                "is_completed" => false,
+                "is_completed" => true,
             ],
         ];
 

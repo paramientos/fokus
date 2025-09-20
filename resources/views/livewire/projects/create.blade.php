@@ -110,62 +110,120 @@ new class extends Livewire\Volt\Component {
 
 ?>
 
-<div>
+<div class="bg-gradient-to-br from-base-100 to-base-200 min-h-screen">
     <x-slot:title>Create Project</x-slot:title>
 
-    <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-primary">Create Project</h1>
-            <x-button link="/projects" label="Back to Projects" icon="o-arrow-left" class="btn-ghost"/>
+    <div class="p-6 max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-primary mb-2">Create Project</h1>
+                <p class="text-base-content/70">Set up a new project workspace with all necessary configurations</p>
+            </div>
+            <x-button link="/projects" label="Back to Projects" icon="o-arrow-left" class="btn-outline btn-primary hover:shadow-lg transition-all duration-300"/>
         </div>
 
-        <div class="card bg-base-100 shadow-xl">
-            <div class="card-body">
-                <form wire:submit="save">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="form-control">
-                            <x-input label="Project Name" wire:model="name" placeholder="Enter project name" required/>
-                            @error('name') <span class="text-error text-sm">{{ $message }}</span> @enderror
-                        </div>
+        <div class="card bg-base-100 shadow-2xl border border-base-300 overflow-hidden">
+            <div class="card-body p-0">
+                <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                    <span class="p-2 rounded-full bg-primary/10 text-primary">
+                        <i class="fas fa-project-diagram text-xl"></i>
+                    </span>
+                    <h2 class="text-xl font-semibold">Project Details</h2>
+                </div>
 
-                        <div class="form-control">
-                            <div class="flex items-end gap-2">
-                                <div class="flex-1">
-                                    <x-input label="Project Key" wire:model="key" placeholder="e.g., PRJ" required/>
-                                    @error('key') <span class="text-error text-sm">{{ $message }}</span> @enderror
+                <div class="p-6">
+                    <form wire:submit="save" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-6">
+                                <div>
+                                    <x-input
+                                        label="Project Name"
+                                        wire:model="name"
+                                        placeholder="Enter project name"
+                                        icon="fas.signature"
+                                        class="transition-all duration-300 focus:ring-2 focus:ring-primary/30"
+                                        required
+                                    />
+                                    @error('name') <span class="text-error text-sm mt-1 block">{{ $message }}</span> @enderror
+                                    <p class="text-xs text-base-content/60 mt-1">Choose a descriptive name for your project</p>
                                 </div>
-                                <x-button type="button" wire:click="generateKey" label="Generate" class="btn-sm"/>
-                            </div>
-                            <span class="text-sm text-gray-500 mt-1">This will be used as a prefix for all tasks (e.g., PRJ-123)</span>
-                        </div>
 
-                        <div class="form-control md:col-span-2">
-                            <x-textarea label="Description" wire:model="description"
-                                        placeholder="Enter project description" rows="4"/>
-                            @error('description') <span class="text-error text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div class="form-control">
-                            <x-input label="Avatar URL (optional)" wire:model="avatar"
-                                     placeholder="https://example.com/avatar.png"/>
-                            @error('avatar') <span class="text-error text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div class="form-control flex items-end">
-                            @if($avatar)
-                                <div class="avatar">
-                                    <div class="w-16 rounded-full">
-                                        <img src="{{ $avatar }}" alt="Project Avatar"/>
+                                <div>
+                                    <div class="flex items-end gap-2">
+                                        <div class="flex-1">
+                                            <x-input
+                                                label="Project Key"
+                                                wire:model="key"
+                                                placeholder="e.g., PRJ"
+                                                icon="fas.key"
+                                                class="transition-all duration-300 focus:ring-2 focus:ring-primary/30"
+                                                required
+                                            />
+                                            @error('key') <span class="text-error text-sm mt-1 block">{{ $message }}</span> @enderror
+                                        </div>
+                                        <x-button
+                                            type="button"
+                                            wire:click="generateKey"
+                                            label="Generate"
+                                            icon="fas.magic"
+                                            class="btn-secondary btn-sm hover:shadow-md transition-all duration-300"
+                                        />
                                     </div>
+                                    <p class="text-xs text-base-content/60 mt-1">This will be used as a prefix for all tasks (e.g., PRJ-123)</p>
                                 </div>
-                            @endif
-                        </div>
-                    </div>
 
-                    <div class="mt-8 flex justify-end">
-                        <x-button type="submit" label="Create Project" icon="o-check" class="btn-primary"/>
-                    </div>
-                </form>
+                                <div>
+                                    <x-input
+                                        label="Avatar URL (optional)"
+                                        wire:model="avatar"
+                                        placeholder="https://example.com/avatar.png"
+                                        icon="fas.image"
+                                        class="transition-all duration-300 focus:ring-2 focus:ring-primary/30"
+                                    />
+                                    @error('avatar') <span class="text-error text-sm mt-1 block">{{ $message }}</span> @enderror
+                                    <p class="text-xs text-base-content/60 mt-1">Add a visual identity to your project</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <x-textarea
+                                        label="Description"
+                                        wire:model="description"
+                                        placeholder="Enter project description"
+                                        rows="6"
+                                        class="transition-all duration-300 focus:ring-2 focus:ring-primary/30"
+                                    />
+                                    @error('description') <span class="text-error text-sm mt-1 block">{{ $message }}</span> @enderror
+                                    <p class="text-xs text-base-content/60 mt-1">Provide details about the project's purpose and goals</p>
+                                </div>
+
+                                @if($avatar)
+                                    <div class="flex flex-col items-center justify-center p-4 bg-base-200/50 rounded-lg border border-base-300">
+                                        <p class="text-sm font-medium mb-2">Project Avatar Preview</p>
+                                        <div class="avatar">
+                                            <div class="w-24 h-24 rounded-xl ring ring-primary ring-offset-2 ring-offset-base-100 overflow-hidden">
+                                                <img src="{{ $avatar }}" alt="Project Avatar" class="object-cover"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-base-300 flex justify-between items-center">
+                            <div class="text-sm text-base-content/70">
+                                <i class="fas fa-info-circle mr-1"></i> Project will be created with default statuses and workflows
+                            </div>
+                            <x-button
+                                type="submit"
+                                label="Create Project"
+                                icon="fas.rocket"
+                                class="btn-primary hover:shadow-lg transition-all duration-300"
+                            />
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
