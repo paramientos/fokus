@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class HRModuleSeeder extends Seeder
 {
@@ -37,7 +38,7 @@ class HRModuleSeeder extends Seeder
 
         // Assign HR Manager to workspace if not already assigned
         if (!$hrManager->workspaceMembers()->where('workspace_id', $workspace->id)->exists()) {
-            $hrManager->workspaceMembers()->attach($workspace->id, ['role' => 'hr_manager']);
+            $hrManager->workspaceMembers()->attach($workspace->id, ['role' => 'hr_manager', 'id' => Str::uuid(),]);
             $hrManager->current_workspace_id = $workspace->id;
             $hrManager->save();
         }
@@ -64,7 +65,7 @@ class HRModuleSeeder extends Seeder
 
         // Assign employee to workspace if not already assigned
         if (!$employeeUser->workspaceMembers()->where('workspace_id', $workspace->id)->exists()) {
-            $employeeUser->workspaceMembers()->attach($workspace->id, ['role' => 'employee']);
+            $employeeUser->workspaceMembers()->attach($workspace->id, ['role' => 'employee','id'=> Str::uuid(),]);
             $employeeUser->current_workspace_id = $workspace->id;
             $employeeUser->save();
         }
@@ -155,6 +156,7 @@ class HRModuleSeeder extends Seeder
         // Enroll employee in training
         if (!$employee->trainings()->where('training_id', $training->id)->exists()) {
             $employee->trainings()->attach($training->id, [
+                'id'=> Str::uuid(),
                 'status' => 'registered',
                 'score' => null,
                 'feedback' => null,

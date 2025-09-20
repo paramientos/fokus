@@ -2,6 +2,7 @@
 
 use App\Models\Project;
 use App\Models\Status;
+use App\Models\StatusTransition;
 
 new class extends Livewire\Volt\Component {
     public $name = '';
@@ -26,6 +27,42 @@ new class extends Livewire\Volt\Component {
         $this->key = generate_project_key($this->name);
     }
 
+    /**
+     * Create status transitions for the project
+     *
+     * @param string $projectId
+     * @param array $statuses
+     * @return void
+     */
+    private function createStatusTransitions(string $projectId, array $statuses): void
+    {
+        $transitions = [
+            ['from' => 'to-do', 'to' => 'in-progress'],
+            ['from' => 'in-progress', 'to' => 'to-do'],
+            ['from' => 'in-progress', 'to' => 'ready-for-test'],
+            ['from' => 'ready-for-test', 'to' => 'in-progress'],
+            ['from' => 'ready-for-test', 'to' => 'ready-for-uat'],
+            ['from' => 'ready-for-uat', 'to' => 'ready-for-test'],
+            ['from' => 'ready-for-uat', 'to' => 'uat'],
+            ['from' => 'ready-for-uat', 'to' => 'in-progress'],
+            ['from' => 'uat', 'to' => 'ready-for-uat'],
+            ['from' => 'uat', 'to' => 'ready-for-test'],
+            ['from' => 'uat', 'to' => 'done'],
+            ['from' => 'uat', 'to' => 'in-progress'],
+            ['from' => 'done', 'to' => 'uat'],
+        ];
+
+        foreach ($transitions as $transition) {
+            if (isset($statuses[$transition['from']]) && isset($statuses[$transition['to']])) {
+                StatusTransition::create([
+                    'project_id' => $projectId,
+                    'from_status_id' => $statuses[$transition['from']]->id,
+                    'to_status_id' => $statuses[$transition['to']]->id,
+                ]);
+            }
+        }
+    }
+
     public function save()
     {
         $this->validate();
@@ -40,21 +77,30 @@ new class extends Livewire\Volt\Component {
         ]);
 
         $statuses = [
-            ['name' => 'To Do', 'slug' => 'to-do', 'color' => '#3498db', 'order' => 1],
-            ['name' => 'In Progress', 'slug' => 'in-progress', 'color' => '#f39c12', 'order' => 2],
-            ['name' => 'Review', 'slug' => 'review', 'color' => '#9b59b6', 'order' => 3],
-            ['name' => 'Done', 'slug' => 'done', 'color' => '#2ecc71', 'order' => 4],
+            ['name' => 'To Do', 'slug' => 'to-do', 'color' => '#3B82F6', 'order' => 0, 'is_completed' => false],
+            ['name' => 'In Progress', 'slug' => 'in-progress', 'color' => '#3B82F6', 'order' => 1, 'is_completed' => false],
+            ['name' => 'Ready For Test', 'slug' => 'ready-for-test', 'color' => '#174896', 'order' => 2, 'is_completed' => false],
+            ['name' => 'Ready For UAT', 'slug' => 'ready-for-uat', 'color' => '#3B82F6', 'order' => 3, 'is_completed' => false],
+            ['name' => 'UAT', 'slug' => 'uat', 'color' => '#3B82F6', 'order' => 4, 'is_completed' => false],
+            ['name' => 'Done', 'slug' => 'done', 'color' => '#3B82F6', 'order' => 5, 'is_completed' => false],
         ];
 
+        // Create status records
+        $createdStatuses = [];
         foreach ($statuses as $status) {
-            Status::create([
+            $createdStatus = Status::create([
                 'name' => $status['name'],
                 'slug' => $status['slug'],
                 'color' => $status['color'],
                 'order' => $status['order'],
                 'project_id' => $project->id,
+                'is_completed' => $status['is_completed'],
             ]);
+            $createdStatuses[$status['slug']] = $createdStatus;
         }
+
+        // Create status transitions
+        $this->createStatusTransitions($project->id, $createdStatuses);
 
         session()->flash('message', 'Project created successfully!');
 

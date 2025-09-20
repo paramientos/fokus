@@ -11,7 +11,7 @@ class StatusSeeder extends Seeder
     {
         Status::truncate();
 
-        $statuses = [
+        $data = [
             [
                 "id" => 3,
                 "name" => "To Do",
@@ -80,6 +80,6 @@ class StatusSeeder extends Seeder
             ],
         ];
 
-        Status::insert($statuses);
+        Status::insert($data);
     }
 }

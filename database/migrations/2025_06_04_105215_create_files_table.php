@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('mime_type');
             $table->unsignedBigInteger('size');
             $table->foreignUuid('uploaded_by')->references('id')->on('users')->onDelete('cascade');
-            $table->morphs('fileable'); // proje veya görev
+            $table->uuidMorphs('fileable'); // proje veya görev
             $table->unsignedInteger('version')->default(1);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
