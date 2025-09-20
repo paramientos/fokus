@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payrolls', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('employee_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->string('payroll_period'); // e.g., "2025-06", "Q1-2025"
             $table->date('pay_date');
             $table->decimal('base_salary', 10, 2);
@@ -35,9 +35,9 @@ return new class extends Migration
             $table->json('deduction_details')->nullable(); // Detailed breakdown of deductions
             $table->json('allowance_details')->nullable(); // Detailed breakdown of allowances
             $table->timestamp('approved_at')->nullable();
-            $table->foreignId('approved_by')->nullable()->constrained('users');
+            $table->foreignUuid('approved_by')->nullable()->constrained('users');
             $table->timestamps();
-            
+
             $table->unique(['employee_id', 'payroll_period']);
             $table->index(['workspace_id', 'payroll_period']);
             $table->index(['status', 'pay_date']);

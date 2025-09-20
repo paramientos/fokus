@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('workspace_workflow_instances', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_workflow_id')->constrained()->onDelete('cascade');
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
-            $table->foreignId('initiated_by')->constrained('users')->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_workflow_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('initiated_by')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('status')->default('in_progress'); // in_progress, completed, cancelled

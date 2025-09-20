@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -56,7 +57,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class PomodoroSession extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -175,7 +176,7 @@ class PomodoroSession extends Model
         if ($this->target_pomodoros === 0) {
             return 0;
         }
-        
+
         return min(100, round(($this->completed_pomodoros / $this->target_pomodoros) * 100));
     }
 }

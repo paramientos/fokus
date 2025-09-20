@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('api_endpoints', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('url');
             $table->string('method');
@@ -20,9 +20,9 @@ return new class extends Migration
             $table->json('headers')->nullable();
             $table->json('params')->nullable();
             $table->json('body')->nullable();
-            $table->foreignId('task_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('project_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('task_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignUuid('project_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

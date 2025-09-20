@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('conversation_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('conversation_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->text('content');
             $table->json('attachments')->nullable();
             $table->boolean('is_system_message')->default(false);
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             // İndeksler
             $table->index(['conversation_id', 'created_at']);
             $table->index(['user_id', 'created_at']);

@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('git_pull_request_reviews', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pull_request_id')->constrained('git_pull_requests')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('pull_request_id')->constrained('git_pull_requests')->onDelete('cascade');
+            $table->foreignUuid('user_id')->nullable()->constrained()->onDelete('set null');
             $table->enum('state', ['approved', 'changes_requested', 'commented'])->default('commented');
             $table->text('body')->nullable();
             $table->timestamp('submitted_at');
             $table->timestamps();
-            
+
             $table->unique(['pull_request_id', 'user_id']);
         });
     }

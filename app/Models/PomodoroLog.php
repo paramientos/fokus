@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $pomodoro_session_id
@@ -37,7 +38,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class PomodoroLog extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'pomodoro_session_id',
@@ -94,7 +95,7 @@ class PomodoroLog extends Model
     {
         $minutes = floor($this->duration / 60);
         $seconds = $this->duration % 60;
-        
+
         return sprintf('%02d:%02d', $minutes, $seconds);
     }
 }

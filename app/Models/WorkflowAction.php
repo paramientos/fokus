@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Mail;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workflow_id
@@ -32,7 +33,7 @@ use Illuminate\Support\Facades\Mail;
  */
 class WorkflowAction extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -91,12 +92,12 @@ class WorkflowAction extends Model
     private function updateStatus(Task $task): void
     {
         $statusId = $this->action_config['status_id'] ?? null;
-        
+
         if ($statusId && $statusId != $task->status_id) {
             $oldStatus = $task->status->name ?? 'Unknown';
             $task->update(['status_id' => $statusId]);
             $newStatus = Status::find($statusId)->name ?? 'Unknown';
-            
+
             // Log the action
             Activity::create([
                 'user_id' => auth()->id() ?? 1,
@@ -123,11 +124,11 @@ class WorkflowAction extends Model
     private function updatePriority(Task $task): void
     {
         $priority = $this->action_config['priority'] ?? null;
-        
+
         if ($priority && $priority != $task->priority) {
             $oldPriority = $task->priority->label() ?? 'Unknown';
             $task->update(['priority' => $priority]);
-            
+
             // Log the action
             Activity::create([
                 'user_id' => auth()->id() ?? 1,
@@ -154,12 +155,12 @@ class WorkflowAction extends Model
     private function assignUser(Task $task): void
     {
         $userId = $this->action_config['user_id'] ?? null;
-        
+
         if ($userId && $userId != $task->user_id) {
             $oldUser = $task->user->name ?? 'Unassigned';
             $task->update(['user_id' => $userId]);
             $newUser = User::find($userId)->name ?? 'Unknown';
-            
+
             // Log the action
             Activity::create([
                 'user_id' => auth()->id() ?? 1,
@@ -186,12 +187,12 @@ class WorkflowAction extends Model
     private function addToSprint(Task $task): void
     {
         $sprintId = $this->action_config['sprint_id'] ?? null;
-        
+
         if ($sprintId && $sprintId != $task->sprint_id) {
             $oldSprint = $task->sprint->name ?? 'None';
             $task->update(['sprint_id' => $sprintId]);
             $newSprint = Sprint::find($sprintId)->name ?? 'Unknown';
-            
+
             // Log the action
             Activity::create([
                 'user_id' => auth()->id() ?? 1,
@@ -221,14 +222,14 @@ class WorkflowAction extends Model
         $recipients = $this->action_config['recipients'] ?? [];
         $subject = $this->action_config['subject'] ?? 'Task Update Notification';
         $message = $this->action_config['message'] ?? 'A task has been updated.';
-        
+
         // Replace placeholders in the message
         $message = str_replace(
             ['{task_id}', '{task_title}', '{project_name}', '{status}', '{assignee}'],
             [$task->id, $task->title, $task->project->name, $task->status->name ?? 'Unknown', $task->user->name ?? 'Unassigned'],
             $message
         );
-        
+
         foreach ($recipients as $recipient) {
             // In a real application, you would send an actual email or notification
             // For demonstration purposes, we'll just log it
@@ -251,7 +252,7 @@ class WorkflowAction extends Model
     private function addComment(Task $task): void
     {
         $content = $this->action_config['content'] ?? '';
-        
+
         if (!empty($content)) {
             // Replace placeholders in the content
             $content = str_replace(
@@ -259,13 +260,13 @@ class WorkflowAction extends Model
                 [$task->id, $task->title, $task->project->name, $task->status->name ?? 'Unknown', $task->user->name ?? 'Unassigned'],
                 $content
             );
-            
+
             Comment::create([
                 'content' => $content,
                 'task_id' => $task->id,
                 'user_id' => auth()->id() ?? 1, // System user or workflow user
             ]);
-            
+
             // Log the action
             Activity::create([
                 'user_id' => auth()->id() ?? 1,

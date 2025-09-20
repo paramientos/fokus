@@ -9,11 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('asset_assignments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('asset_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('assigned_by')->constrained('users')->onDelete('cascade');
-            
+            $table->uuid('id')->primary();
+            $table->foreignUuid('asset_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('assigned_by')->constrained('users')->onDelete('cascade');
+
             $table->datetime('assigned_at');
             $table->datetime('returned_at')->nullable();
             $table->text('assignment_notes')->nullable();
@@ -21,9 +21,9 @@ return new class extends Migration
             $table->enum('condition_on_assignment', ['excellent', 'good', 'fair', 'poor'])->default('good');
             $table->enum('condition_on_return', ['excellent', 'good', 'fair', 'poor'])->nullable();
             $table->boolean('is_active')->default(true);
-            
+
             $table->timestamps();
-            
+
             $table->index(['asset_id', 'is_active']);
             $table->index(['user_id', 'is_active']);
         });

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,7 @@ use App\Models\Workspace;
 use App\Models\User;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $employee_id
@@ -77,6 +78,8 @@ use App\Models\User;
  */
 class Payroll extends Model
 {
+    use HasUuids;
+
     protected $fillable = [
         'employee_id',
         'workspace_id',
@@ -154,7 +157,7 @@ class Payroll extends Model
 
     public function calculateTotalDeductions(): void
     {
-        $this->total_deductions = $this->tax_deduction + $this->social_security_deduction + 
+        $this->total_deductions = $this->tax_deduction + $this->social_security_deduction +
                                  $this->health_insurance_deduction + $this->other_deductions;
     }
 

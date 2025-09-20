@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workspace_id
@@ -58,7 +59,7 @@ use Carbon\Carbon;
  */
 class Leaderboard extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -105,7 +106,7 @@ class Leaderboard extends Model
     public function scopeCurrentPeriod(Builder $query, string $period): Builder
     {
         $dates = self::getPeriodDates($period);
-        
+
         return $query->where('period_start', $dates['start'])
                     ->where('period_end', $dates['end']);
     }
@@ -118,11 +119,11 @@ class Leaderboard extends Model
     public function getRankSuffixAttribute(): string
     {
         $rank = $this->rank;
-        
+
         if ($rank >= 11 && $rank <= 13) {
             return $rank . 'th';
         }
-        
+
         return match($rank % 10) {
             1 => $rank . 'st',
             2 => $rank . 'nd',
@@ -144,7 +145,7 @@ class Leaderboard extends Model
     public static function getPeriodDates(string $period): array
     {
         $now = Carbon::now();
-        
+
         return match($period) {
             'daily' => [
                 'start' => $now->startOfDay()->toDateString(),
@@ -176,7 +177,7 @@ class Leaderboard extends Model
     public static function updateRankings(int $workspaceId, string $period, string $category): void
     {
         $dates = self::getPeriodDates($period);
-        
+
         $leaderboards = self::where('workspace_id', $workspaceId)
             ->where('period', $period)
             ->where('category', $category)

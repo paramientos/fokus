@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('workflow_id')->nullable()->constrained()->onDelete('set null')->after('sprint_id');
+            $table->foreignUuid('workflow_id')->nullable()->constrained()->onDelete('set null')->after('sprint_id');
         });
     }
 

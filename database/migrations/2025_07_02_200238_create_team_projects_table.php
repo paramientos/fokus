@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('team_projects', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('team_id')->constrained()->onDelete('cascade');
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('assigned_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('team_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('assigned_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('assigned_at')->useCurrent();
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             // Bir takım bir projeye sadece bir kez atanabilir
             $table->unique(['team_id', 'project_id']);
         });

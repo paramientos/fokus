@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('certifications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('issuing_organization');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('is_mandatory')->default(false);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+
             $table->index(['workspace_id', 'category']);
             $table->index(['is_active', 'is_mandatory']);
         });

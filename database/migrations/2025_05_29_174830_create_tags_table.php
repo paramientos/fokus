@@ -12,21 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tags', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('color')->default('#3498db');
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('project_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-            
+
             $table->unique(['name', 'project_id']);
         });
-        
+
         Schema::create('taggables', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('tag_id')->constrained()->cascadeOnDelete();
             $table->morphs('taggable');
             $table->timestamps();
-            
+
             $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
         });
     }

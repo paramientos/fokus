@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Priority;
 use App\Enums\TaskType;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $order
@@ -86,7 +87,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -241,7 +242,7 @@ class Task extends Model
             ->withPivot('type')
             ->withTimestamps();
     }
-    
+
     /**
      * Bu task'tan oluşturulan wiki sayfaları
      */
@@ -250,7 +251,7 @@ class Task extends Model
         return $this->morphToMany(WikiPage::class, 'source', 'wiki_source_references')
             ->withTimestamps();
     }
-    
+
     /**
      * Görev ile ilişkili konuşmalar
      */

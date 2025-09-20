@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('project_alerts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); // Alert sahibi
+            $table->uuid('id')->primary();
+            $table->foreignUuid('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->nullable()->constrained()->nullOnDelete(); // Alert sahibi
             $table->enum('type', [
                 'deadline_risk',
                 'resource_conflict',
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->json('metadata')->nullable(); // Ek bilgiler
             $table->boolean('is_resolved')->default(false);
             $table->timestamp('resolved_at')->nullable();
-            $table->foreignId('resolved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignUuid('resolved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->text('resolution_notes')->nullable();
             $table->timestamps();
 

@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
             $table->foreignId('status_id')->constrained()->onDelete('restrict');
-            $table->foreignId('sprint_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null'); // Assigned to
-            $table->foreignId('reporter_id')->constrained('users')->onDelete('cascade'); // Created by
+            $table->foreignUuid('sprint_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignUuid('user_id')->nullable()->constrained()->onDelete('set null'); // Assigned to
+            $table->foreignUuid('reporter_id')->constrained('users')->onDelete('cascade'); // Created by
             $table->string('task_type')->default('task'); // task, bug, story, epic
             $table->integer('priority')->default(3); // 1-5 (highest to lowest)
             $table->integer('story_points')->nullable();

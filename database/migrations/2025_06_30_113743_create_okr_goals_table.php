@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('okr_goals', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
-            $table->foreignId('performance_review_id')->nullable()->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('employee_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('performance_review_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('type', ['objective', 'key_result'])->default('objective');
-            $table->foreignId('parent_id')->nullable()->constrained('okr_goals')->onDelete('cascade'); // For key results under objectives
+            $table->foreignUuid('parent_id')->nullable()->constrained('okr_goals')->onDelete('cascade'); // For key results under objectives
             $table->decimal('target_value', 10, 2)->nullable(); // Numeric target for key results
             $table->decimal('current_value', 10, 2)->default(0); // Current progress
             $table->string('unit')->nullable(); // e.g., '%', 'count', 'hours'
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->json('milestones')->nullable(); // Key milestones and deadlines
             $table->timestamps();
-            
+
             $table->index(['employee_id', 'type']);
             $table->index(['workspace_id', 'status']);
             $table->index(['start_date', 'end_date']);

@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $employee_id
@@ -73,6 +74,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class OkrGoal extends Model
 {
+    use HasUuids;
+
     protected $table = 'okr_goals';
 
     protected $fillable = [

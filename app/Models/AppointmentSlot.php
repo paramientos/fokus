@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -37,7 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class AppointmentSlot extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -76,7 +77,7 @@ class AppointmentSlot extends Model
     {
         $start = \Carbon\Carbon::parse($this->start_time);
         $end = \Carbon\Carbon::parse($this->end_time);
-        
+
         return $end->diffInMinutes($start);
     }
 }

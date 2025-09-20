@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('parent_id')->nullable()->after('id')->constrained('tasks')->nullOnDelete();
+            $table->foreignUuid('parent_id')->nullable()->after('id')->constrained('tasks')->nullOnDelete();
             $table->boolean('is_subtask')->default(false)->after('parent_id');
         });
     }

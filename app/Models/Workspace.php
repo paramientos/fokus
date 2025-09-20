@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -46,7 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Workspace extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'name',
@@ -119,7 +120,7 @@ class Workspace extends Model
 
     /**
      * Get or create storage usage for the workspace.
-     * 
+     *
      * @return StorageUsage
      */
     public function getStorageUsage(): StorageUsage
@@ -132,7 +133,7 @@ class Workspace extends Model
                 'plan_name' => 'basic'
             ]);
         }
-        
+
         return $this->storageUsage;
     }
 
@@ -156,7 +157,7 @@ class Workspace extends Model
                     'role' => 'owner',
                 ]);
             }
-            
+
             // Create storage usage record for the workspace
             $workspace->storageUsage()->create([
                 'workspace_id' => $workspace->id,

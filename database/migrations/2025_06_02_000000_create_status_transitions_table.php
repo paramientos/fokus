@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('status_transitions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
             $table->foreignId('from_status_id')->constrained('statuses')->onDelete('cascade');
             $table->foreignId('to_status_id')->constrained('statuses')->onDelete('cascade');
             $table->timestamps();

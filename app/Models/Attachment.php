@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $filename
@@ -45,7 +46,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Attachment extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -86,11 +87,11 @@ class Attachment extends Model
     {
         $bytes = $this->size;
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         for ($i = 0; $bytes > 1024; $i++) {
             $bytes /= 1024;
         }
-        
+
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
@@ -119,7 +120,7 @@ class Attachment extends Model
             'image/webp',
         ]);
     }
-    
+
     /**
      * Get the file type icon class based on mime type or extension.
      *
@@ -130,9 +131,9 @@ class Attachment extends Model
         if ($this->is_image) {
             return 'fas fa-image text-primary';
         }
-        
+
         $extension = $this->extension;
-        
+
         if (in_array($extension, ['pdf'])) {
             return 'fas fa-file-pdf text-error';
         } elseif (in_array($extension, ['doc', 'docx'])) {
@@ -150,7 +151,7 @@ class Attachment extends Model
         } elseif (in_array($extension, ['js', 'php', 'html', 'css', 'py', 'java', 'c', 'cpp'])) {
             return 'fas fa-file-code text-primary';
         }
-        
+
         return 'fas fa-file text-gray-500';
     }
 }

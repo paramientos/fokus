@@ -9,9 +9,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('performance_reviews', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
-            $table->foreignId('reviewer_id')->constrained('users')->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignUuid('reviewer_id')->constrained('users')->onDelete('cascade');
             $table->date('review_date');
             $table->date('next_review_date');
             $table->json('goals');

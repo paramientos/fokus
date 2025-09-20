@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $content
@@ -32,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -60,7 +61,7 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * Bu yorumdan oluşturulan wiki sayfaları
      */

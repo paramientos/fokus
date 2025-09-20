@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $file_name
@@ -54,7 +55,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class File extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,HasUuids;
 
     protected $fillable = [
         'file_name',
@@ -82,7 +83,7 @@ class File extends Model
         // Dosya silindiğinde workspace depolama alanını güncelle
         static::deleted(function (File $file) {
             $file->updateWorkspaceStorageUsage(-$file->size);
-            
+
             // Fiziksel dosyayı da sil
             if (Storage::disk('public')->exists($file->file_path)) {
                 Storage::disk('public')->delete($file->file_path);
@@ -92,7 +93,7 @@ class File extends Model
 
     /**
      * Workspace depolama alanını güncelle
-     * 
+     *
      * @param int $bytes Eklenecek veya çıkarılacak byte miktarı (negatif değer çıkarma işlemi yapar)
      * @return bool
      */
@@ -100,32 +101,32 @@ class File extends Model
     {
         // Dosyanın bağlı olduğu modeli al
         $fileable = $this->fileable;
-        
+
         // Eğer fileable bir Project veya Task ise, workspace'i bul
         $workspace = null;
-        
+
         if ($fileable instanceof Project) {
             $workspace = $fileable->workspace;
         } elseif ($fileable instanceof Task) {
             $workspace = $fileable->project->workspace;
         }
-        
+
         if ($workspace) {
             $storageUsage = $workspace->getStorageUsage();
-            
+
             if ($bytes > 0) {
                 return $storageUsage->addUsage($bytes);
             } else {
                 return $storageUsage->removeUsage(abs($bytes));
             }
         }
-        
+
         return false;
     }
 
     /**
      * Dosya yüklemeden önce workspace'in yeterli depolama alanı olup olmadığını kontrol et
-     * 
+     *
      * @param string $fileabletype Dosyanın bağlı olduğu model tipi
      * @param int $fileableid Dosyanın bağlı olduğu model ID'si
      * @param int $filesize Dosya boyutu (byte)
@@ -136,24 +137,24 @@ class File extends Model
         // Dosyanın bağlı olduğu modeli bul
         $modelClass = $fileabletype;
         $fileable = $modelClass::find($fileableid);
-        
+
         if (!$fileable) {
             return false;
         }
-        
+
         // Eğer fileable bir Project veya Task ise, workspace'i bul
         $workspace = null;
-        
+
         if ($fileable instanceof Project) {
             $workspace = $fileable->workspace;
         } elseif ($fileable instanceof Task) {
             $workspace = $fileable->project->workspace;
         }
-        
+
         if ($workspace) {
             return $workspace->hasEnoughStorageSpace($filesize);
         }
-        
+
         return false;
     }
 

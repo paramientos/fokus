@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_achievements', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('achievement_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('achievement_id')->constrained()->cascadeOnDelete();
             $table->integer('level')->default(1); // For progressive achievements
             $table->integer('progress')->default(0); // Current progress towards next level
             $table->integer('points_earned')->default(0);

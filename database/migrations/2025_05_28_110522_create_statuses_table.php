@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('color')->default('#3498db');
             $table->integer('order')->default(0);
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             $table->unique(['project_id', 'slug'], 'statuses_project_id_slug_unique');

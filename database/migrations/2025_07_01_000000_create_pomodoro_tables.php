@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pomodoro_sessions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('workspace_id')->nullable()->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('workspace_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->integer('work_duration')->default(25); // Dakika cinsinden
@@ -30,8 +30,8 @@ return new class extends Migration
         });
 
         Schema::create('pomodoro_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pomodoro_session_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('pomodoro_session_id')->constrained()->onDelete('cascade');
             $table->enum('type', ['work', 'break', 'long_break']);
             $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
@@ -42,17 +42,17 @@ return new class extends Migration
         });
 
         Schema::create('pomodoro_tags', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('color')->default('#3b82f6'); // Varsayılan mavi
             $table->timestamps();
         });
 
         Schema::create('pomodoro_session_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pomodoro_session_id')->constrained()->onDelete('cascade');
-            $table->foreignId('pomodoro_tag_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('pomodoro_session_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('pomodoro_tag_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

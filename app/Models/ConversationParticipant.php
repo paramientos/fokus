@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $conversation_id
@@ -40,8 +41,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ConversationParticipant extends Model
 {
-    use HasFactory;
-    
+    use HasFactory,HasUuids;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -55,7 +56,7 @@ class ConversationParticipant extends Model
         'joined_at',
         'left_at',
     ];
-    
+
     /**
      * The attributes that should be cast.
      *
@@ -67,7 +68,7 @@ class ConversationParticipant extends Model
         'joined_at' => 'datetime',
         'left_at' => 'datetime',
     ];
-    
+
     /**
      * Get the conversation that the participant belongs to.
      */
@@ -75,7 +76,7 @@ class ConversationParticipant extends Model
     {
         return $this->belongsTo(Conversation::class);
     }
-    
+
     /**
      * Get the user that is participating in the conversation.
      */
@@ -83,7 +84,7 @@ class ConversationParticipant extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * Scope a query to only include active participants.
      */
@@ -91,7 +92,7 @@ class ConversationParticipant extends Model
     {
         return $query->whereNull('left_at');
     }
-    
+
     /**
      * Scope a query to only include admin participants.
      */
@@ -99,7 +100,7 @@ class ConversationParticipant extends Model
     {
         return $query->where('is_admin', true);
     }
-    
+
     /**
      * Scope a query to only include participants for a specific conversation.
      */
@@ -107,7 +108,7 @@ class ConversationParticipant extends Model
     {
         return $query->where('conversation_id', $conversationId);
     }
-    
+
     /**
      * Scope a query to only include participants for a specific user.
      */

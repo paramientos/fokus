@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $user_id
@@ -39,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class UserAchievement extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -71,13 +72,13 @@ class UserAchievement extends Model
         if ($this->achievement->max_level <= $this->level) {
             return 100.0;
         }
-        
+
         // Calculate progress towards next level
         $nextLevelRequirement = $this->getNextLevelRequirement();
         if ($nextLevelRequirement <= 0) {
             return 100.0;
         }
-        
+
         return min(100.0, ($this->progress / $nextLevelRequirement) * 100);
     }
 
@@ -90,7 +91,7 @@ class UserAchievement extends Model
 
     public function canLevelUp(): bool
     {
-        return $this->level < $this->achievement->max_level && 
+        return $this->level < $this->achievement->max_level &&
                $this->progress >= $this->getNextLevelRequirement();
     }
 

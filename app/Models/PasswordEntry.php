@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $password_vault_id
@@ -55,7 +56,7 @@ use Illuminate\Support\Facades\Crypt;
  */
 class PasswordEntry extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes,HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -155,16 +156,16 @@ class PasswordEntry extends Model
     protected function calculatePasswordStrength(string $password): int
     {
         $strength = 0;
-        
+
         // Length check
         if (strlen($password) >= 8) $strength++;
         if (strlen($password) >= 12) $strength++;
-        
+
         // Complexity checks
         if (preg_match('/[A-Z]/', $password)) $strength++;
         if (preg_match('/[0-9]/', $password)) $strength++;
         if (preg_match('/[^A-Za-z0-9]/', $password)) $strength++;
-        
+
         return min(5, $strength);
     }
 

@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Testing\Fluent\Concerns\Has;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workspace_id
@@ -52,6 +54,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Training extends Model
 {
+    use HasUuids;
+
     protected $fillable = [
         'workspace_id',
         'title',

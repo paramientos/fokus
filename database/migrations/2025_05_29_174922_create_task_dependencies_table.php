@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('task_dependencies', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('task_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('dependency_id')->references('id')->on('tasks')->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('task_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('dependency_id')->references('id')->on('tasks')->cascadeOnDelete();
             $table->enum('type', ['blocks', 'is_blocked_by', 'relates_to', 'duplicates', 'is_duplicated_by']);
             $table->timestamps();
-            
+
             $table->unique(['task_id', 'dependency_id', 'type']);
         });
     }

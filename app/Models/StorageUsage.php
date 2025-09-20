@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workspace_id
@@ -34,7 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StorageUsage extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -96,7 +97,7 @@ class StorageUsage extends Model
         if ($this->limit_bytes <= 0) {
             return 100;
         }
-        
+
         return min(100, round(($this->used_bytes / $this->limit_bytes) * 100, 2));
     }
 
@@ -143,13 +144,13 @@ class StorageUsage extends Model
     protected function formatBytes(int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         $bytes = max($bytes, 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
-        
+
         $bytes /= (1 << (10 * $pow));
-        
+
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 }

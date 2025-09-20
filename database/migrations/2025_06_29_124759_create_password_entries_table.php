@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('password_entries', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('password_vault_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('password_category_id')->nullable()->constrained()->nullOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('password_vault_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('password_category_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
             $table->string('username')->nullable();
             $table->text('password_encrypted');

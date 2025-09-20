@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('password_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('password_vault_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('password_vault_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('color')->default('#4f46e5'); // Default indigo color
             $table->string('icon')->default('fas.folder'); // Default folder icon

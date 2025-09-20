@@ -9,9 +9,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employee_training', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('training_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('employee_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('training_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['assigned', 'registered', 'in_progress', 'completed', 'dropped'])->default('assigned');
             $table->decimal('score', 5, 2)->nullable();
             $table->text('feedback')->nullable();

@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('project_members', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->string('role')->default('member'); // member, admin, viewer, etc.
             $table->timestamps();
-            
+
             // Her kullanıcı bir projede sadece bir kez olabilir
             $table->unique(['project_id', 'user_id']);
         });

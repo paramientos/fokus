@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $project_id
@@ -40,7 +41,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class WikiPage extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'project_id',
@@ -67,7 +68,7 @@ class WikiPage extends Model
     {
         return $this->belongsToMany(WikiCategory::class, 'wiki_category_wiki_page');
     }
-    
+
     // Slug oluşturma
     public static function createSlug(string $title): string
     {

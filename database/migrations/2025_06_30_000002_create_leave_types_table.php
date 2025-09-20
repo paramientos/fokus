@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('leave_types', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->integer('annual_quota');
             $table->boolean('carry_over')->default(false);

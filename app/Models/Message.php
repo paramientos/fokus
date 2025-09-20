@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $conversation_id
@@ -46,8 +47,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Message extends Model
 {
-    use HasFactory, SoftDeletes;
-    
+    use HasFactory, SoftDeletes,HasUuids;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -61,7 +62,7 @@ class Message extends Model
         'is_system_message',
         'read_at',
     ];
-    
+
     /**
      * The attributes that should be cast.
      *
@@ -72,7 +73,7 @@ class Message extends Model
         'is_system_message' => 'boolean',
         'read_at' => 'datetime',
     ];
-    
+
     /**
      * Get the conversation that owns the message.
      */
@@ -80,7 +81,7 @@ class Message extends Model
     {
         return $this->belongsTo(Conversation::class);
     }
-    
+
     /**
      * Get the user who sent the message.
      */
@@ -88,7 +89,7 @@ class Message extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
      * Scope a query to only include messages for a specific conversation.
      */
@@ -96,7 +97,7 @@ class Message extends Model
     {
         return $query->where('conversation_id', $conversationId);
     }
-    
+
     /**
      * Scope a query to only include messages from a specific user.
      */
@@ -104,7 +105,7 @@ class Message extends Model
     {
         return $query->where('user_id', $userId);
     }
-    
+
     /**
      * Scope a query to only include system messages.
      */
@@ -112,7 +113,7 @@ class Message extends Model
     {
         return $query->where('is_system_message', true);
     }
-    
+
     /**
      * Scope a query to only include unread messages.
      */

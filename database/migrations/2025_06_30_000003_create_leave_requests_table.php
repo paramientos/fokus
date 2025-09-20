@@ -9,15 +9,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('leave_requests', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->foreignId('leave_type_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('employee_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('leave_type_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('days_requested');
             $table->text('reason');
             $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled'])->default('pending');
-            $table->foreignId('approved_by')->nullable()->constrained('users');
+            $table->foreignUuid('approved_by')->nullable()->constrained('users');
             $table->timestamp('approved_at')->nullable();
             $table->text('rejection_reason')->nullable();
             $table->timestamps();

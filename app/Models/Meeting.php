@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $project_id
@@ -62,7 +63,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Meeting extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'project_id',
@@ -171,7 +172,7 @@ class Meeting extends Model
     {
         return 'projecta-meeting-' . $this->id . '-' . str_replace(' ', '-', strtolower($this->title));
     }
-    
+
     /**
      * Check if the meeting can be joined
      */
@@ -179,7 +180,7 @@ class Meeting extends Model
     {
         return $this->status === 'scheduled' || $this->status === 'in_progress';
     }
-    
+
     /**
      * Check if the meeting is in progress
      */
@@ -187,7 +188,7 @@ class Meeting extends Model
     {
         return $this->status === 'in_progress';
     }
-    
+
     /**
      * Check if the meeting is completed
      */

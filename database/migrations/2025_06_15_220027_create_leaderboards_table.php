@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('leaderboards', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->enum('period', ['daily', 'weekly', 'monthly', 'quarterly', 'yearly', 'all_time']);
             $table->enum('category', ['overall', 'tasks', 'projects', 'collaboration', 'learning', 'quality']);
             $table->integer('total_points')->default(0);

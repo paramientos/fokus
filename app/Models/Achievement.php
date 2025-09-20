@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workspace_id
@@ -55,7 +56,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Achievement extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -125,7 +126,7 @@ class Achievement extends Model
     public function checkCriteria(User $user, array $data = []): bool
     {
         $criteria = $this->criteria;
-        
+
         // Example criteria checking logic
         foreach ($criteria as $criterion => $value) {
             switch ($criterion) {
@@ -148,7 +149,7 @@ class Achievement extends Model
                 // Add more criteria as needed
             }
         }
-        
+
         return true;
     }
 

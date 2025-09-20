@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('meetings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('created_by')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('meeting_type')->default('daily'); // daily, planning, retro, other
@@ -28,26 +28,26 @@ return new class extends Migration
         });
 
         Schema::create('meeting_attendees', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('meeting_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('meeting_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->boolean('is_required')->default(true);
             $table->string('status')->default('pending'); // pending, accepted, declined
             $table->timestamps();
         });
 
         Schema::create('meeting_notes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('meeting_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('meeting_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->text('content');
             $table->timestamps();
         });
 
         Schema::create('meeting_action_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('meeting_id')->constrained()->onDelete('cascade');
-            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('meeting_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('assigned_to')->nullable()->constrained('users')->onDelete('set null');
             $table->string('description');
             $table->date('due_date')->nullable();
             $table->string('status')->default('open'); // open, in_progress, completed

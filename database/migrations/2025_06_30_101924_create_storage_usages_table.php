@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('storage_usages', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->bigInteger('used_bytes')->default(0);
             $table->bigInteger('limit_bytes')->default(1073741824); // Default 1GB
             $table->string('plan_name')->default('basic');

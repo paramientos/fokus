@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('asset_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('icon')->default('fas.box'); // FontAwesome icon
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+
             $table->index(['workspace_id', 'is_active']);
         });
     }

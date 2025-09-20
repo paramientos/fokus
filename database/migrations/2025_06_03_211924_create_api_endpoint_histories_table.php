@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('api_endpoint_histories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('api_endpoint_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('api_endpoint_id')->constrained()->onDelete('cascade');
             $table->string('request_url');
             $table->string('request_method');
             $table->json('request_headers')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('response_headers')->nullable();
             $table->json('response_body')->nullable();
             $table->integer('execution_time_ms');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

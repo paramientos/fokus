@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('trainings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description');
             $table->enum('type', ['online', 'classroom', 'workshop', 'conference']);

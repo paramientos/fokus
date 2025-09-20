@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('git_commits', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('repository_id')->constrained('git_repositories')->onDelete('cascade');
-            $table->foreignId('branch_id')->nullable()->constrained('git_branches')->onDelete('set null');
-            $table->foreignId('task_id')->nullable()->constrained()->onDelete('set null');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('repository_id')->constrained('git_repositories')->onDelete('cascade');
+            $table->foreignUuid('branch_id')->nullable()->constrained('git_branches')->onDelete('set null');
+            $table->foreignUuid('task_id')->nullable()->constrained()->onDelete('set null');
             $table->string('hash')->unique();
             $table->text('message');
             $table->string('author_name');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('additions')->default(0);
             $table->integer('deletions')->default(0);
             $table->timestamps();
-            
+
             $table->index(['repository_id', 'hash']);
             $table->index(['task_id']);
         });

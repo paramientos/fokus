@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wiki_category_wiki_page', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('wiki_category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('wiki_page_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('wiki_category_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('wiki_page_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             // Aynı kategori-sayfa ilişkisinin tekrarlanmaması için unique index
             $table->unique(['wiki_category_id', 'wiki_page_id'], 'wiki_cat_page_unique');
         });

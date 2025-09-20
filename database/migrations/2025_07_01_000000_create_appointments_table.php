@@ -8,29 +8,24 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('appointment_slots', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id'); // Slot sahibi (genelde admin)
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
             $table->boolean('is_available')->default(true);
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('appointments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('slot_id');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('slot_id')->references('id')->on('appointment_slots')->onDelete('cascade');
             $table->string('name');
             $table->string('email');
             $table->text('note')->nullable();
-            $table->unsignedBigInteger('workspace_id')->nullable();
+            $table->foreignUuid('workspace_id')->references('id')->on('workspaces');
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
             $table->timestamps();
-
-            $table->foreign('slot_id')->references('id')->on('appointment_slots')->onDelete('cascade');
-            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('set null');
         });
     }
 

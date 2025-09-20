@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,7 +13,7 @@ use App\Models\User;
 use App\Models\Project;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workspace_id
@@ -41,6 +42,8 @@ use App\Models\Project;
  */
 class Team extends Model
 {
+    use HasUuids;
+
     protected $fillable = [
         'workspace_id', 'name', 'description', 'created_by',
     ];
@@ -64,7 +67,7 @@ class Team extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-    
+
     /**
      * Get the projects assigned to this team.
      */

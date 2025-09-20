@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->foreignId('workspace_id')->nullable()->after('user_id')->constrained();
+            $table->foreignUuid('workspace_id')->nullable()->after('user_id')->constrained();
         });
     }
 

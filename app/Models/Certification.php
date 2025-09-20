@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $workspace_id
@@ -54,6 +55,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Certification extends Model
 {
+    use HasUuids;
+
     protected $fillable = [
         'workspace_id',
         'name',
@@ -121,7 +124,7 @@ class Certification extends Model
         if (!$this->is_active) {
             return 'error';
         }
-        
+
         return $this->is_mandatory ? 'warning' : 'success';
     }
 }

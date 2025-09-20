@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('project_health_metrics', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('project_id')->constrained()->cascadeOnDelete();
             $table->date('metric_date');
             $table->decimal('health_score', 5, 2); // 0-100 arası skor
             $table->json('risk_factors'); // Risk faktörleri array

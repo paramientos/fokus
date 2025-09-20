@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('workspace_invitations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workspace_id')->constrained()->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workspace_id')->constrained()->cascadeOnDelete();
             $table->string('email');
             $table->string('role')->default('member');
             $table->string('token')->unique();
             $table->timestamp('expires_at');
             $table->timestamp('accepted_at')->nullable();
-            $table->foreignId('invited_by')->constrained('users');
+            $table->foreignUuid('invited_by')->constrained('users');
             $table->timestamps();
 
             $table->unique(['workspace_id', 'email']);

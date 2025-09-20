@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $title
@@ -61,8 +62,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Conversation extends Model
 {
-    use HasFactory, SoftDeletes;
-    
+    use HasFactory, SoftDeletes,HasUuids;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -79,7 +80,7 @@ class Conversation extends Model
         'is_private',
         'last_message_at',
     ];
-    
+
     /**
      * The attributes that should be cast.
      *
@@ -89,7 +90,7 @@ class Conversation extends Model
         'is_private' => 'boolean',
         'last_message_at' => 'datetime',
     ];
-    
+
     /**
      * Get the project that owns the conversation.
      */
@@ -97,7 +98,7 @@ class Conversation extends Model
     {
         return $this->belongsTo(Project::class);
     }
-    
+
     /**
      * Get the user who created the conversation.
      */
@@ -105,7 +106,7 @@ class Conversation extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-    
+
     /**
      * Get the messages for the conversation.
      */
@@ -113,7 +114,7 @@ class Conversation extends Model
     {
         return $this->hasMany(Message::class)->orderBy('created_at', 'asc');
     }
-    
+
     /**
      * Get the participants for the conversation.
      */
@@ -121,7 +122,7 @@ class Conversation extends Model
     {
         return $this->hasMany(ConversationParticipant::class);
     }
-    
+
     /**
      * Get the users participating in the conversation.
      */
@@ -131,7 +132,7 @@ class Conversation extends Model
             ->withPivot(['is_admin', 'last_read_at', 'joined_at', 'left_at'])
             ->withTimestamps();
     }
-    
+
     /**
      * Get the context model (Task, Sprint, etc.)
      */
@@ -139,7 +140,7 @@ class Conversation extends Model
     {
         return $this->morphTo();
     }
-    
+
     /**
      * Get the last message in the conversation.
      */
@@ -147,7 +148,7 @@ class Conversation extends Model
     {
         return $this->hasOne(Message::class)->latest();
     }
-    
+
     /**
      * Scope a query to only include conversations for a specific project.
      */
@@ -155,7 +156,7 @@ class Conversation extends Model
     {
         return $query->where('project_id', $projectId);
     }
-    
+
     /**
      * Scope a query to only include conversations for a specific context.
      */
@@ -164,7 +165,7 @@ class Conversation extends Model
         return $query->where('context_type', $contextType)
             ->where('context_id', $contextId);
     }
-    
+
     /**
      * Scope a query to only include conversations for a specific type.
      */

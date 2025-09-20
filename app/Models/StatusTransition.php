@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $project_id
@@ -29,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StatusTransition extends Model
 {
+    use HasUuids;
+
     protected $table='status_transitions';
 
     protected $fillable = ['project_id', 'from_status_id', 'to_status_id'];

@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('workflow_actions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('workflow_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('workflow_id')->constrained()->onDelete('cascade');
             $table->string('action_type');
             $table->json('action_config')->nullable();
             $table->integer('order')->default(0);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\GitRepository;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -73,7 +74,7 @@ use App\Models\GitRepository;
  */
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
 
     /**
      * The attributes that are mass assignable.
