@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string|null $goal
- * @property int $project_id
+ * @property string $project_id
  * @property \Illuminate\Support\Carbon $start_date
  * @property \Illuminate\Support\Carbon $end_date
  * @property bool $is_active

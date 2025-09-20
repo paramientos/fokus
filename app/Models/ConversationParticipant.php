@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $conversation_id
- * @property int $user_id
+ * @property string $id
+ * @property string $conversation_id
+ * @property string $user_id
  * @property bool $is_admin
  * @property \Illuminate\Support\Carbon|null $last_read_at
  * @property \Illuminate\Support\Carbon $joined_at

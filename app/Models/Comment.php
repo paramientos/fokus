@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $content
- * @property int $task_id
- * @property int $user_id
+ * @property string $task_id
+ * @property string $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Task $task

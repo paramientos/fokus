@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $user_id
+ * @property string $id
+ * @property string $user_id
  * @property \Illuminate\Support\Carbon $date
  * @property string $start_time
  * @property string $end_time

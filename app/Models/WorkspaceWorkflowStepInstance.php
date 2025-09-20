@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_workflow_instance_id
- * @property int $workspace_workflow_step_id
- * @property int|null $assigned_to
- * @property int|null $completed_by
+ * @property string $id
+ * @property string $workspace_workflow_instance_id
+ * @property string $workspace_workflow_step_id
+ * @property string|null $assigned_to
+ * @property string|null $completed_by
  * @property string $status
  * @property string|null $data
  * @property string|null $notes

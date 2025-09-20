@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- *
+ * 
  *
  * @property-read \App\Models\User|null $createdBy
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members

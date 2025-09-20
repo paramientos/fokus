@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
- * @property int $asset_category_id
- * @property int|null $assigned_to
- * @property int $created_by
+ * @property string $id
+ * @property string $workspace_id
+ * @property string $asset_category_id
+ * @property string|null $assigned_to
+ * @property string $created_by
  * @property string $name
  * @property string $asset_tag
  * @property string|null $description

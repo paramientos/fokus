@@ -9,25 +9,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $repository_id
- * @property int|null $task_id
+ * @property string $id
+ * @property string $repository_id
+ * @property string|null $task_id
  * @property int $number
  * @property string $title
  * @property string|null $description
  * @property string $status
  * @property string $source_branch
  * @property string $target_branch
- * @property int|null $author_id
+ * @property string|null $author_id
  * @property \Illuminate\Support\Carbon|null $merged_at
  * @property \Illuminate\Support\Carbon|null $closed_at
  * @property string $url
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $author
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitPullRequestComment> $comments
+ * @property-read int|null $comments_count
  * @property-read \App\Models\GitRepository $repository
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitPullRequestReview> $reviews
+ * @property-read int|null $reviews_count
  * @property-read \App\Models\Task|null $task
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest newQuery()

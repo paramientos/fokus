@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Testing\Fluent\Concerns\Has;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property string $title
  * @property string $description
  * @property string $type

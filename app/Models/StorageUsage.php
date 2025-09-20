@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property int $used_bytes
  * @property int $limit_bytes
  * @property string $plan_name

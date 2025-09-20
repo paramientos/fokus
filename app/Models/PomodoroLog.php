@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $pomodoro_session_id
+ * @property string $id
+ * @property string $pomodoro_session_id
  * @property string $type
  * @property \Illuminate\Support\Carbon $started_at
  * @property \Illuminate\Support\Carbon|null $ended_at

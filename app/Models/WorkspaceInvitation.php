@@ -8,16 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property string $email
- * @property string $role
  * @property string $token
  * @property \Illuminate\Support\Carbon $expires_at
  * @property \Illuminate\Support\Carbon|null $accepted_at
- * @property int $invited_by
+ * @property string $invited_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $invitedBy
@@ -31,7 +30,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereExpiresAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereInvitedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereWorkspaceId($value)

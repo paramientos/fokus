@@ -8,22 +8,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\GitRepository;
+use Illuminate\Support\Str;
 
 /**
  *
  *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $key
  * @property string|null $description
- * @property int $user_id
- * @property int|null $workspace_id
+ * @property string $user_id
  * @property string|null $avatar
  * @property bool $is_active
- * @property bool $is_archived
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property bool $is_archived
+ * @property string|null $workspace_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectAlert> $alerts
  * @property-read int|null $alerts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
@@ -74,7 +74,7 @@ use App\Models\GitRepository;
  */
 class Project extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -105,10 +105,9 @@ class Project extends Model
     protected static function booted(): void
     {
         static::created(function (Project $project) {
-            // Projeyi oluşturan kullanıcıyı otomatik olarak üyeler listesine ekle
             if ($project->user_id) {
                 if (!$project->teamMembers()->where('users.id', $project->user_id)->exists()) {
-                    $project->teamMembers()->attach($project->user_id, ['role' => 'admin']);
+                    $project->teamMembers()->attach($project->user_id, ['role' => 'admin', 'id' => Str::uuid()]);
                 }
             }
 
@@ -187,7 +186,7 @@ class Project extends Model
      */
     public function teamMembers()
     {
-        return $this->belongsToMany(User::class, 'project_members')
+        return $this->belongsToMany(User::class, ProjectMember::class)
             ->withPivot(['role'])
             ->withTimestamps();
     }

@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property string $name
  * @property int $annual_quota
  * @property bool $carry_over

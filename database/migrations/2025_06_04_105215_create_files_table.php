@@ -19,11 +19,14 @@ return new class extends Migration
             $table->unsignedBigInteger('size');
             $table->foreignUuid('uploaded_by')->references('id')->on('users')->onDelete('cascade');
             $table->morphs('fileable'); // proje veya görev
-            $table->foreignUuid('parent_id')->references('id')->on('files')->onDelete('cascade');
             $table->unsignedInteger('version')->default(1);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
+        });
+
+        Schema::table('files', function (Blueprint $table) {
+            $table->foreignUuid('parent_id')->references('id')->on('files')->onDelete('cascade');
         });
     }
 

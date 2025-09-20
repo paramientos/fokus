@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $color
- * @property int $project_id
+ * @property string $project_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Project $project

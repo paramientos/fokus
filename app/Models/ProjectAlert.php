@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $project_id
- * @property int|null $user_id
+ * @property string $id
+ * @property string $project_id
+ * @property string|null $user_id
  * @property string $type
  * @property string $severity
  * @property string $title
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property array<array-key, mixed>|null $metadata
  * @property bool $is_resolved
  * @property \Illuminate\Support\Carbon|null $resolved_at
- * @property int|null $resolved_by
+ * @property string|null $resolved_by
  * @property string|null $resolution_notes
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

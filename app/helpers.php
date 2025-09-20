@@ -102,7 +102,7 @@ function generate_project_key(string $name): string
     return $key;
 }
 
-function get_workspace_id(): ?int
+function get_workspace_id(): ?string
 {
-    return (int)session('workspace_id');
+    return (string)session('workspace_id');
 }

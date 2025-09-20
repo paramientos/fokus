@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Workspace;
+use Livewire\Features\SupportRedirects\Redirector;
 use Mary\Traits\Toast;
 
 new class extends Livewire\Volt\Component {
@@ -21,7 +22,7 @@ new class extends Livewire\Volt\Component {
         $this->loadWorkspaces();
     }
 
-    public function loadWorkspaces()
+    public function loadWorkspaces(): void
     {
         $this->workspaces = Workspace::where('owner_id', auth()->id())
             ->orWhereHas('members', function ($query) {
@@ -61,9 +62,10 @@ new class extends Livewire\Volt\Component {
         $this->success('Workspace başarıyla oluşturuldu.');
     }
 
-    public function selectWorkspace($workspaceId)
+    public function selectWorkspace(string $workspaceId): Redirector
     {
         session(['workspace_id' => $workspaceId]);
+
         return redirect()->route('dashboard');
     }
 }
@@ -125,7 +127,7 @@ new class extends Livewire\Volt\Component {
                         </div>
 
                         <div class="card-actions justify-end mt-4">
-                            <x-button wire:click="selectWorkspace({{ $workspace->id }})" icon="fas.check"
+                            <x-button wire:click="selectWorkspace('{{ $workspace->id }}')" icon="fas.check"
                                       class="btn-sm btn-primary">
                                 Select
                             </x-button>

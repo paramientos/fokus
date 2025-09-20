@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $conversation_id
- * @property int $user_id
+ * @property string $id
+ * @property string $conversation_id
+ * @property string $user_id
  * @property string $content
  * @property array<array-key, mixed>|null $attachments
  * @property bool $is_system_message

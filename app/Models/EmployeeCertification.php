@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $employee_id
- * @property int $certification_id
+ * @property string $id
+ * @property string $employee_id
+ * @property string $certification_id
  * @property \Illuminate\Support\Carbon $obtained_date
  * @property \Illuminate\Support\Carbon|null $expiry_date
  * @property string|null $certificate_number

@@ -12,11 +12,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $current_workspace_id
  * @property string|null $phone
  * @property string|null $date_of_birth
  * @property string|null $gender
@@ -30,12 +36,6 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $postal_code
  * @property string|null $country
  * @property string|null $emergency_contact_relationship
- * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
- * @property string|null $remember_token
- * @property int|null $current_workspace_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Achievement> $achievements
  * @property-read int|null $achievements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $assignedTasks

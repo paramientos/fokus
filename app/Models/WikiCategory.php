@@ -9,16 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $project_id
+ * @property string $id
+ * @property string $project_id
  * @property string $name
  * @property string $slug
- * @property string|null $type Kategori tipi (status, type, technical, user)
- * @property string|null $description Kategori açıklaması
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $type Kategori tipi (status, type, technical, user)
+ * @property string|null $description Kategori açıklaması
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $pages
  * @property-read int|null $pages_count
  * @property-read \App\Models\Project $project

@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $password_vault_id
+ * @property string $id
+ * @property string $password_vault_id
  * @property string $name
  * @property string $color
  * @property string $icon

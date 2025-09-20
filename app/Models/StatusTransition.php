@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $project_id
+ * @property string $id
+ * @property string $project_id
  * @property int $from_status_id
  * @property int $to_status_id
  * @property \Illuminate\Support\Carbon|null $created_at

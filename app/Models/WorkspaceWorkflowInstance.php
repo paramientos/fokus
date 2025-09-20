@@ -9,16 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property string|null $name
- * @property int $workspace_workflow_id
- * @property int $workspace_id
- * @property int $initiated_by
+ * @property string $id
+ * @property string $workspace_workflow_id
+ * @property string $workspace_id
+ * @property string $initiated_by
  * @property string $title
  * @property string|null $description
- * @property array<array-key, mixed>|null $custom_fields
  * @property string $status
  * @property string|null $data
  * @property int $current_step
@@ -26,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $completed_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $name
+ * @property array<array-key, mixed>|null $custom_fields
  * @property-read \App\Models\User $initiator
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkspaceWorkflowStepInstance> $stepInstances
  * @property-read int|null $step_instances_count

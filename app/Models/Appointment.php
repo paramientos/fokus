@@ -8,19 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $slot_id
+ * @property string $id
+ * @property string $slot_id
  * @property string $name
  * @property string $email
  * @property string|null $note
- * @property int|null $workspace_id
+ * @property string $workspace_id
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\AppointmentSlot $slot
- * @property-read \App\Models\Workspace|null $workspace
+ * @property-read \App\Models\Workspace $workspace
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Appointment query()

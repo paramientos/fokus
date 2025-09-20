@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $project_id
+ * @property string $id
+ * @property string $project_id
  * @property \Illuminate\Support\Carbon $metric_date
  * @property numeric $health_score
  * @property array<array-key, mixed> $risk_factors

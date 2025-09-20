@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $project_id
+ * @property string $id
+ * @property string $project_id
  * @property string $title
  * @property string $slug
  * @property string $content

@@ -9,16 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string|null $description
- * @property int $workspace_workflow_id
+ * @property string $workspace_workflow_id
  * @property int $order
  * @property string $step_type
  * @property array<array-key, mixed>|null $step_config
- * @property int|null $assigned_to
+ * @property string|null $assigned_to
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $started_at
  * @property \Illuminate\Support\Carbon|null $completed_at

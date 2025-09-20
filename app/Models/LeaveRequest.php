@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $employee_id
- * @property int $leave_type_id
+ * @property string $id
+ * @property string $employee_id
+ * @property string $leave_type_id
  * @property \Illuminate\Support\Carbon $start_date
  * @property \Illuminate\Support\Carbon $end_date
  * @property int $days_requested
  * @property string $reason
  * @property string $status
- * @property int|null $approved_by
+ * @property string|null $approved_by
  * @property \Illuminate\Support\Carbon|null $approved_at
  * @property string|null $rejection_reason
  * @property \Illuminate\Support\Carbon|null $created_at

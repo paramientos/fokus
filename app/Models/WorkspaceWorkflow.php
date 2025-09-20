@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string|null $description
- * @property int $workspace_id
- * @property int $created_by
+ * @property string $workspace_id
+ * @property string $created_by
  * @property string $status
  * @property bool $is_active
  * @property array<array-key, mixed>|null $settings

@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property string $name
  * @property string $description
  * @property string $icon

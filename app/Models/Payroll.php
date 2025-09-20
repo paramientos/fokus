@@ -11,11 +11,11 @@ use App\Models\Workspace;
 use App\Models\User;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $employee_id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $employee_id
+ * @property string $workspace_id
  * @property string $payroll_period
  * @property \Illuminate\Support\Carbon $pay_date
  * @property numeric $base_salary
@@ -36,7 +36,7 @@ use App\Models\User;
  * @property array<array-key, mixed>|null $deduction_details
  * @property array<array-key, mixed>|null $allowance_details
  * @property \Illuminate\Support\Carbon|null $approved_at
- * @property int|null $approved_by
+ * @property string|null $approved_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read User|null $approver

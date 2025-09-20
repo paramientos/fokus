@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Mail;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workflow_id
+ * @property string $id
+ * @property string $workflow_id
  * @property string $action_type
  * @property array<array-key, mixed>|null $action_config
  * @property int $order

@@ -8,26 +8,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $file_name
  * @property string $file_path
  * @property string $mime_type
  * @property int $size
- * @property int $uploaded_by
+ * @property string $uploaded_by
  * @property string $fileable_type
  * @property int $fileable_id
- * @property int|null $parent_id
  * @property int $version
- * @property int $is_active
+ * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $parent_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FileComment> $comments
  * @property-read int|null $comments_count
  * @property-read Model|\Eloquent $fileable
- * @property-read File|null $parent
+ * @property-read File $parent
  * @property-read \App\Models\User $uploader
  * @property-read \Illuminate\Database\Eloquent\Collection<int, File> $versions
  * @property-read int|null $versions_count

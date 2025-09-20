@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $user_id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $user_id
+ * @property string $workspace_id
  * @property string $employee_id
  * @property string|null $department
  * @property string|null $position

@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $team_id
- * @property int $project_id
- * @property int|null $assigned_by
+ * @property string $id
+ * @property string $team_id
+ * @property string $project_id
+ * @property string|null $assigned_by
  * @property \Illuminate\Support\Carbon $assigned_at
  * @property string|null $notes
  * @property \Illuminate\Support\Carbon|null $created_at

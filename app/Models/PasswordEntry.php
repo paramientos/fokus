@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $password_vault_id
- * @property int|null $password_category_id
+ * @property string $id
+ * @property string $password_vault_id
+ * @property string|null $password_category_id
  * @property string $title
  * @property string|null $username
  * @property string $password_encrypted

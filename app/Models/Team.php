@@ -13,13 +13,13 @@ use App\Models\User;
 use App\Models\Project;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
+ * @property string $id
+ * @property string $workspace_id
  * @property string $name
  * @property string|null $description
- * @property int $created_by
+ * @property string $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read User $creator

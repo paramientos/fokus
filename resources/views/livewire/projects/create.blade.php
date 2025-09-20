@@ -1,19 +1,22 @@
 <?php
 
+use App\Models\Project;
+use App\Models\Status;
+
 new class extends Livewire\Volt\Component {
     public $name = '';
     public $key = '';
     public $description = '';
     public $avatar = '';
 
-    protected $rules = [
+    protected array $rules = [
         'name' => 'required|min:3|max:255',
         'key' => 'required|min:2|max:10|unique:projects,key|alpha_num',
         'description' => 'nullable|max:1000',
         'avatar' => 'nullable|url|max:255',
     ];
 
-    public function updated($propertyName)
+    public function updated($propertyName): void
     {
         $this->validateOnly($propertyName);
     }
@@ -27,7 +30,7 @@ new class extends Livewire\Volt\Component {
     {
         $this->validate();
 
-        $project = \App\Models\Project::create([
+        $project = Project::create([
             'name' => $this->name,
             'key' => strtoupper($this->key),
             'description' => $this->description,
@@ -36,7 +39,6 @@ new class extends Livewire\Volt\Component {
             'is_active' => true,
         ]);
 
-        // Create default statuses for the project
         $statuses = [
             ['name' => 'To Do', 'slug' => 'to-do', 'color' => '#3498db', 'order' => 1],
             ['name' => 'In Progress', 'slug' => 'in-progress', 'color' => '#f39c12', 'order' => 2],
@@ -45,7 +47,7 @@ new class extends Livewire\Volt\Component {
         ];
 
         foreach ($statuses as $status) {
-            \App\Models\Status::create([
+            Status::create([
                 'name' => $status['name'],
                 'slug' => $status['slug'],
                 'color' => $status['color'],
@@ -115,7 +117,7 @@ new class extends Livewire\Volt\Component {
                     </div>
 
                     <div class="mt-8 flex justify-end">
-                        <x-button type="submit" label="Create Project" icon="o-check" class="btn-primary" />
+                        <x-button type="submit" label="Create Project" icon="o-check" class="btn-primary"/>
                     </div>
                 </form>
             </div>

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $team_id
- * @property int $user_id
+ * @property string $id
+ * @property string $team_id
+ * @property string $user_id
  * @property string $role
  * @property \Illuminate\Support\Carbon|null $joined_at
  * @property \Illuminate\Support\Carbon|null $created_at

@@ -9,15 +9,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string $filename
  * @property string $path
  * @property string $mime_type
  * @property int $size File size in bytes
  * @property string|null $description
- * @property int|null $user_id
+ * @property string|null $user_id
  * @property string $attachable_type
  * @property int $attachable_id
  * @property \Illuminate\Support\Carbon|null $created_at

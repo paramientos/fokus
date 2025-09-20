@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $meeting_id
- * @property int|null $assigned_to
+ * @property string $id
+ * @property string $meeting_id
+ * @property string|null $assigned_to
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $due_date
  * @property string $status

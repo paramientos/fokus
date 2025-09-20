@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $project_id
- * @property int $created_by
+ * @property string $id
+ * @property string $project_id
+ * @property string $created_by
  * @property string $title
  * @property string|null $description
  * @property string $meeting_type
@@ -23,10 +23,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $recurrence_pattern
  * @property string $status
  * @property string|null $meeting_link
- * @property \Illuminate\Support\Carbon|null $started_at
- * @property \Illuminate\Support\Carbon|null $ended_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $started_at
+ * @property \Illuminate\Support\Carbon|null $ended_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MeetingActionItem> $actionItems
  * @property-read int|null $action_items_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\MeetingAttendee> $attendees

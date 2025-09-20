@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $employee_id
- * @property int $reviewer_id
+ * @property string $id
+ * @property string $employee_id
+ * @property string $reviewer_id
  * @property \Illuminate\Support\Carbon $review_date
  * @property \Illuminate\Support\Carbon $next_review_date
  * @property array<array-key, mixed> $goals

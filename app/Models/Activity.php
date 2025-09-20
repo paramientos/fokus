@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $user_id
- * @property int|null $project_id
- * @property int|null $task_id
- * @property int|null $sprint_id
+ * @property string $id
+ * @property string $user_id
+ * @property string|null $project_id
+ * @property string|null $task_id
+ * @property string|null $sprint_id
  * @property string $action
  * @property string|null $description
  * @property array<array-key, mixed>|null $changes

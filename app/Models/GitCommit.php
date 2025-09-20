@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $repository_id
- * @property int|null $branch_id
- * @property int|null $task_id
+ * @property string $id
+ * @property string $repository_id
+ * @property string|null $branch_id
+ * @property string|null $task_id
  * @property string $hash
  * @property string $message
  * @property string $author_name

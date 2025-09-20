@@ -9,16 +9,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $employee_id
- * @property int $workspace_id
- * @property int|null $performance_review_id
+ * @property string $id
+ * @property string $employee_id
+ * @property string $workspace_id
+ * @property string|null $performance_review_id
  * @property string $title
  * @property string|null $description
  * @property string $type
- * @property int|null $parent_id
  * @property numeric|null $target_value
  * @property numeric $current_value
  * @property string|null $unit
@@ -31,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array<array-key, mixed>|null $milestones
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $parent_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, OkrGoal> $children
  * @property-read int|null $children_count
  * @property-read \App\Models\Employee $employee

@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $repository_id
- * @property int|null $task_id
+ * @property string $id
+ * @property string $repository_id
+ * @property string|null $task_id
  * @property string $name
  * @property string $status
- * @property int|null $created_by
+ * @property string|null $created_by
  * @property string|null $last_commit_hash
  * @property \Illuminate\Support\Carbon|null $last_commit_date
  * @property \Illuminate\Support\Carbon|null $created_at

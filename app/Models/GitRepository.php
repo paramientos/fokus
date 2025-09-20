@@ -9,23 +9,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
- * @property int $project_id
+ * @property string $id
+ * @property string $workspace_id
+ * @property string $project_id
  * @property string $name
  * @property string $provider
  * @property string $repository_url
  * @property string|null $api_token
- * @property \Illuminate\Support\Carbon|null $api_token_expires_at
- * @property string|null $refresh_token
  * @property string|null $webhook_secret
  * @property string $default_branch
  * @property string|null $branch_prefix
  * @property array<array-key, mixed>|null $settings
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $api_token_expires_at
+ * @property string|null $refresh_token
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitBranch> $branches
  * @property-read int|null $branches_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitCommit> $commits

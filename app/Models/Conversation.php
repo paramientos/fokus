@@ -11,15 +11,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
+ * 
  *
- *
- * @property int $id
+ * @property string $id
  * @property string|null $title
  * @property string|null $description
- * @property int $project_id
- * @property int $created_by
+ * @property string $project_id
+ * @property string $created_by
  * @property string $type
- * @property int|null $context_id
+ * @property string|null $context_id
  * @property string|null $context_type
  * @property bool $is_private
  * @property \Illuminate\Support\Carbon|null $last_message_at

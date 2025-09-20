@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * API Endpoint çalıştırma geçmişi modeli
  *
- * @property int $id
- * @property int $api_endpoint_id
+ * @property string $id
+ * @property string $api_endpoint_id
  * @property string $request_url
  * @property string $request_method
  * @property array<array-key, mixed>|null $request_headers
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property array<array-key, mixed>|null $response_headers
  * @property array<array-key, mixed>|null $response_body
  * @property int $execution_time_ms
- * @property int $user_id
+ * @property string $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\ApiEndpoint $apiEndpoint

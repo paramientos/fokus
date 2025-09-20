@@ -12,17 +12,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $order
+ * @property string $id
  * @property string $title
  * @property string|null $description
- * @property int $project_id
+ * @property string $project_id
  * @property int $status_id
- * @property int|null $sprint_id
- * @property int|null $user_id
- * @property int $reporter_id
+ * @property string|null $sprint_id
+ * @property string|null $user_id
+ * @property string $reporter_id
  * @property TaskType $task_type
  * @property Priority $priority
  * @property int|null $story_points
@@ -33,7 +32,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int|null $time_estimate Time estimate in minutes
  * @property \Illuminate\Support\Carbon|null $started_at When the task was started
  * @property \Illuminate\Support\Carbon|null $completed_at When the task was completed
- * @property int|null $workflow_id
+ * @property string|null $workflow_id
+ * @property int $order
+ * @property string|null $parent_id
+ * @property bool $is_subtask
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\User|null $assignee
@@ -49,10 +51,13 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read int|null $dependents_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Activity> $latestActivities
  * @property-read int|null $latest_activities_count
+ * @property-read Task|null $parent
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\User $reporter
  * @property-read \App\Models\Sprint|null $sprint
  * @property-read \App\Models\Status $status
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Task> $subtasks
+ * @property-read int|null $subtasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @property-read \App\Models\User|null $user
@@ -68,7 +73,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereDueDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereIsSubtask($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task wherePriority($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereReporterId($value)

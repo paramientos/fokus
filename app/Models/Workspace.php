@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 /**
  *
  *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string|null $description
- * @property int $owner_id
- * @property int $created_by
+ * @property string $owner_id
+ * @property string $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Channel> $channels
@@ -73,7 +74,7 @@ class Workspace extends Model
 
     public function members()
     {
-        return $this->belongsToMany(User::class, 'workspace_members')
+        return $this->belongsToMany(User::class,WorkspaceMember::class)
             ->withTimestamps()
             ->withPivot(['role']);
     }
@@ -154,6 +155,7 @@ class Workspace extends Model
             // Add creator/owner to workspace_members pivot as role 'owner' if not already.
             if (!$workspace->members()->where('user_id', $workspace->owner_id)->exists()) {
                 $workspace->members()->attach($workspace->owner_id, [
+                    'id'=> Str::uuid7()->toString(),
                     'role' => 'owner',
                 ]);
             }

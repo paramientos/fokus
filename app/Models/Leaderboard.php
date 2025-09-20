@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $workspace_id
- * @property int $user_id
+ * @property string $id
+ * @property string $workspace_id
+ * @property string $user_id
  * @property string $period
  * @property string $category
  * @property int $total_points

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->enum('type', ['objective', 'key_result'])->default('objective');
-            $table->foreignUuid('parent_id')->nullable()->constrained('okr_goals')->onDelete('cascade'); // For key results under objectives
             $table->decimal('target_value', 10, 2)->nullable(); // Numeric target for key results
             $table->decimal('current_value', 10, 2)->default(0); // Current progress
             $table->string('unit')->nullable(); // e.g., '%', 'count', 'hours'
@@ -35,7 +34,10 @@ return new class extends Migration
             $table->index(['employee_id', 'type']);
             $table->index(['workspace_id', 'status']);
             $table->index(['start_date', 'end_date']);
-            $table->index('parent_id');
+        });
+
+        Schema::table('okr_goals', function (Blueprint $table) {
+            $table->foreignUuid('parent_id')->nullable()->constrained('okr_goals')->onDelete('cascade'); // For key results under objectives
         });
     }
 

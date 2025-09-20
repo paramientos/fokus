@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * 
  *
- *
- * @property int $id
- * @property int $user_id
- * @property int|null $workspace_id
- * @property int $notification
- * @property int $sound
+ * @property string $id
+ * @property string $user_id
+ * @property string|null $workspace_id
+ * @property bool $notification
+ * @property bool $sound
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSetting newModelQuery()

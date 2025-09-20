@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * API Endpoint modeli
  *
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $url
  * @property string $method
@@ -19,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property array<array-key, mixed>|null $headers
  * @property array<array-key, mixed>|null $params
  * @property array<array-key, mixed>|null $body
- * @property int|null $task_id
- * @property int|null $project_id
- * @property int $user_id
+ * @property string|null $task_id
+ * @property string|null $project_id
+ * @property string $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ApiEndpointHistory> $history
