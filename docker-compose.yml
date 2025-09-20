@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    image: fokus-app
+    container_name: fokus-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:dummykey
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=projecta
+      - DB_USERNAME=projecta
+      - DB_PASSWORD=secret
+    depends_on:
+      - db
+    ports:
+      - "9000:9000" # php-fpm
+      - "5173:5173" # Vite hot reload (isteğe bağlı)
+
+  db:
+    image: postgres:15
+    container_name: fokus-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=projecta
+      - POSTGRES_USER=projecta
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
