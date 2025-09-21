@@ -1,6 +1,7 @@
 - A project management system similar to Jira
 - Name: Fokus
 - Project should be in English
+- Project code and comments should be in English
 - Design should be modern and futuristic and similar to projects/show.blade.php
 - For example, I want this in the project: a team holds daily meetings in the morning, then progresses tasks through this system, shares screens during dailies, etc. Now I want to handle things like Slack, Jira, retro outputs through this system so that no one needs to use any other tool
 - Laravel 12
