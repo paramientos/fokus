@@ -417,139 +417,249 @@ new class extends Livewire\Volt\Component {
         <!-- Task Details Modal -->
         @if($selectedTask)
             <div class="modal modal-open">
-                <div class="modal-box max-w-3xl">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-bold">{{ $project->key }}-{{ $selectedTaskDetails['id'] }}
-                                : {{ $selectedTaskDetails['title'] }}</h3>
-                            <div class="flex gap-2 mt-1">
-                                @if($selectedTaskDetails['task_type'])
-                                    <div class="badge">{{ ucfirst($selectedTaskDetails['task_type']) }}</div>
-                                @endif
-                                @if($selectedTaskDetails['priority'])
-                                    <div class="badge {{
-                                        $selectedTaskDetails['priority'] === 'high' ? 'badge-error' :
-                                        ($selectedTaskDetails['priority'] === 'medium' ? 'badge-warning' : 'badge-info')
-                                    }}">
-                                        {{ ucfirst($selectedTaskDetails['priority']) }}
+                <div class="modal-box max-w-4xl bg-base-100 shadow-xl border border-base-300 p-0 overflow-hidden">
+                    <!-- Task Header -->
+                    <div class="bg-primary/5 p-4 border-b border-base-300">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-primary/10 text-primary rounded-lg p-2">
+                                    @if($selectedTaskDetails['task_type'] === 'bug')
+                                        <i class="fas fa-bug text-error text-lg"></i>
+                                    @elseif($selectedTaskDetails['task_type'] === 'feature')
+                                        <i class="fas fa-star text-primary text-lg"></i>
+                                    @elseif($selectedTaskDetails['task_type'] === 'improvement')
+                                        <i class="fas fa-arrow-up text-success text-lg"></i>
+                                    @else
+                                        <i class="fas fa-tasks text-primary text-lg"></i>
+                                    @endif
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-mono bg-primary/10 text-primary px-2 py-0.5 rounded">
+                                            {{ $project->key }}-{{ $selectedTaskDetails['id'] }}
+                                        </span>
+                                        @if($selectedTaskDetails['priority'])
+                                            <div class="badge {{
+                                                $selectedTaskDetails['priority'] === 'high' ? 'badge-error' :
+                                                ($selectedTaskDetails['priority'] === 'medium' ? 'badge-warning' : 'badge-info')
+                                            }}">
+                                                @if($selectedTaskDetails['priority'] === 'high')
+                                                    <i class="fas fa-arrow-up mr-1"></i>
+                                                @elseif($selectedTaskDetails['priority'] === 'medium')
+                                                    <i class="fas fa-equals mr-1"></i>
+                                                @else
+                                                    <i class="fas fa-arrow-down mr-1"></i>
+                                                @endif
+                                                {{ ucfirst($selectedTaskDetails['priority']) }}
+                                            </div>
+                                        @endif
                                     </div>
-                                @endif
+                                    <h3 class="text-lg font-bold mt-1">{{ $selectedTaskDetails['title'] }}</h3>
+                                </div>
                             </div>
+                            <x-button 
+                                wire:click="closeTaskDetails" 
+                                icon="fas.xmark" 
+                                class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                                tooltip="Close"
+                            />
                         </div>
-                        <x-button wire:click="closeTaskDetails" icon="o-x-mark" class="btn-sm btn-ghost"/>
                     </div>
 
-                    <div class="divider"></div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="md:col-span-2">
-                            <div class="mb-6">
-                                <h4 class="font-bold mb-2">Description</h4>
-                                <div class="prose max-w-none">
-                                    {!! $selectedTaskDetails['description'] ?? '<p class="text-gray-500">No description provided.</p>' !!}
+                    <div class="p-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Left Column - Description and Comments -->
+                            <div class="md:col-span-2 space-y-6">
+                                <!-- Description -->
+                                <div class="bg-base-200/30 p-4 rounded-lg border border-base-300">
+                                    <h4 class="font-semibold flex items-center gap-2 mb-3">
+                                        <i class="fas fa-align-left text-primary"></i>
+                                        Description
+                                    </h4>
+                                    <div class="prose max-w-none">
+                                        {!! $selectedTaskDetails['description'] ?? '<p class="text-base-content/50 italic">No description provided.</p>' !!}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <h4 class="font-bold mb-2">Comments</h4>
-                                @if(!empty($selectedTaskDetails['comments']))
-                                    <div class="space-y-4">
-                                        @foreach($selectedTaskDetails['comments'] as $comment)
-                                            <div class="bg-base-200 p-3 rounded-lg">
-                                                <div class="flex justify-between items-start">
-                                                    <div class="flex items-center gap-2">
-                                                        <div class="avatar placeholder">
-                                                            <div
-                                                                class="bg-neutral text-neutral-content rounded-full w-8">
-                                                                <span
-                                                                    class="text-xs">{{ substr($comment['user']['name'] ?? 'U', 0, 1) }}</span>
+                                <!-- Comments -->
+                                <div>
+                                    <h4 class="font-semibold flex items-center gap-2 mb-3">
+                                        <i class="fas fa-comments text-primary"></i>
+                                        Comments
+                                    </h4>
+                                    
+                                    @if(!empty($selectedTaskDetails['comments']))
+                                        <div class="space-y-4">
+                                            @foreach($selectedTaskDetails['comments'] as $comment)
+                                                <div class="bg-base-200/50 p-4 rounded-lg border border-base-300 hover:bg-base-200/70 transition-colors duration-200">
+                                                    <div class="flex justify-between items-start">
+                                                        <div class="flex items-center gap-3">
+                                                            <div class="bg-primary/10 text-primary rounded-lg w-8 h-8 flex items-center justify-center">
+                                                                <span class="font-medium">{{ substr($comment['user']['name'] ?? 'U', 0, 1) }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <p class="font-medium">{{ $comment['user']['name'] ?? 'Unknown' }}</p>
+                                                                <p class="text-xs text-base-content/60">{{ \Carbon\Carbon::parse($comment['created_at'])->format('M d, Y H:i') }}</p>
                                                             </div>
                                                         </div>
-                                                        <div>
-                                                            <p class="font-medium">{{ $comment['user']['name'] ?? 'Unknown' }}</p>
-                                                            <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($comment['created_at'])->format('M d, Y H:i') }}</p>
-                                                        </div>
+                                                    </div>
+                                                    <div class="mt-3 prose max-w-none text-base-content/90">
+                                                        {!! $comment['content'] !!}
                                                     </div>
                                                 </div>
-                                                <div class="mt-2 prose max-w-none">
-                                                    {!! $comment['content'] !!}
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <p class="text-gray-500">No comments yet.</p>
-                                @endif
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="text-center py-6 text-base-content/50 bg-base-200/30 rounded-lg border border-base-300">
+                                            <i class="fas fa-comment-slash text-2xl mb-2"></i>
+                                            <p>No comments yet</p>
+                                        </div>
+                                    @endif
 
-                                @if($showCommentForm)
-                                    <div class="mt-4">
-                                        <textarea wire:model="newComment" class="textarea textarea-bordered w-full" placeholder="Write a comment..."></textarea>
-                                        <div class="flex gap-2 mt-2">
-                                            <x-button wire:click="saveComment" icon="o-paper-airplane" class="btn-sm btn-primary">Add Comment</x-button>
-                                            <x-button wire:click="hideAddComment" icon="o-x-mark" class="btn-sm btn-ghost">Cancel</x-button>
+                                    @if($showCommentForm)
+                                        <div class="mt-4 bg-base-200/30 p-4 rounded-lg border border-base-300">
+                                            <h5 class="font-medium mb-2">Add Comment</h5>
+                                            <textarea 
+                                                wire:model="newComment" 
+                                                class="textarea textarea-bordered w-full focus:border-primary/50 transition-all duration-300" 
+                                                placeholder="Write your comment here..."
+                                                rows="3"
+                                            ></textarea>
+                                            <div class="flex justify-end gap-2 mt-3">
+                                                <x-button 
+                                                    wire:click="hideAddComment" 
+                                                    icon="fas.xmark" 
+                                                    class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                                                >
+                                                    Cancel
+                                                </x-button>
+                                                <x-button 
+                                                    wire:click="saveComment" 
+                                                    icon="fas.paper-plane" 
+                                                    class="btn-sm btn-primary hover:shadow-md transition-all duration-300"
+                                                >
+                                                    Add Comment
+                                                </x-button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="mt-4">
+                                            <x-button 
+                                                wire:click="showAddComment" 
+                                                icon="fas.comment" 
+                                                class="btn-sm btn-outline hover:shadow-md transition-all duration-300"
+                                            >
+                                                Add Comment
+                                            </x-button>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Right Column - Task Details -->
+                            <div>
+                                <div class="bg-base-200/30 p-4 rounded-lg border border-base-300">
+                                    <h4 class="font-semibold flex items-center gap-2 mb-4">
+                                        <i class="fas fa-info-circle text-primary"></i>
+                                        Task Details
+                                    </h4>
+                                    
+                                    <div class="space-y-4">
+                                        <!-- Status -->
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-base-content/70">Status</span>
+                                            <span class="badge" style="background-color: {{ $selectedTaskDetails['status']['color'] ?? '#6c757d' }}; color: white;">
+                                                {{ $selectedTaskDetails['status']['name'] ?? 'None' }}
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Assignee -->
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-base-content/70">Assignee</span>
+                                            @if(isset($selectedTaskDetails['user']) && $selectedTaskDetails['user'])
+                                                <div class="flex items-center gap-2">
+                                                    <div class="bg-primary/10 text-primary rounded-lg w-6 h-6 flex items-center justify-center">
+                                                        <span class="text-xs font-medium">{{ substr($selectedTaskDetails['user']['name'], 0, 1) }}</span>
+                                                    </div>
+                                                    <span class="font-medium">{{ $selectedTaskDetails['user']['name'] }}</span>
+                                                </div>
+                                            @else
+                                                <span class="text-base-content/50 flex items-center gap-1">
+                                                    <i class="fas fa-user-slash"></i> Unassigned
+                                                </span>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Reporter -->
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-base-content/70">Reporter</span>
+                                            @if(isset($selectedTaskDetails['reporter']) && $selectedTaskDetails['reporter'])
+                                                <span class="font-medium">{{ $selectedTaskDetails['reporter']['name'] }}</span>
+                                            @else
+                                                <span class="text-base-content/50">Unknown</span>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Story Points -->
+                                        @if(isset($selectedTaskDetails['story_points']) && $selectedTaskDetails['story_points'])
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-sm text-base-content/70">Story Points</span>
+                                                <span class="text-xs bg-info/10 text-info px-2 py-0.5 rounded-full font-medium">
+                                                    {{ $selectedTaskDetails['story_points'] }} pts
+                                                </span>
+                                            </div>
+                                        @endif
+                                        
+                                        <!-- Time Tracking -->
+                                        @if(isset($selectedTaskDetails['estimated_hours']) || isset($selectedTaskDetails['spent_hours']))
+                                            <div class="border-t border-base-300 pt-3 mt-3">
+                                                <h5 class="font-medium mb-2 text-sm">Time Tracking</h5>
+                                                
+                                                @if(isset($selectedTaskDetails['estimated_hours']) && $selectedTaskDetails['estimated_hours'])
+                                                    <div class="flex items-center justify-between mb-1">
+                                                        <span class="text-xs text-base-content/70">Estimated</span>
+                                                        <span class="font-medium flex items-center gap-1">
+                                                            <i class="fas fa-clock text-xs"></i>
+                                                            {{ $selectedTaskDetails['estimated_hours'] }}h
+                                                        </span>
+                                                    </div>
+                                                @endif
+                                                
+                                                @if(isset($selectedTaskDetails['spent_hours']) && $selectedTaskDetails['spent_hours'])
+                                                    <div class="flex items-center justify-between">
+                                                        <span class="text-xs text-base-content/70">Spent</span>
+                                                        <span class="font-medium flex items-center gap-1">
+                                                            <i class="fas fa-stopwatch text-xs"></i>
+                                                            {{ $selectedTaskDetails['spent_hours'] }}h
+                                                        </span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        
+                                        <!-- Dates -->
+                                        <div class="border-t border-base-300 pt-3 mt-3">
+                                            <div class="flex items-center justify-between mb-1">
+                                                <span class="text-xs text-base-content/70">Created</span>
+                                                <span class="text-xs">{{ \Carbon\Carbon::parse($selectedTaskDetails['created_at'])->format('M d, Y') }}</span>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs text-base-content/70">Updated</span>
+                                                <span class="text-xs">{{ \Carbon\Carbon::parse($selectedTaskDetails['updated_at'])->format('M d, Y') }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                @else
-                                    <div class="mt-4">
-                                        <x-button wire:click="showAddComment" icon="o-chat-bubble-left" class="btn-sm">Add Comment</x-button>
+                                    
+                                    <div class="mt-6 pt-4 border-t border-base-300">
+                                        <x-button 
+                                            link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}"
+                                            label="View Full Details" 
+                                            icon="fas.external-link-alt" 
+                                            class="btn-sm btn-outline w-full hover:shadow-md transition-all duration-300"
+                                        />
                                     </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 class="font-bold mb-2">Details</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <p class="text-sm text-gray-500">Status</p>
-                                    <p class="font-medium">{{ $selectedTaskDetails['status']['name'] ?? 'None' }}</p>
                                 </div>
-
-                                <div>
-                                    <p class="text-sm text-gray-500">Assignee</p>
-                                    <p class="font-medium">{{ $selectedTaskDetails['user']['name'] ?? 'Unassigned' }}</p>
-                                </div>
-
-                                <div>
-                                    <p class="text-sm text-gray-500">Reporter</p>
-                                    <p class="font-medium">{{ $selectedTaskDetails['reporter']['name'] ?? 'Unknown' }}</p>
-                                </div>
-
-                                @if(isset($selectedTaskDetails['story_points']) && $selectedTaskDetails['story_points'])
-                                    <div>
-                                        <p class="text-sm text-gray-500">Story Points</p>
-                                        <p class="font-medium">{{ $selectedTaskDetails['story_points'] }}</p>
-                                    </div>
-                                @endif
-
-                                @if(isset($selectedTaskDetails['estimated_hours']) && $selectedTaskDetails['estimated_hours'])
-                                    <div>
-                                        <p class="text-sm text-gray-500">Estimated Hours</p>
-                                        <p class="font-medium">{{ $selectedTaskDetails['estimated_hours'] }}</p>
-                                    </div>
-                                @endif
-
-                                @if(isset($selectedTaskDetails['spent_hours']) && $selectedTaskDetails['spent_hours'])
-                                    <div>
-                                        <p class="text-sm text-gray-500">Spent Hours</p>
-                                        <p class="font-medium">{{ $selectedTaskDetails['spent_hours'] }}</p>
-                                    </div>
-                                @endif
-
-                                <div>
-                                    <p class="text-sm text-gray-500">Created</p>
-                                    <p class="font-medium">{{ \Carbon\Carbon::parse($selectedTaskDetails['created_at'])->format('M d, Y') }}</p>
-                                </div>
-
-                                <div>
-                                    <p class="text-sm text-gray-500">Updated</p>
-                                    <p class="font-medium">{{ \Carbon\Carbon::parse($selectedTaskDetails['updated_at'])->format('M d, Y') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-6">
-                                <x-button link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}"
-                                          label="View Full Details" icon="o-arrow-top-right-on-square" class="btn-sm btn-outline w-full"/>
                             </div>
                         </div>
                     </div>
