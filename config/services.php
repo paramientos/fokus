@@ -47,8 +47,8 @@ return [
     ],
 
     'github' => [
-        'client_id' => env('GITHUB_CLIENT_ID', 'Ov23liln6LQ6PXDdM1DE'),
-        'client_secret' => env('GITHUB_CLIENT_SECRET', '851f4976aedc2c7815d64d05f2c23015b93de61e'),
+        'client_id' => env('GITHUB_CLIENT_ID', ''),
+        'client_secret' => env('GITHUB_CLIENT_SECRET', ''),
         'redirect_uri' => env('GITHUB_REDIRECT_URI', env('APP_URL') . '/git/sso/github/callback'),
     ],
 
