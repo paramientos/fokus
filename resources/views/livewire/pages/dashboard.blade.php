@@ -37,7 +37,7 @@ new class extends Livewire\Volt\Component {
 
 <div class="min-h-screen">
     <x-slot:title>Dashboard</x-slot:title>
-    
+
     <!-- Dashboard Header with Stats -->
     <div class="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-base-300">
         <div class="max-w-7xl mx-auto p-6">
@@ -47,23 +47,23 @@ new class extends Livewire\Volt\Component {
                     <p class="text-base-content/70">Welcome to your project management hub</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <x-button 
-                        link="/workspaces" 
-                        icon="fas.building" 
+                    <x-button
+                        link="/workspaces"
+                        icon="fas.building"
                         class="btn-outline btn-primary hover:shadow-md transition-all duration-300"
                     >
                         My Workspaces
                     </x-button>
-                    <x-button 
-                        link="/projects/create" 
-                        icon="fas.plus" 
+                    <x-button
+                        link="/projects/create"
+                        icon="fas.plus"
                         class="btn-primary hover:shadow-lg transition-all duration-300"
                     >
                         Create Project
                     </x-button>
                 </div>
             </div>
-            
+
             <!-- Quick Stats -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 <div class="bg-base-100 rounded-xl shadow-md border border-base-300 p-4 flex items-center gap-4 hover:shadow-lg transition-all duration-300">
@@ -75,7 +75,7 @@ new class extends Livewire\Volt\Component {
                         <div class="text-xs text-base-content/70">Total Projects</div>
                     </div>
                 </div>
-                
+
                 <div class="bg-base-100 rounded-xl shadow-md border border-base-300 p-4 flex items-center gap-4 hover:shadow-lg transition-all duration-300">
                     <div class="p-3 rounded-full bg-success/10 text-success">
                         <i class="fas fa-tasks text-xl"></i>
@@ -85,7 +85,7 @@ new class extends Livewire\Volt\Component {
                         <div class="text-xs text-base-content/70">Total Tasks</div>
                     </div>
                 </div>
-                
+
                 <div class="bg-base-100 rounded-xl shadow-md border border-base-300 p-4 flex items-center gap-4 hover:shadow-lg transition-all duration-300">
                     <div class="p-3 rounded-full bg-info/10 text-info">
                         <i class="fas fa-flag text-xl"></i>
@@ -95,7 +95,7 @@ new class extends Livewire\Volt\Component {
                         <div class="text-xs text-base-content/70">Active Sprints</div>
                     </div>
                 </div>
-                
+
                 <div class="bg-base-100 rounded-xl shadow-md border border-base-300 p-4 flex items-center gap-4 hover:shadow-lg transition-all duration-300">
                     <div class="p-3 rounded-full bg-warning/10 text-warning">
                         <i class="fas fa-users text-xl"></i>
@@ -108,7 +108,7 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
     </div>
-    
+
     <div class="max-w-7xl mx-auto p-6">
         <!-- Main Dashboard Layout -->
         <div class="grid grid-cols-12 gap-6">
@@ -121,17 +121,17 @@ new class extends Livewire\Volt\Component {
                             <i class="fas fa-building text-primary"></i>
                             <h2 class="font-semibold">My Workspaces</h2>
                         </div>
-                        <x-button 
-                            link="/workspaces" 
-                            icon="fas.arrow-right" 
+                        <x-button
+                            link="/workspaces"
+                            icon="fas.arrow-right"
                             class="btn-xs btn-ghost hover:bg-base-200 transition-all duration-200"
                             tooltip="View All"
                         />
                     </div>
-                    
+
                     <div class="p-4">
                         <livewire:components.all-info-component />
-                        
+
                         @forelse($workspaces->take(3) as $workspace)
                             <div class="mb-3 bg-base-200/50 rounded-lg p-3 hover:bg-base-200 transition-all duration-200">
                                 <div class="flex items-center justify-between">
@@ -148,9 +148,9 @@ new class extends Livewire\Volt\Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <x-button 
-                                        link="/workspaces/{{ $workspace->id }}" 
-                                        icon="fas.arrow-right" 
+                                    <x-button
+                                        link="/workspaces/{{ $workspace->id }}"
+                                        icon="fas.arrow-right"
                                         class="btn-xs btn-ghost hover:bg-base-200 transition-all duration-200"
                                         tooltip="Open Workspace"
                                     />
@@ -163,20 +163,20 @@ new class extends Livewire\Volt\Component {
                                 </div>
                                 <h3 class="font-bold mb-2">No workspaces yet</h3>
                                 <p class="text-xs text-base-content/70 mb-3">Create your first workspace</p>
-                                <x-button 
-                                    link="/workspaces" 
-                                    icon="fas.plus" 
+                                <x-button
+                                    link="/workspaces"
+                                    icon="fas.plus"
                                     class="btn-sm btn-primary hover:shadow-md transition-all duration-300"
                                 >
                                     Create Workspace
                                 </x-button>
                             </div>
                         @endforelse
-                        
+
                         @if($workspaces->count() > 0)
                             <div class="mt-3 pt-3 border-t border-base-200 text-center">
-                                <x-button 
-                                    link="/workspaces" 
+                                <x-button
+                                    link="/workspaces"
                                     class="btn-sm btn-outline w-full hover:shadow-md transition-all duration-300"
                                 >
                                     View All Workspaces
@@ -185,7 +185,7 @@ new class extends Livewire\Volt\Component {
                         @endif
                     </div>
                 </div>
-                
+
                 @if($latestProject)
                 <!-- Activity Timeline -->
                 <div class="bg-base-100 rounded-xl shadow-md border border-base-300 overflow-hidden">
@@ -194,14 +194,14 @@ new class extends Livewire\Volt\Component {
                             <i class="fas fa-history text-primary"></i>
                             <h2 class="font-semibold">Recent Activity</h2>
                         </div>
-                        <x-button 
+                        <x-button
                             link="/projects/{{ $latestProject->id }}/activities"
-                            icon="fas.clock-rotate-left" 
+                            icon="fas.clock-rotate-left"
                             class="btn-xs btn-ghost hover:bg-base-200 transition-all duration-200"
                             tooltip="View Full Timeline"
                         />
                     </div>
-                    
+
                     <div class="p-4">
                         @if($tasks->isEmpty())
                             <div class="text-center py-4">
@@ -218,7 +218,7 @@ new class extends Livewire\Volt\Component {
                                             <i class="fas fa-tasks text-sm"></i>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <div class="font-medium truncate">{{ $task->title }}</div>
+                                            <div class="font-medium truncate">{{ get_task_with_id($task) }}</div>
                                             <div class="flex items-center gap-1">
                                                 <span class="text-xs bg-primary/10 text-primary px-1 rounded">{{ $task->project->key }}</span>
                                                 <span class="text-xs text-base-content/60">{{ $task->created_at->diffForHumans() }}</span>
@@ -232,7 +232,7 @@ new class extends Livewire\Volt\Component {
                 </div>
                 @endif
             </div>
-            
+
             <!-- Right Column - Projects and Tasks -->
             <div class="col-span-12 lg:col-span-8 space-y-6">
                 <!-- Projects and Tasks Tabs -->
@@ -251,29 +251,29 @@ new class extends Livewire\Volt\Component {
                             <span>Recommendations</span>
                         </a>
                     </div>
-                    
+
                     <div class="p-4">
                         <!-- Projects Tab Content -->
                         <div>
                             <div class="flex items-center justify-between mb-4">
                                 <h2 class="text-lg font-semibold">Recent Projects</h2>
                                 <div class="flex gap-2">
-                                    <x-button 
-                                        link="/projects/create" 
-                                        icon="fas.plus" 
+                                    <x-button
+                                        link="/projects/create"
+                                        icon="fas.plus"
                                         class="btn-sm btn-primary hover:shadow-md transition-all duration-300"
                                     >
                                         New Project
                                     </x-button>
-                                    <x-button 
-                                        link="/projects" 
-                                        icon="fas.arrow-right" 
+                                    <x-button
+                                        link="/projects"
+                                        icon="fas.arrow-right"
                                         class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
                                         tooltip="View All Projects"
                                     />
                                 </div>
                             </div>
-                            
+
                             @if($projects->isEmpty())
                                 <div class="flex flex-col items-center justify-center py-8 text-center">
                                     <div class="p-5 rounded-full bg-base-200 mb-3">
@@ -281,8 +281,8 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                     <h3 class="text-lg font-bold mb-2">No projects yet</h3>
                                     <p class="text-base-content/70 max-w-md mb-4">Create your first project to start organizing your tasks</p>
-                                    <x-button 
-                                        link="/projects/create" 
+                                    <x-button
+                                        link="/projects/create"
                                         icon="fas.plus"
                                         class="btn-primary hover:shadow-lg transition-all duration-300"
                                     >
@@ -306,11 +306,11 @@ new class extends Livewire\Volt\Component {
                                                     {{ $project->is_active ? 'Active' : 'Inactive' }}
                                                 </div>
                                             </div>
-                                            
+
                                             @if($project->description)
                                                 <p class="text-sm text-base-content/70 mb-3 line-clamp-2">{{ Str::limit($project->description, 100) }}</p>
                                             @endif
-                                            
+
                                             <div class="flex justify-between items-center mt-3 pt-2 border-t border-base-300">
                                                 <div class="flex items-center gap-3">
                                                     <span class="text-xs bg-primary/5 px-2 py-1 rounded">
@@ -321,14 +321,14 @@ new class extends Livewire\Volt\Component {
                                                     </span>
                                                 </div>
                                                 <div class="flex gap-1">
-                                                    <x-button 
-                                                        link="/projects/{{ $project->id }}" 
+                                                    <x-button
+                                                        link="/projects/{{ $project->id }}"
                                                         icon="fas.eye"
                                                         class="btn-xs btn-ghost hover:bg-base-300 transition-all duration-200"
                                                         tooltip="View Project"
                                                     />
-                                                    <x-button 
-                                                        link="/projects/{{ $project->id }}/board" 
+                                                    <x-button
+                                                        link="/projects/{{ $project->id }}/board"
                                                         icon="fas.columns"
                                                         class="btn-xs btn-ghost hover:bg-base-300 transition-all duration-200"
                                                         tooltip="Board View"
@@ -342,7 +342,7 @@ new class extends Livewire\Volt\Component {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Recent Tasks with Status Distribution -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Tasks List -->
@@ -353,7 +353,7 @@ new class extends Livewire\Volt\Component {
                                 <h2 class="font-semibold">Recent Tasks</h2>
                             </div>
                         </div>
-                        
+
                         <div class="p-4">
                             @if($tasks->isEmpty())
                                 <div class="flex flex-col items-center justify-center py-6 text-center">
@@ -372,7 +372,7 @@ new class extends Livewire\Volt\Component {
                                                 </div>
                                                 <div class="min-w-0">
                                                     <a href="/projects/{{ $task->project_id }}/tasks/{{ $task->id }}" class="font-medium text-primary hover:underline transition-colors duration-200 truncate block">
-                                                        {{ $task->title }}
+                                                        {{ get_task_with_id($task) }}
                                                     </a>
                                                     <div class="flex items-center gap-2">
                                                         <span class="text-xs text-base-content/60">{{ $task->created_at->diffForHumans() }}</span>
@@ -383,10 +383,10 @@ new class extends Livewire\Volt\Component {
                                                 <div class="badge" style="background-color: {{ $task->status->color }}; color: white;">
                                                     {{ $task->status->name }}
                                                 </div>
-                                                <x-button 
+                                                <x-button
                                                     link="/projects/{{ $task->project_id }}/tasks/{{ $task->id }}"
-                                                    icon="fas.eye" 
-                                                    class="btn-xs btn-ghost hover:bg-base-300 transition-all duration-200" 
+                                                    icon="fas.eye"
+                                                    class="btn-xs btn-ghost hover:bg-base-300 transition-all duration-200"
                                                     tooltip="View Task"
                                                 />
                                             </div>
@@ -396,7 +396,7 @@ new class extends Livewire\Volt\Component {
                             @endif
                         </div>
                     </div>
-                    
+
                     <!-- Recommended Tasks -->
                     <div class="bg-base-100 rounded-xl shadow-md border border-base-300 overflow-hidden">
                         <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-2">

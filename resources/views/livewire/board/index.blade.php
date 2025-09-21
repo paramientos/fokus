@@ -35,7 +35,7 @@ new class extends Livewire\Volt\Component {
     public function mount($project)
     {
         $this->project = \App\Models\Project::findOrFail($project);
-        $this->users = $this->project->teamMembers()->select('users.id','users.name')->get();
+        $this->users = $this->project->teamMembers()->select('users.id', 'users.name')->get();
         $this->loadFilterOptions();
         $this->loadBoard();
     }
@@ -66,9 +66,9 @@ new class extends Livewire\Volt\Component {
 
             // Apply filters
             if ($this->search) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('title', 'like', '%' . $this->search . '%')
-                      ->orWhere('description', 'like', '%' . $this->search . '%');
+                        ->orWhere('description', 'like', '%' . $this->search . '%');
                 });
             }
 
@@ -185,7 +185,7 @@ new class extends Livewire\Volt\Component {
         $this->loadBoard();
     }
 
-    public function viewTask($taskId)
+    public function viewTask(string $taskId): void
     {
         $this->selectedTask = $taskId;
         $this->selectedTaskDetails = Task::with(['user', 'reporter', 'status', 'comments.user'])
@@ -215,18 +215,21 @@ new class extends Livewire\Volt\Component {
 
     public function saveModalChanges()
     {
-        if(!$this->selectedTask) return;
+        if (!$this->selectedTask) return;
         $task = Task::find($this->selectedTask);
-        if(!$task) { $this->error('Task bulunamadı!'); return; }
+        if (!$task) {
+            $this->error('Task bulunamadı!');
+            return;
+        }
 
         // Status change
-        if($this->modalStatusId && $this->modalStatusId != $task->status_id){
-            $allowed = StatusTransition::where('project_id',$this->project->id)
-                ->where('from_status_id',$task->status_id)
-                ->where('to_status_id',$this->modalStatusId)
+        if ($this->modalStatusId && $this->modalStatusId != $task->status_id) {
+            $allowed = StatusTransition::where('project_id', $this->project->id)
+                ->where('from_status_id', $task->status_id)
+                ->where('to_status_id', $this->modalStatusId)
                 ->exists();
 
-            if(!$allowed){
+            if (!$allowed) {
                 $this->error('Bu durum geçişine izin verilmiyor!');
             } else {
                 $task->status_id = $this->modalStatusId;
@@ -234,7 +237,7 @@ new class extends Livewire\Volt\Component {
         }
 
         // Assignee change
-        if($this->modalUserId != $task->user_id){
+        if ($this->modalUserId != $task->user_id) {
             $task->user_id = $this->modalUserId ?: null;
         }
 
@@ -246,7 +249,7 @@ new class extends Livewire\Volt\Component {
 
     public function addComment()
     {
-        if(!$this->selectedTask) return;
+        if (!$this->selectedTask) return;
 
         $this->validate([
             'newComment' => 'required|string|min:1',
@@ -266,9 +269,14 @@ new class extends Livewire\Volt\Component {
     public function deleteComment($commentId)
     {
         $comment = \App\Models\Comment::find($commentId);
-        if(!$comment){ $this->error('Comment not found'); return; }
-        if($comment->user_id !== (auth()->id() ?? 0)){
-            $this->error('You cannot delete this comment'); return; }
+        if (!$comment) {
+            $this->error('Comment not found');
+            return;
+        }
+        if ($comment->user_id !== (auth()->id() ?? 0)) {
+            $this->error('You cannot delete this comment');
+            return;
+        }
         $comment->delete();
         $this->success('Comment deleted');
         $this->viewTask($this->selectedTask);
@@ -288,7 +296,8 @@ new class extends Livewire\Volt\Component {
             </div>
 
             <div class="flex gap-2">
-                <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task" icon="o-plus"
+                <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/create" label="Create Task"
+                          icon="o-plus"
                           class="btn-primary"/>
             </div>
         </div>
@@ -434,12 +443,12 @@ new class extends Livewire\Volt\Component {
                                                 }
                                             }"
                                             x-on:dragstart="onDragStart"
-                                            wire:click="viewTask({{ $task['id'] }})"
+                                            wire:click="viewTask('{{ $task['id'] }}')"
                                         >
                                             <div class="card-body p-3">
                                                 <div class="flex justify-between items-start">
                                                     <h4 class="font-medium text-sm">{{ $project->key }}
-                                                        -{{ $task['id'] }}</h4>
+                                                        -{{ $task['task_id'] }}</h4>
                                                     @if($task['priority'])
                                                         <div class="badge badge-sm {{
                                                             $task['priority'] === 'high' ? 'badge-error' :
@@ -550,7 +559,10 @@ new class extends Livewire\Volt\Component {
                                                     <span
                                                         class="text-sm text-gray-500">{{ Carbon::parse($comment['created_at'])->diffForHumans() }}</span>
                                                     @if(($comment['user']['id'] ?? null) === (auth()->id()))
-                                                        <button wire:click="deleteComment({{ $comment['id'] }})" class="btn btn-xs btn-ghost text-error"><x-icon name="o-trash"/></button>
+                                                        <button wire:click="deleteComment({{ $comment['id'] }})"
+                                                                class="btn btn-xs btn-ghost text-error">
+                                                            <x-icon name="o-trash"/>
+                                                        </button>
                                                     @endif
                                                 </div>
                                                 <p>{{ $comment['content'] }}</p>
@@ -562,7 +574,8 @@ new class extends Livewire\Volt\Component {
                                 <div class="mt-4">
                                     <x-textarea wire:model="newComment" placeholder="Add a comment..." rows="2"/>
                                     <div class="mt-2 flex justify-end">
-                                        <x-button wire:click="addComment" label="Add Comment" class="btn-primary btn-sm"/>
+                                        <x-button wire:click="addComment" label="Add Comment"
+                                                  class="btn-primary btn-sm"/>
                                     </div>
                                 </div>
                             </div>
@@ -575,11 +588,14 @@ new class extends Livewire\Volt\Component {
                                     <div class="space-y-2 max-h-60 overflow-y-auto pr-2">
                                         @foreach($selectedTaskActivities as $activity)
                                             <div class="flex items-start gap-2">
-                                                <x-icon name="{{ $activity['icon'] ?? 'fas.circle-info' }}" class="w-4 h-4 text-{{ $activity['color'] ?? 'neutral' }}"/>
+                                                <x-icon name="{{ $activity['icon'] ?? 'fas.circle-info' }}"
+                                                        class="w-4 h-4 text-{{ $activity['color'] ?? 'neutral' }}"/>
                                                 <p class="text-sm">
-                                                    <span class="font-medium">{{ $activity['user']['name'] ?? 'Unknown' }}</span>
+                                                    <span
+                                                        class="font-medium">{{ $activity['user']['name'] ?? 'Unknown' }}</span>
                                                     {{ $activity['description'] ?? $activity['action'] }}
-                                                    <span class="text-gray-500">- {{ Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
+                                                    <span
+                                                        class="text-gray-500">- {{ Carbon::parse($activity['created_at'])->diffForHumans() }}</span>
                                                 </p>
                                             </div>
                                         @endforeach
@@ -598,7 +614,9 @@ new class extends Livewire\Volt\Component {
 
                                 <div>
                                     <p class="text-sm text-gray-500">Assignee</p>
-                                    <x-select wire:model.live="modalUserId" :options="$users->select('name','id')->toArray()" empty-message="Unassigned" class="w-full mt-1"/>
+                                    <x-select wire:model.live="modalUserId"
+                                              :options="$users->select('name','id')->toArray()"
+                                              empty-message="Unassigned" class="w-full mt-1"/>
                                 </div>
 
                                 <div>
@@ -648,12 +666,14 @@ new class extends Livewire\Volt\Component {
 
                             <div class="flex flex-col gap-2">
                                 <x-button no-wire-navigate
-                                    link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit"
-                                    label="Edit Task" icon="o-pencil" class="btn-outline w-full"/>
-                                <x-button wire:click="saveModalChanges" label="Save Changes" icon="o-check" class="btn-primary w-full"/>
+                                          link="/projects/{{ $project->id }}/tasks/{{ $selectedTaskDetails['id'] }}/edit"
+                                          label="Edit Task" icon="o-pencil" class="btn-outline w-full"/>
+                                <x-button wire:click="saveModalChanges" label="Save Changes" icon="o-check"
+                                          class="btn-primary w-full"/>
                                 <x-button no-wire-navigate
-                                    link="{{ route('tasks.show', ['project' => $project, 'task' => $selectedTaskDetails['id']]) }}"
-                                    label="Open Task Page" icon="o-arrow-top-right-on-square" class="btn-outline w-full"/>
+                                          link="{{ route('tasks.show', ['project' => $project, 'task' => $selectedTaskDetails['id']]) }}"
+                                          label="Open Task Page" icon="o-arrow-top-right-on-square"
+                                          class="btn-outline w-full"/>
                             </div>
                         </div>
                     </div>

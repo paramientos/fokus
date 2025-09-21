@@ -19,6 +19,10 @@
 
 Fokus is a comprehensive project management system inspired by tools like Jira, Asana, and Trello. It aims to consolidate all team collaboration needs into a single platform, eliminating the need for multiple tools.
 
+### Development Status
+
+Fokus is currently under active development with version 1.0.0 targeted for release by the end of September 2025. After this date, you will be able to download stable releases from the releases page.
+
 ### Key Features
 
 - **Project Management**: Create and manage projects with customizable workflows

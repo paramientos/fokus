@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Project;
+use App\Models\Task;
 
 function get_real_ip(): mixed
 {
@@ -78,6 +79,13 @@ function in_array_recursive($needle, $haystack, $strict = false): bool
     }
 
     return false;
+}
+
+function get_task_with_id(Task $task): string
+{
+    $task->load('project:id,key');
+
+    return "{$task->project->key}{$task->task_id } - {$task->title}";
 }
 
 

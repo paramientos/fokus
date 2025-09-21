@@ -149,7 +149,7 @@ new class extends Livewire\Volt\Component {
             </div>
         </div>
 
-        <!-- Git Repository Integration -->
+       {{-- <!-- Git Repository Integration -->
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
                 <h2 class="card-title text-xl font-bold mb-4">Git Repository Integration</h2>
@@ -235,6 +235,6 @@ new class extends Livewire\Volt\Component {
                     @endif
                 </div>
             </div>
-        </div>
+        </div>--}}
     </div>
 </div>

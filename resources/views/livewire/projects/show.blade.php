@@ -79,12 +79,12 @@ new class extends Livewire\Volt\Component {
                             </div>
                         </div>
                     @endif
-                    
+
                     <div class="absolute -bottom-2 -right-2 bg-{{ $project->is_active ? 'success' : 'error' }} text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md border-2 border-base-100">
                         <i class="fas fa-{{ $project->is_active ? 'check' : 'times' }} text-xs"></i>
                     </div>
                 </div>
-                
+
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="text-3xl font-bold text-primary">{{ $project->name }}</h1>
@@ -102,30 +102,30 @@ new class extends Livewire\Volt\Component {
             </div>
 
             <div class="flex flex-wrap gap-2">
-                <x-button 
-                    link="/projects/{{ $project->id }}/edit" 
-                    label="Edit" 
-                    icon="fas.edit" 
+                <x-button
+                    link="/projects/{{ $project->id }}/edit"
+                    label="Edit"
+                    icon="fas.edit"
                     class="btn-outline btn-primary hover:shadow-md transition-all duration-300"
                 />
-                <x-button 
-                    link="/projects/{{ $project->id }}/board" 
-                    label="Board" 
+                <x-button
+                    link="/projects/{{ $project->id }}/board"
+                    label="Board"
                     icon="fas.columns"
                     class="btn-primary hover:shadow-lg transition-all duration-300"
                 />
                 @if($project->is_archived)
-                    <x-button 
-                        wire:click="unarchiveProject" 
-                        label="Unarchive" 
-                        icon="fas.box-archive" 
+                    <x-button
+                        wire:click="unarchiveProject"
+                        label="Unarchive"
+                        icon="fas.box-archive"
                         class="btn-warning hover:shadow-md transition-all duration-300"
                     />
                 @else
-                    <x-button 
-                        wire:click="archiveProject" 
-                        label="Archive" 
-                        icon="fas.archive" 
+                    <x-button
+                        wire:click="archiveProject"
+                        label="Archive"
+                        icon="fas.archive"
                         class="btn-error hover:shadow-md transition-all duration-300"
                     />
                 @endif
@@ -134,65 +134,65 @@ new class extends Livewire\Volt\Component {
 
         <!-- Project Navigation -->
         <div class="tabs tabs-boxed p-1 bg-base-200/50 rounded-xl mb-6 border border-base-300 overflow-x-auto flex-nowrap">
-            <a 
-                wire:click="setTab('overview')" 
+            <a
+                wire:click="setTab('overview')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'overview' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-home text-sm"></i>
                 <span>Overview</span>
             </a>
-            <a 
-                wire:click="setTab('tasks')" 
+            <a
+                wire:click="setTab('tasks')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'tasks' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-tasks text-sm"></i>
                 <span>Tasks</span>
             </a>
-            <a 
-                wire:click="setTab('sprints')" 
+            <a
+                wire:click="setTab('sprints')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'sprints' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-flag text-sm"></i>
                 <span>Sprints</span>
             </a>
-            <a 
-                wire:click="setTab('team')" 
+            <a
+                wire:click="setTab('team')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'team' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-users text-sm"></i>
                 <span>Team Members</span>
             </a>
-            <a 
-                wire:click="setTab('status')" 
-                onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" 
+            <a
+                wire:click="setTab('status')"
+                onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'status' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-list-ul text-sm"></i>
                 <span>Status</span>
             </a>
-            <a 
-                wire:click="setTab('health')" 
+            <a
+                wire:click="setTab('health')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'health' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-heartbeat text-sm"></i>
                 <span>Health</span>
             </a>
-            <a 
-                wire:click="setTab('wiki')" 
+            <a
+                wire:click="setTab('wiki')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'wiki' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-book text-sm"></i>
                 <span>Wiki</span>
             </a>
-            <a 
-                wire:click="setTab('files')" 
+            <a
+                wire:click="setTab('files')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'files' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-file text-sm"></i>
                 <span>Files</span>
             </a>
-            <a 
-                wire:click="setTab('settings')" 
+            <a
+                wire:click="setTab('settings')"
                 class="tab gap-2 transition-all duration-200 {{ $selectedTab === 'settings' ? 'tab-active' : 'hover:bg-base-300' }}"
             >
                 <i class="fas fa-cog text-sm"></i>
@@ -229,10 +229,10 @@ new class extends Livewire\Volt\Component {
                                             <i class="fas fa-file-alt text-2xl text-base-content/50"></i>
                                         </div>
                                         <p class="text-base-content/50 italic">No description provided</p>
-                                        <x-button 
-                                            link="/projects/{{ $project->id }}/edit" 
-                                            label="Add Description" 
-                                            icon="fas.edit" 
+                                        <x-button
+                                            link="/projects/{{ $project->id }}/edit"
+                                            label="Add Description"
+                                            icon="fas.edit"
                                             class="btn-sm btn-outline mt-4 hover:shadow-md transition-all duration-300"
                                         />
                                     </div>
@@ -255,7 +255,7 @@ new class extends Livewire\Volt\Component {
                                     <div class="text-3xl font-bold text-primary mb-1">{{ $project->tasks->count() }}</div>
                                     <div class="text-sm text-base-content/70">Total Tasks</div>
                                 </div>
-                                
+
                                 <div class="p-4 bg-success/5 rounded-lg text-center">
                                     <div class="text-3xl font-bold text-success mb-1">
                                         {{ $project->tasks->whereNotNull('status_id')->where(function($query) {
@@ -266,24 +266,24 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                     <div class="text-sm text-base-content/70">Completed</div>
                                 </div>
-                                
+
                                 <div class="p-4 bg-warning/5 rounded-lg text-center">
                                     <div class="text-3xl font-bold text-warning mb-1">{{ $project->sprints->where('is_active', true)->count() }}</div>
                                     <div class="text-sm text-base-content/70">Active Sprints</div>
                                 </div>
-                                
+
                                 <div class="p-4 bg-info/5 rounded-lg text-center">
                                     <div class="text-3xl font-bold text-info mb-1">{{ $project->statuses->count() }}</div>
                                     <div class="text-sm text-base-content/70">Statuses</div>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-4 pt-4 border-t border-base-200">
                                 <h3 class="font-medium mb-2 flex items-center gap-2">
                                     <i class="fas fa-tasks text-primary"></i>
                                     <span>Tasks by Status</span>
                                 </h3>
-                                
+
                                 @if($tasksByStatus->isEmpty())
                                     <p class="text-base-content/50 text-sm italic">No tasks data available</p>
                                 @else
@@ -312,9 +312,9 @@ new class extends Livewire\Volt\Component {
                                 </span>
                                 <h2 class="text-xl font-semibold">Recent Tasks</h2>
                             </div>
-                            <x-button 
-                                link="/projects/{{ $project->id }}/tasks" 
-                                icon="fas.arrow-right" 
+                            <x-button
+                                link="/projects/{{ $project->id }}/tasks"
+                                icon="fas.arrow-right"
                                 class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
                                 tooltip="View All"
                             />
@@ -328,10 +328,10 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                     <h3 class="text-xl font-bold mb-2">No tasks yet</h3>
                                     <p class="text-base-content/70 max-w-md mb-6">Create your first task to start tracking your project progress</p>
-                                    <x-button 
-                                        no-wire-navigate 
-                                        link="/projects/{{ $project->id }}/tasks/create" 
-                                        label="Create Task" 
+                                    <x-button
+                                        no-wire-navigate
+                                        link="/projects/{{ $project->id }}/tasks/create"
+                                        label="Create Task"
                                         icon="fas.plus"
                                         class="btn-primary hover:shadow-lg transition-all duration-300"
                                     />
@@ -351,11 +351,11 @@ new class extends Livewire\Volt\Component {
                                             @foreach($tasks as $task)
                                                 <tr class="hover:bg-base-200/30 transition-colors duration-150">
                                                     <td>
-                                                        <span class="font-medium">{{ $project->key }}-{{ $task->id }}</span>
+                                                        <span class="font-medium">{{ $project->key }}-{{ $task->task_id }}</span>
                                                     </td>
                                                     <td>
-                                                        <a 
-                                                            href="/projects/{{ $project->id }}/tasks/{{ $task->id }}" 
+                                                        <a
+                                                            href="/projects/{{ $project->id }}/tasks/{{ $task->id }}"
                                                             class="font-medium text-primary hover:underline transition-colors duration-200"
                                                         >
                                                             {{ $task->title }}
@@ -382,10 +382,10 @@ new class extends Livewire\Volt\Component {
                                     </table>
                                 </div>
                                 <div class="p-4 border-t border-base-200 flex justify-center">
-                                    <x-button 
-                                        no-wire-navigate 
-                                        link="/projects/{{ $project->id }}/tasks/create" 
-                                        label="Create New Task" 
+                                    <x-button
+                                        no-wire-navigate
+                                        link="/projects/{{ $project->id }}/tasks/create"
+                                        label="Create New Task"
                                         icon="fas.plus"
                                         class="btn-sm btn-outline hover:shadow-md transition-all duration-300"
                                     />
@@ -403,9 +403,9 @@ new class extends Livewire\Volt\Component {
                                 </span>
                                 <h2 class="text-xl font-semibold">Recent Sprints</h2>
                             </div>
-                            <x-button 
-                                link="/projects/{{ $project->id }}/sprints" 
-                                icon="fas.arrow-right" 
+                            <x-button
+                                link="/projects/{{ $project->id }}/sprints"
+                                icon="fas.arrow-right"
                                 class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
                                 tooltip="View All"
                             />
@@ -419,9 +419,9 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                     <h3 class="text-xl font-bold mb-2">No sprints yet</h3>
                                     <p class="text-base-content/70 max-w-md mb-6">Create your first sprint to organize your project timeline</p>
-                                    <x-button 
-                                        link="/projects/{{ $project->id }}/sprints/create" 
-                                        label="Create Sprint" 
+                                    <x-button
+                                        link="/projects/{{ $project->id }}/sprints/create"
+                                        label="Create Sprint"
                                         icon="fas.plus"
                                         class="btn-primary hover:shadow-lg transition-all duration-300"
                                     />
@@ -442,8 +442,8 @@ new class extends Livewire\Volt\Component {
                                             @foreach($sprints as $sprint)
                                                 <tr class="hover:bg-base-200/30 transition-colors duration-150">
                                                     <td>
-                                                        <a 
-                                                            href="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" 
+                                                        <a
+                                                            href="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}"
                                                             class="font-medium text-primary hover:underline transition-colors duration-200"
                                                         >
                                                             {{ $sprint->name }}
@@ -472,8 +472,8 @@ new class extends Livewire\Volt\Component {
                                                     </td>
                                                     <td>
                                                         <div class="flex gap-1">
-                                                            <x-button 
-                                                                link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}" 
+                                                            <x-button
+                                                                link="/projects/{{ $project->id }}/sprints/{{ $sprint->id }}"
                                                                 icon="fas.eye"
                                                                 class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
                                                                 tooltip="View Sprint"
@@ -486,9 +486,9 @@ new class extends Livewire\Volt\Component {
                                     </table>
                                 </div>
                                 <div class="p-4 border-t border-base-200 flex justify-center">
-                                    <x-button 
-                                        link="/projects/{{ $project->id }}/sprints/create" 
-                                        label="Create New Sprint" 
+                                    <x-button
+                                        link="/projects/{{ $project->id }}/sprints/create"
+                                        label="Create New Sprint"
                                         icon="fas.plus"
                                         class="btn-sm btn-outline hover:shadow-md transition-all duration-300"
                                     />
@@ -509,10 +509,10 @@ new class extends Livewire\Volt\Component {
                             </span>
                             <h2 class="text-xl font-semibold">Project Tasks</h2>
                         </div>
-                        <x-button 
-                            no-wire-navigate 
-                            link="/projects/{{ $project->id }}/tasks/create" 
-                            label="Create Task" 
+                        <x-button
+                            no-wire-navigate
+                            link="/projects/{{ $project->id }}/tasks/create"
+                            label="Create Task"
                             icon="fas.plus"
                             class="btn-primary hover:shadow-lg transition-all duration-300"
                         />
@@ -534,9 +534,9 @@ new class extends Livewire\Volt\Component {
                             </span>
                             <h2 class="text-xl font-semibold">Project Sprints</h2>
                         </div>
-                        <x-button 
-                            link="/projects/{{ $project->id }}/sprints/create" 
-                            label="Create Sprint" 
+                        <x-button
+                            link="/projects/{{ $project->id }}/sprints/create"
+                            label="Create Sprint"
                             icon="fas.plus"
                             class="btn-primary hover:shadow-lg transition-all duration-300"
                         />
@@ -670,12 +670,12 @@ new class extends Livewire\Volt\Component {
                                     <span class="font-medium">Name</span>
                                     <span>{{ $project->name }}</span>
                                 </div>
-                                
+
                                 <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
                                     <span class="font-medium">Key</span>
                                     <span class="badge badge-primary">{{ $project->key }}</span>
                                 </div>
-                                
+
                                 <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
                                     <span class="font-medium">Status</span>
                                     <div class="flex gap-2">
@@ -687,7 +687,7 @@ new class extends Livewire\Volt\Component {
                                         @endif
                                     </div>
                                 </div>
-                                
+
                                 <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
                                     <span class="font-medium">Created</span>
                                     <div class="flex flex-col items-end">
@@ -695,7 +695,7 @@ new class extends Livewire\Volt\Component {
                                         <span class="text-xs text-base-content/70">{{ $project->created_at->format('H:i') }}</span>
                                     </div>
                                 </div>
-                                
+
                                 <div class="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
                                     <span class="font-medium">Last Updated</span>
                                     <div class="flex flex-col items-end">
@@ -706,25 +706,25 @@ new class extends Livewire\Volt\Component {
                             </div>
 
                             <div class="flex flex-wrap gap-2 mt-6 pt-4 border-t border-base-200">
-                                <x-button 
-                                    link="/projects/{{ $project->id }}/edit" 
+                                <x-button
+                                    link="/projects/{{ $project->id }}/edit"
                                     label="Edit Project"
-                                    icon="fas.edit" 
+                                    icon="fas.edit"
                                     class="btn-outline btn-primary hover:shadow-md transition-all duration-300"
                                 />
 
                                 @if($project->is_archived)
-                                    <x-button 
-                                        wire:click="unarchiveProject" 
+                                    <x-button
+                                        wire:click="unarchiveProject"
                                         label="Unarchive Project"
-                                        icon="fas.box-archive" 
+                                        icon="fas.box-archive"
                                         class="btn-warning hover:shadow-md transition-all duration-300"
                                     />
                                 @else
-                                    <x-button 
-                                        wire:click="archiveProject" 
+                                    <x-button
+                                        wire:click="archiveProject"
                                         label="Archive Project"
-                                        icon="fas.archive" 
+                                        icon="fas.archive"
                                         class="btn-warning hover:shadow-md transition-all duration-300"
                                     />
                                 @endif
@@ -741,9 +741,9 @@ new class extends Livewire\Volt\Component {
                                 </span>
                                 <h2 class="text-xl font-semibold">Project Statuses</h2>
                             </div>
-                            <a 
-                                wire:click="setTab('status')" 
-                                onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);" 
+                            <a
+                                wire:click="setTab('status')"
+                                onclick="setTimeout(() => window.dispatchEvent(new Event('init-sortable')), 100);"
                                 class="btn btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
                             >
                                 <i class="fas fa-cog text-sm mr-1"></i>
@@ -781,7 +781,7 @@ new class extends Livewire\Volt\Component {
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        
+
                                         @if($project->statuses->isEmpty())
                                             <tr>
                                                 <td colspan="4" class="text-center py-6 text-base-content/50 italic">No statuses defined</td>
@@ -793,7 +793,7 @@ new class extends Livewire\Volt\Component {
                         </div>
                     </div>
 
-                    <!-- Git Repositories -->
+                  {{--  <!-- Git Repositories -->
                     <div class="card bg-base-100 shadow-xl border border-base-300 overflow-hidden lg:col-span-3">
                         <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
                             <span class="p-2 rounded-full bg-primary/10 text-primary">
@@ -805,7 +805,7 @@ new class extends Livewire\Volt\Component {
                             <livewire:projects.settings.git-repositories :project="$project" />
                         </div>
                     </div>
-                    
+--}}
                     <!-- Danger Zone -->
                     <div class="card bg-base-100 shadow-xl border-2 border-error/50 overflow-hidden lg:col-span-3">
                         <div class="bg-error/10 p-4 border-b border-error/30">
@@ -818,7 +818,7 @@ new class extends Livewire\Volt\Component {
                         </div>
                         <div class="card-body p-5">
                             <p class="mb-6 text-base-content/80">These actions are <b>irreversible</b> and should be used with caution.</p>
-                            
+
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <!-- Archive Project -->
                                 <div class="p-4 border border-warning/30 rounded-lg bg-warning/5 flex flex-col items-center text-center">
@@ -830,22 +830,22 @@ new class extends Livewire\Volt\Component {
                                         {{ $project->is_archived ? 'Make this project available again' : 'Hide this project from active projects list' }}
                                     </p>
                                     @if($project->is_archived)
-                                        <x-button 
-                                            wire:click="unarchiveProject" 
+                                        <x-button
+                                            wire:click="unarchiveProject"
                                             class="btn-warning btn-sm hover:shadow-md transition-all duration-300 mt-auto"
                                         >
                                             Unarchive Project
                                         </x-button>
                                     @else
-                                        <x-button 
-                                            wire:click="archiveProject" 
+                                        <x-button
+                                            wire:click="archiveProject"
                                             class="btn-warning btn-sm hover:shadow-md transition-all duration-300 mt-auto"
                                         >
                                             Archive Project
                                         </x-button>
                                     @endif
                                 </div>
-                                
+
                                 <!-- Export Data -->
                                 <div class="p-4 border border-info/30 rounded-lg bg-info/5 flex flex-col items-center text-center">
                                     <div class="p-3 rounded-full bg-info/10 mb-3">
@@ -855,15 +855,15 @@ new class extends Livewire\Volt\Component {
                                     <p class="text-sm text-base-content/70 mb-4">Download all project data in JSON format</p>
                                     <form method="POST" action="#" class="mt-auto">
                                         @csrf
-                                        <x-button 
-                                            type="submit" 
+                                        <x-button
+                                            type="submit"
                                             class="btn-info btn-sm hover:shadow-md transition-all duration-300"
                                         >
                                             Export Data
                                         </x-button>
                                     </form>
                                 </div>
-                                
+
                                 <!-- Delete Project -->
                                 <div class="p-4 border border-error/30 rounded-lg bg-error/5 flex flex-col items-center text-center">
                                     <div class="p-3 rounded-full bg-error/10 mb-3">
@@ -871,7 +871,7 @@ new class extends Livewire\Volt\Component {
                                     </div>
                                     <h3 class="font-bold mb-2">Delete Project</h3>
                                     <p class="text-sm text-base-content/70 mb-4">Permanently delete this project and all its data</p>
-                                    <x-button 
+                                    <x-button
                                         class="btn-error btn-sm hover:shadow-md transition-all duration-300 mt-auto"
                                         disabled
                                     >
