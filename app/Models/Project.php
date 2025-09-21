@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $name
@@ -28,7 +28,7 @@ use Illuminate\Support\Str;
  * @property-read int|null $alerts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conversation> $conversations
  * @property-read int|null $conversations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, GitRepository> $gitRepositories
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitRepository> $gitRepositories
  * @property-read int|null $git_repositories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProjectHealthMetric> $healthMetrics
  * @property-read int|null $health_metrics_count

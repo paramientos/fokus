@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int $order
  * @property string|null $parent_id
  * @property bool $is_subtask
+ * @property int|null $task_id
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \App\Models\User|null $assignee
@@ -83,6 +84,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereStartedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereStoryPoints($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereTaskType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereTimeEstimate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereTimeSpent($value)
@@ -120,6 +122,7 @@ class Task extends Model
         'order',
         'parent_id',
         'is_subtask',
+        'task_id',
     ];
 
     /**

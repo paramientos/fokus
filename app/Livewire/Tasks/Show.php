@@ -50,6 +50,7 @@ class Show extends Component
     public function mount(Task $task)
     {
         $this->task = $task;
+
         $this->project = $task->project;
         $this->searchResults = collect();
 
@@ -66,6 +67,7 @@ class Show extends Component
     {
         $this->availableTags = Tag::where('project_id', $this->project->id)->get();
         $this->selectedTagIds = $this->task->tags->pluck('id')->toArray();
+
     }
 
     public function addComment()

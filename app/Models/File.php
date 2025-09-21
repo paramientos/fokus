@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int $size
  * @property string $uploaded_by
  * @property string $fileable_type
- * @property int $fileable_id
+ * @property string $fileable_id
  * @property int $version
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at

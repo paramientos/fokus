@@ -259,283 +259,365 @@ new class extends Livewire\Volt\Component {
 
 ?>
 
-<div>
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <div class="flex flex-col sm:flex-row gap-4 w-full">
-            <x-input placeholder="Search tasks..." wire:model.live.debounce.300ms="search" icon="o-magnifying-glass" class="w-full"/>
-        </div>
-
-        <x-button link="/projects/{{ $project->id }}/tasks/create" icon="o-plus" class="btn-primary whitespace-nowrap">
-            Add Task
-        </x-button>
-    </div>
-
-    <!-- Advanced Filters -->
-    <div class="card bg-base-100 shadow-sm mb-6">
-        <div class="card-body p-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                <!-- Status Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Status" 
-                        wire:model.live="statusFilter"
-                        :options="$availableStatuses"
-                        option-value="id"
-                        option-label="name"
-                    />
-                </div>
-
-                <!-- Assignee Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Assignee" 
-                        wire:model.live="assigneeFilter"
-                        :options="$users"
-                        option-value="id"
-                        option-label="name"
-                    />
-                </div>
-
-                <!-- Reporter Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Reporter" 
-                        wire:model.live="reporterFilter"
-                        :options="$users"
-                        option-value="id"
-                        option-label="name"
-                    />
-                </div>
-
-                <!-- Sprint Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Sprint" 
-                        wire:model.live="sprintFilter"
-                        :options="$sprints"
-                        option-value="id"
-                        option-label="name"
-                    />
-                </div>
-
-                <!-- Priority Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Priority" 
-                        wire:model.live="priorityFilter"
-                        :options="$priorities"
-                        option-value="value"
-                        option-label="label"
-                    />
-                </div>
-
-                <!-- Task Type Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Task Type" 
-                        wire:model.live="taskTypeFilter"
-                        :options="$taskTypes"
-                        option-value="value"
-                        option-label="label"
-                    />
-                </div>
+<div class="bg-gradient-to-br from-base-100 to-base-200 min-h-screen">
+    <div class="max-w-7xl mx-auto p-6">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <div class="flex flex-col sm:flex-row gap-4 w-full">
+                <x-input 
+                    placeholder="Search tasks..." 
+                    wire:model.live.debounce.300ms="search" 
+                    icon="fas.magnifying-glass" 
+                    class="w-full shadow-sm focus:border-primary/50 transition-all duration-300"
+                />
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
-                <!-- Due Date Filter -->
-                <div>
-                    <x-select 
-                        placeholder="Due Date" 
-                        wire:model.live="dueDateFilter"
-                        :options="[
-                            ['value' => 'overdue', 'label' => 'Overdue'],
-                            ['value' => 'today', 'label' => 'Due Today'],
-                            ['value' => 'this_week', 'label' => 'This Week'],
-                            ['value' => 'next_week', 'label' => 'Next Week'],
-                            ['value' => 'no_due_date', 'label' => 'No Due Date']
-                        ]"
-                        option-value="value"
-                        option-label="label"
-                    />
-                </div>
+            <x-button 
+                link="/projects/{{ $project->id }}/tasks/create" 
+                icon="fas.plus" 
+                class="btn-primary whitespace-nowrap hover:shadow-md transition-all duration-300"
+            >
+                Add Task
+            </x-button>
+        </div>
 
-                <!-- Clear Filters -->
-                <div class="flex items-end">
+        <!-- Advanced Filters -->
+        <div class="bg-base-100 rounded-xl shadow-md border border-base-300 overflow-hidden mb-6">
+            <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                    <i class="fas fa-filter text-lg"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-semibold">Filters</h2>
+                    <p class="text-sm text-base-content/70">Refine your task list</p>
+                </div>
+                
+                <div class="ml-auto">
                     <x-button 
                         wire:click="clearFilters" 
-                        icon="o-x-mark" 
-                        class="btn-ghost btn-sm w-full"
+                        icon="fas.xmark" 
+                        class="btn-ghost btn-sm hover:bg-base-200 transition-all duration-200"
+                        tooltip="Clear all filters"
                     >
                         Clear Filters
                     </x-button>
                 </div>
             </div>
-        </div>
-    </div>
+            
+            <div class="p-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                    <!-- Status Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Status" 
+                            wire:model.live="statusFilter"
+                            :options="$availableStatuses"
+                            option-value="id"
+                            option-label="name"
+                            icon="fas.check-circle"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
+                    </div>
 
-    <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-            @if($tasks->isEmpty())
-                <div class="py-8 text-center">
-                    <x-icon name="o-clipboard-document-list" class="w-16 h-16 mx-auto text-gray-400"/>
-                    <h3 class="mt-4 text-lg font-medium text-gray-900">No tasks found</h3>
-                    <p class="mt-1 text-sm text-gray-500">Get started by creating a new task.</p>
-                    <div class="mt-6">
-                        <x-button no-wire-navigate link="{{ route('tasks.create', ['project' => $project]) }}"
-                                  label="Create Task" icon="o-plus"
-                                  class="btn-primary"/>
+                    <!-- Assignee Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Assignee" 
+                            wire:model.live="assigneeFilter"
+                            :options="$users"
+                            option-value="id"
+                            option-label="name"
+                            icon="fas.user"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
+                    </div>
+
+                    <!-- Reporter Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Reporter" 
+                            wire:model.live="reporterFilter"
+                            :options="$users"
+                            option-value="id"
+                            option-label="name"
+                            icon="fas.user-edit"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
+                    </div>
+
+                    <!-- Sprint Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Sprint" 
+                            wire:model.live="sprintFilter"
+                            :options="$sprints"
+                            option-value="id"
+                            option-label="name"
+                            icon="fas.flag"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
+                    </div>
+
+                    <!-- Priority Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Priority" 
+                            wire:model.live="priorityFilter"
+                            :options="$priorities"
+                            option-value="value"
+                            option-label="label"
+                            icon="fas.arrow-up-wide-short"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
+                    </div>
+
+                    <!-- Task Type Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Task Type" 
+                            wire:model.live="taskTypeFilter"
+                            :options="$taskTypes"
+                            option-value="value"
+                            option-label="label"
+                            icon="fas.list-check"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
                     </div>
                 </div>
-            @else
-                <div class="overflow-x-auto">
-                    <table class="table table-zebra w-full">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th class="cursor-pointer" wire:click="sortBy('id')">
-                                ID
-                                @if($sortField === 'id')
-                                    <x-icon name="{{ $sortDirection === 'asc' ? 'o-chevron-up' : 'o-chevron-down' }}"
-                                            class="w-4 h-4 inline"/>
-                                @endif
-                            </th>
-                            <th class="cursor-pointer" wire:click="sortBy('title')">
-                                Title
-                                @if($sortField === 'title')
-                                    <x-icon name="{{ $sortDirection === 'asc' ? 'o-chevron-up' : 'o-chevron-down' }}"
-                                            class="w-4 h-4 inline"/>
-                                @endif
-                            </th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Assignee</th>
-                            <th>Sprint</th>
-                            <th class="cursor-pointer" wire:click="sortBy('created_at')">
-                                Created
-                                @if($sortField === 'created_at')
-                                    <x-icon name="{{ $sortDirection === 'asc' ? 'o-chevron-up' : 'o-chevron-down' }}"
-                                            class="w-4 h-4 inline"/>
-                                @endif
-                            </th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody x-data
-                               x-init="
-                                    Sortable.create($el, {
-                                        animation: 150,
-                                        handle: '.drag-handle',
-                                        onEnd: function (evt) {
-                                            const ids = Array.from(evt.to.children).map(row => row.dataset.id);
-                                            $wire.reorder(ids);
-                                        }
-                                    });
-                               "
-                        >
-                        @foreach($tasks as $task)
-                            <tr data-id="{{ $task->id }}">
-                                <td class="drag-handle cursor-move select-none text-gray-400"><x-icon name="o-bars-3" class="w-4 h-4"/></td>
-                                <td>{{ $project->key }}-{{ $task->id }}</td>
-                                <td>
-                                    <a href="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}"
-                                       class="link link-hover font-medium">
-                                        {{ $task->title }}
-                                    </a>
-                                </td>
-                                <td>
-                                    @if($editingTaskId === $task->id)
-                                        <x-select
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mt-4">
+                    <!-- Due Date Filter -->
+                    <div>
+                        <x-select 
+                            placeholder="Due Date" 
+                            wire:model.live="dueDateFilter"
+                            :options="[
+                                ['value' => 'overdue', 'label' => 'Overdue'],
+                                ['value' => 'today', 'label' => 'Due Today'],
+                                ['value' => 'this_week', 'label' => 'This Week'],
+                                ['value' => 'next_week', 'label' => 'Next Week'],
+                                ['value' => 'no_due_date', 'label' => 'No Due Date']
+                            ]"
+                            option-value="value"
+                            option-label="label"
+                            icon="fas.calendar-days"
+                            class="w-full focus:border-primary/50 transition-all duration-300"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-base-100 rounded-xl shadow-xl border border-base-300 overflow-hidden">
+            <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                    <i class="fas fa-list-check text-lg"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-semibold">Task List</h2>
+                    <p class="text-sm text-base-content/70">{{ $tasks->total() }} tasks found</p>
+                </div>
+            </div>
+            
+            <div class="p-0">
+                @if($tasks->isEmpty())
+                    <div class="flex flex-col items-center justify-center py-16 px-4">
+                        <div class="p-6 rounded-full bg-base-200/50 mb-4">
+                            <i class="fas fa-clipboard-list text-5xl text-base-content/30"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-base-content/80 mb-2">No tasks found</h3>
+                        <p class="text-base-content/60 text-center max-w-md mb-8">No tasks match your current filters or there are no tasks in this project yet.</p>
+                        <x-button 
+                            no-wire-navigate 
+                            link="{{ route('tasks.create', ['project' => $project]) }}"
+                            label="Create Task" 
+                            icon="fas.plus"
+                            class="btn-primary hover:shadow-md transition-all duration-300"
+                        />
+                    </div>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                            <thead class="bg-base-200/50">
+                                <tr>
+                                    <th class="w-8"></th>
+                                    <th class="cursor-pointer hover:bg-base-200/80 transition-colors duration-200" wire:click="sortBy('id')">
+                                        <div class="flex items-center gap-1">
+                                            <span>ID</span>
+                                            @if($sortField === 'id')
+                                                <i class="fas fa-{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }} text-xs text-primary"></i>
+                                            @endif
+                                        </div>
+                                    </th>
+                                    <th class="cursor-pointer hover:bg-base-200/80 transition-colors duration-200" wire:click="sortBy('title')">
+                                        <div class="flex items-center gap-1">
+                                            <span>Title</span>
+                                            @if($sortField === 'title')
+                                                <i class="fas fa-{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }} text-xs text-primary"></i>
+                                            @endif
+                                        </div>
+                                    </th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Assignee</th>
+                                    <th>Sprint</th>
+                                    <th class="cursor-pointer hover:bg-base-200/80 transition-colors duration-200" wire:click="sortBy('created_at')">
+                                        <div class="flex items-center gap-1">
+                                            <span>Created</span>
+                                            @if($sortField === 'created_at')
+                                                <i class="fas fa-{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }} text-xs text-primary"></i>
+                                            @endif
+                                        </div>
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody x-data
+                                   x-init="
+                                        Sortable.create($el, {
+                                            animation: 150,
+                                            handle: '.drag-handle',
+                                            onEnd: function (evt) {
+                                                const ids = Array.from(evt.to.children).map(row => row.dataset.id);
+                                                $wire.reorder(ids);
+                                            }
+                                        });
+                                   "
+                            >
+                            @foreach($tasks as $task)
+                                <tr data-id="{{ $task->id }}" class="hover:bg-base-200/30 transition-colors duration-150">
+                                    <td class="drag-handle cursor-move select-none text-base-content/30 hover:text-base-content/70 transition-colors duration-200">
+                                        <i class="fas fa-grip-vertical"></i>
+                                    </td>
+                                    <td>
+                                        <span class="text-xs font-mono bg-primary/10 text-primary px-2 py-1 rounded">
+                                            {{ $project->key }}-{{ $task->task_id ?? $task->id }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}"
+                                           class="font-medium text-primary hover:underline transition-colors duration-200">
+                                            {{ $task->title }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @if($editingTaskId === $task->id)
+                                            <x-select
                                                 wire:model="editingTaskStatus"
                                                 :options="$availableStatuses"
-                                                class="w-full"
-                                        />
-                                    @else
-                                        @if($task->status)
-                                            <div class="badge cursor-pointer"
-                                                 style="background-color: {{ $task->status->color }}"
-                                                 wire:click="editTask({{ $task->id }})">
-                                                {{ $task->status->name }}
+                                                option-value="id"
+                                                option-label="name"
+                                                class="w-full focus:border-primary/50 transition-all duration-300"
+                                            />
+                                        @else
+                                            @if($task->status)
+                                                <div class="badge cursor-pointer hover:shadow-sm transition-all duration-200"
+                                                     style="background-color: {{ $task->status->color }}; color: white;"
+                                                     wire:click="editTask({{ $task->id }})">
+                                                    {{ $task->status->name }}
+                                                </div>
+                                            @else
+                                                <span class="text-base-content/50">-</span>
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($task->priority)
+                                            <div class="badge {{
+                                                    $task->priority->value === 'high' ? 'badge-error' :
+                                                    ($task->priority->value === 'medium' ? 'badge-warning' : 'badge-info')
+                                                }}">
+                                                @if($task->priority->value === 'high')
+                                                    <i class="fas fa-arrow-up mr-1"></i>
+                                                @elseif($task->priority->value === 'medium')
+                                                    <i class="fas fa-equals mr-1"></i>
+                                                @else
+                                                    <i class="fas fa-arrow-down mr-1"></i>
+                                                @endif
+                                                {{ ucfirst($task->priority->label()) }}
                                             </div>
                                         @else
-                                            <span class="text-gray-500">-</span>
+                                            <span class="text-base-content/50">-</span>
                                         @endif
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($task->priority)
-                                        <div class="badge {{
-                                                $task->priority->value === 'high' ? 'badge-error' :
-                                                ($task->priority->value === 'medium' ? 'badge-warning' : 'badge-info')
-                                            }}">
-                                            {{ ucfirst($task->priority->label()) }}
-                                        </div>
-                                    @else
-                                        <span class="text-gray-500">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($editingTaskId === $task->id)
-                                        <x-select
+                                    </td>
+                                    <td>
+                                        @if($editingTaskId === $task->id)
+                                            <x-select
                                                 wire:model="editingTaskUser"
                                                 :options="collect($users)->pluck('name', 'id')->toArray()"
                                                 empty-message="Unassigned"
-                                                class="w-full"
-                                        />
-                                    @else
-                                        <div class="cursor-pointer" wire:click="editTask({{ $task->id }})">
-                                            @if($task->user)
-                                                <div class="flex items-center gap-2">
-                                                    <div class="avatar placeholder">
-                                                        <div class="bg-neutral text-neutral-content rounded-full w-6">
-                                                            <span>{{ substr($task->user->name, 0, 1) }}</span>
+                                                class="w-full focus:border-primary/50 transition-all duration-300"
+                                                icon="fas.user"
+                                            />
+                                        @else
+                                            <div class="cursor-pointer hover:bg-base-200/50 rounded-lg px-2 py-1 transition-all duration-200" wire:click="editTask({{ $task->id }})">
+                                                @if($task->user)
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="bg-primary/10 text-primary rounded-lg w-6 h-6 flex items-center justify-center">
+                                                            <span class="text-xs font-medium">{{ substr($task->user->name, 0, 1) }}</span>
                                                         </div>
+                                                        <span>{{ $task->user->name }}</span>
                                                     </div>
-                                                    <span>{{ $task->user->name }}</span>
-                                                </div>
+                                                @else
+                                                    <span class="text-base-content/50 flex items-center gap-1">
+                                                        <i class="fas fa-user-slash"></i> Unassigned
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($task->sprint)
+                                            <div class="badge badge-outline border-primary/30 text-primary/80 hover:border-primary hover:text-primary transition-all duration-200">
+                                                <i class="fas fa-flag mr-1 text-xs"></i> {{ $task->sprint->name }}
+                                            </div>
+                                        @else
+                                            <span class="text-base-content/50">-</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $task->created_at->format('M d, Y') }}</td>
+                                    <td>
+                                        <div class="flex gap-2">
+                                            @if($editingTaskId === $task->id)
+                                                <x-button 
+                                                    wire:click="saveChanges" 
+                                                    icon="fas.check" 
+                                                    class="btn-sm btn-success hover:shadow-sm transition-all duration-200"
+                                                    tooltip="Save changes"
+                                                />
+                                                <x-button 
+                                                    wire:click="cancelEdit" 
+                                                    icon="fas.xmark" 
+                                                    class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200"
+                                                    tooltip="Cancel"
+                                                />
                                             @else
-                                                <span class="text-gray-500">Unassigned</span>
+                                                <x-button
+                                                    link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}"
+                                                    icon="fas.eye"
+                                                    class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200" 
+                                                    tooltip="View task details"
+                                                />
+                                                <x-button 
+                                                    no-wire-navigate
+                                                    link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
+                                                    icon="fas.pen" 
+                                                    class="btn-sm btn-ghost hover:bg-base-200 transition-all duration-200" 
+                                                    tooltip="Edit task"
+                                                />
                                             @endif
                                         </div>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($task->sprint)
-                                        <div class="badge badge-outline">
-                                            {{ $task->sprint->name }}
-                                        </div>
-                                    @else
-                                        <span class="text-gray-500">-</span>
-                                    @endif
-                                </td>
-                                <td>{{ $task->created_at->format('M d, Y') }}</td>
-                                <td>
-                                    <div class="flex gap-2">
-                                        @if($editingTaskId === $task->id)
-                                            <x-button wire:click="saveChanges" icon="o-check" class="btn-sm btn-success"
-                                                      tooltip="Save"/>
-                                            <x-button wire:click="cancelEdit" icon="o-x-mark" class="btn-sm btn-ghost"
-                                                      tooltip="Cancel"/>
-                                        @else
-                                            <x-button
-                                                    link="{{ route('tasks.show', ['project' => $project, 'task' => $task]) }}"
-                                                    icon="o-eye"
-                                                    class="btn-sm btn-ghost" tooltip="View"/>
-                                            <x-button no-wire-navigate
-                                                      link="{{ route('tasks.edit', ['project' => $project, 'task' => $task]) }}"
-                                                      icon="o-pencil" class="btn-sm btn-ghost" tooltip="Edit"/>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div class="mt-4">
-                    {{ $tasks->links() }}
-                </div>
-            @endif
+                    <div class="p-4 border-t border-base-300">
+                        {{ $tasks->links() }}
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>

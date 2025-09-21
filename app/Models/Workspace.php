@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
- *
+ * 
  *
  * @property string $id
  * @property string $name

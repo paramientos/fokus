@@ -1,243 +1,357 @@
-<div>
-    <x-slot:title>{{ $project->key }}-{{ $task->id }}: {{ $task->title }}</x-slot:title>
+<div class="bg-gradient-to-br from-base-100 to-base-200 min-h-screen">
+    <x-slot:title>{{ $project->key }}-{{ $task->task_id }}: {{ $task->title }}</x-slot:title>
 
-    <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex items-center gap-2">
-                <x-button link="/projects/{{ $project->id }}/tasks" icon="o-arrow-left" class="btn-ghost btn-sm"/>
-                <h1 class="text-2xl font-bold text-primary">{{ $project->key }}-{{ $task->id }}: {{ $task->title }}</h1>
+    <div class="max-w-7xl mx-auto p-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div class="flex items-center gap-3">
+                <x-button 
+                    link="/projects/{{ $project->id }}/tasks" 
+                    icon="fas.arrow-left" 
+                    class="btn-ghost btn-sm hover:bg-base-200 transition-all duration-200"
+                    tooltip="Back to Tasks"
+                />
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xs font-mono bg-primary/10 text-primary px-2 py-1 rounded">
+                            {{ $project->key }}-{{ $task->task_id }}
+                        </span>
+                        @if($task->status)
+                            <div class="badge" style="background-color: {{ $task->status->color }}; color: white;">
+                                {{ $task->status->name }}
+                            </div>
+                        @endif
+                        @if($task->priority)
+                            <div class="badge {{
+                                $task->priority->value === 'high' ? 'badge-error' :
+                                ($task->priority->value === 'medium' ? 'badge-warning' : 'badge-info')
+                            }}">
+                                @if($task->priority->value === 'high')
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                @elseif($task->priority->value === 'medium')
+                                    <i class="fas fa-equals mr-1"></i>
+                                @else
+                                    <i class="fas fa-arrow-down mr-1"></i>
+                                @endif
+                                {{ ucfirst($task->priority->label()) }}
+                            </div>
+                        @endif
+                    </div>
+                    <h1 class="text-2xl font-bold text-primary">{{ $task->title }}</h1>
+                </div>
             </div>
 
-            <div class="flex gap-2">
-                <x-button no-wire-navigate link="/projects/{{ $project->id }}/tasks/{{ $task->id }}/edit" label="Edit" icon="o-pencil"
-                          class="btn-outline"/>
+            <div class="flex flex-wrap gap-2">
+                <x-button 
+                    no-wire-navigate 
+                    link="/projects/{{ $project->id }}/tasks/{{ $task->id }}/edit" 
+                    label="Edit Task" 
+                    icon="fas.pen" 
+                    class="btn-outline btn-sm hover:bg-base-200 transition-all duration-200"
+                    tooltip="Edit this task"
+                />
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="md:col-span-2">
                 <!-- Tabs -->
-                <x-tabs selected="details">
-                    <x-tab name="details" label="Details" icon="o-document-text" wire:click="setActiveTab('details')">
-
-                        <!-- Task Description -->
-                        <div class="card bg-base-100 shadow-xl mb-6">
-                            <div class="card-body">
-                                <h2 class="card-title mb-4">Description</h2>
-                                <x-markdown-viewer :content="$task->description" />
-                            </div>
-                        </div>
+                <div class="bg-base-100 rounded-xl shadow-xl border border-base-300 overflow-hidden mb-6">
+                    <x-tabs selected="details" class="p-0">
+                        <x-tab name="details" label="Details" icon="fas.file-lines" wire:click="setActiveTab('details')">
+                            <!-- Task Description -->
+                            <div class="bg-base-100 p-6">
+                                <div class="mb-6">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                            <i class="fas fa-align-left"></i>
+                                        </span>
+                                        <h2 class="text-xl font-semibold">Description</h2>
+                                    </div>
+                                    <div class="prose max-w-none">
+                                        <x-markdown-viewer :content="$task->description" />
+                                    </div>
+                                </div>
 
                         <!-- Comments -->
-                        <div class="card bg-base-100 shadow-xl">
-                            <div class="card-body">
-                                <h2 class="card-title">Comments</h2>
+                        <div class="mt-8">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-comments"></i>
+                                </span>
+                                <h2 class="text-xl font-semibold">Comments</h2>
+                            </div>
 
-                                <div class="space-y-6 mt-4">
-                                    @forelse($task->comments as $comment)
-                                        <div class="flex gap-4">
-                                            <div class="avatar">
-                                                <div class="w-10 h-10 rounded-full">
-                                                    @if($comment->user && $comment->user->avatar)
-                                                        <img src="{{ $comment->user->avatar }}"
-                                                             alt="{{ $comment->user->name }}"/>
-                                                    @else
-                                                        <div
-                                                            class="bg-primary text-white flex items-center justify-center">
-                                                            {{ $comment->user ? substr($comment->user->name, 0, 1) : 'U' }}
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="flex-1">
-                                                <div class="flex justify-between items-center">
-                                                    <div
-                                                        class="font-medium">{{ $comment->user->name ?? 'Unknown User' }}</div>
-                                                    <div class="text-xs text-gray-500">
-                                                        {{ $comment->created_at->format('M d, Y H:i') }}
+                            <div class="space-y-6">
+                                @forelse($task->comments as $comment)
+                                    <div class="flex gap-4 bg-base-200/30 p-4 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                        <div class="avatar">
+                                            <div class="w-10 h-10 rounded-full">
+                                                @if($comment->user && $comment->user->avatar)
+                                                    <img src="{{ $comment->user->avatar }}"
+                                                         alt="{{ $comment->user->name }}"/>
+                                                @else
+                                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10 flex items-center justify-center">
+                                                        <span class="font-medium">{{ $comment->user ? substr($comment->user->name, 0, 1) : 'U' }}</span>
                                                     </div>
-                                                    @if($comment->user_id === auth()->id())
-                                                        <button wire:click="deleteComment({{ $comment->id }})" class="btn btn-xs btn-ghost text-error"><x-icon name="o-trash"/></button>
-                                                    @endif
-                                                </div>
-                                                <div class="mt-2">
-                                                    {{ $comment->content }}
-                                                </div>
+                                                @endif
                                             </div>
                                         </div>
-                                    @empty
-                                        <div class="text-center py-4">
-                                            <p class="text-gray-500">No comments yet.</p>
+                                        <div class="flex-1">
+                                            <div class="flex flex-col sm:flex-row justify-between sm:items-center">
+                                                <div class="font-medium text-primary/90">{{ $comment->user->name ?? 'Unknown User' }}</div>
+                                                <div class="text-xs text-base-content/50 flex items-center gap-1">
+                                                    <i class="fas fa-clock"></i>
+                                                    <span>{{ $comment->created_at->format('M d, Y H:i') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 text-base-content/80">
+                                                {{ $comment->content }}
+                                            </div>
+                                            @if($comment->user_id === auth()->id())
+                                                <div class="mt-2 flex justify-end">
+                                                    <button 
+                                                        wire:click="deleteComment({{ $comment->id }})" 
+                                                        class="text-xs text-error hover:text-error/80 flex items-center gap-1 transition-colors duration-200"
+                                                    >
+                                                        <i class="fas fa-trash"></i>
+                                                        <span>Delete</span>
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endforelse
-
-                                    <div class="mt-6">
-                                        <form wire:submit="addComment">
-                                            <div>
-                                                <x-textarea wire:model="newComment" placeholder="Add a comment..."
-                                                            rows="3"/>
-                                                @error('newComment')
-                                                <div class="text-error text-sm mt-1">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mt-2 flex justify-end">
-                                                <x-button type="submit" label="Add Comment" icon="o-paper-airplane"
-                                                          class="btn-primary"/>
-                                            </div>
-                                        </form>
                                     </div>
+                                @empty
+                                    <div class="flex flex-col items-center justify-center py-8 text-base-content/50 bg-base-200/30 rounded-lg border border-base-300">
+                                        <i class="fas fa-comments text-3xl mb-2 text-base-content/30"></i>
+                                        <p>No comments yet</p>
+                                        <p class="text-xs mt-1">Be the first to comment on this task</p>
+                                    </div>
+                                @endforelse
+
+                                <div class="mt-6 bg-base-200/30 p-4 rounded-lg border border-base-300">
+                                    <form wire:submit="addComment">
+                                        <div>
+                                            <x-textarea 
+                                                wire:model="newComment" 
+                                                placeholder="Add a comment..." 
+                                                rows="3"
+                                                class="w-full focus:border-primary/50 transition-all duration-300"
+                                            />
+                                            @error('newComment')
+                                                <div class="text-error text-sm mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="mt-3 flex justify-end">
+                                            <x-button 
+                                                type="submit" 
+                                                label="Add Comment" 
+                                                icon="fas.paper-plane"
+                                                class="btn-primary hover:shadow-md transition-all duration-300"
+                                            />
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </x-tab>
 
                     <x-tab name="history" label="History" icon="fas.clock-rotate-left"
                            wire:click="setActiveTab('history')">
                         <!-- Timeline -->
-                        <div class="card bg-base-100 shadow-xl">
-                            <div class="card-body">
-                                <div class="flex items-center gap-4 mb-6">
-                                    <x-icon name="fas.clock-rotate-left" class="w-8 h-8 text-primary"/>
-                                    <div>
-                                        <h2 class="text-xl font-bold">Activity Timeline</h2>
-                                        <p class="text-gray-500">All changes and updates for this task</p>
-                                    </div>
+                        <div class="bg-base-100 p-6">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-clock-rotate-left"></i>
+                                </span>
+                                <div>
+                                    <h2 class="text-xl font-semibold">Activity Timeline</h2>
+                                    <p class="text-sm text-base-content/70">All changes and updates for this task</p>
                                 </div>
-
-                                @if($task->activities->isEmpty())
-                                    <div class="py-10 text-center">
-                                        <x-icon name="fas.clock" class="w-16 h-16 mx-auto text-gray-400"/>
-                                        <h3 class="mt-4 text-lg font-medium text-gray-900">No activity yet</h3>
-                                        <p class="mt-1 text-sm text-gray-500">Activities will appear here when changes
-                                            are made to this task.</p>
-                                    </div>
-                                @else
-                                    <div class="relative">
-                                        <!-- Timeline line -->
-                                        <div class="absolute left-5 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-
-                                        <!-- Timeline items -->
-                                        <ul class="space-y-6 relative">
-                                            @foreach($task->latestActivities as $activity)
-                                                <li class="ml-10 relative">
-                                                    <!-- Timeline dot with icon -->
-                                                    <div
-                                                        class="absolute -left-10 mt-1.5 flex items-center justify-center w-8 h-8 rounded-full border-4 border-white {{ $loop->first ? 'bg-primary' : 'bg-base-200' }}">
-                                                        <x-icon name="{{ $activity->icon }}"
-                                                                class="w-4 h-4 {{ $loop->first ? 'text-white' : 'text-gray-500' }}"/>
-                                                    </div>
-
-                                                    <!-- Timeline content -->
-                                                    <div
-                                                        class="card bg-base-100 border border-gray-100 hover:shadow-md transition-shadow">
-                                                        <div class="card-body p-4">
-                                                            <div class="flex justify-between items-start">
-                                                                <div class="flex items-center gap-3">
-                                                                    @if($activity->user)
-                                                                        <div class="avatar">
-                                                                            <div class="w-8 h-8 rounded-full">
-                                                                                @if($activity->user->avatar)
-                                                                                    <img
-                                                                                        src="{{ $activity->user->avatar }}"
-                                                                                        alt="{{ $activity->user->name }}"/>
-                                                                                @else
-                                                                                    <div
-                                                                                        class="bg-primary text-white flex items-center justify-center">
-                                                                                        {{ substr($activity->user->name, 0, 1) }}
-                                                                                    </div>
-                                                                                @endif
-                                                                            </div>
-                                                                        </div>
-                                                                        <span
-                                                                            class="font-medium">{{ $activity->user->name }}</span>
-                                                                    @else
-                                                                        <span class="font-medium">System</span>
-                                                                    @endif
-                                                                </div>
-                                                                <div class="text-xs text-gray-500">
-                                                                    <span
-                                                                        title="{{ $activity->created_at->format('Y-m-d H:i:s') }}">
-                                                                        {{ $activity->created_at->diffForHumans() }}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-
-                                                            <p class="mt-2">{{ $activity->description }}</p>
-
-                                                            @if($activity->changes)
-                                                                <div class="mt-3 p-3 bg-base-200 rounded-lg text-sm">
-                                                                    @foreach($activity->changes as $field => $change)
-                                                                        <div class="mb-1">
-                                                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $field)) }}:</span>
-                                                                            <span
-                                                                                class="line-through text-error">{{ $change['from'] }}</span>
-                                                                            <x-icon name="fas.arrow-right"
-                                                                                    class="w-3 h-3 inline mx-1"/>
-                                                                            <span
-                                                                                class="text-success">{{ $change['to'] }}</span>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
                             </div>
+
+                            @if($task->activities->isEmpty())
+                                <div class="flex flex-col items-center justify-center py-12 text-base-content/50 bg-base-200/30 rounded-lg border border-base-300">
+                                    <i class="fas fa-history text-4xl mb-3 text-base-content/30"></i>
+                                    <h3 class="text-lg font-medium text-base-content/80">No activity yet</h3>
+                                    <p class="mt-1 text-sm text-center max-w-md">Activities will appear here when changes are made to this task.</p>
+                                </div>
+                            @else
+                                <div class="relative">
+                                    <!-- Timeline line -->
+                                    <div class="absolute left-5 top-0 bottom-0 w-0.5 bg-primary/10"></div>
+
+                                    <!-- Timeline items -->
+                                    <ul class="space-y-6 relative">
+                                        @foreach($task->latestActivities as $activity)
+                                            <li class="ml-10 relative">
+                                                <!-- Timeline dot with icon -->
+                                                <div class="absolute -left-10 mt-1.5 flex items-center justify-center w-8 h-8 rounded-full border-4 border-base-100 {{ $loop->first ? 'bg-primary' : 'bg-base-200' }}">
+                                                    <i class="{{ str_replace('o-', 'fas fa-', $activity->icon) }} {{ $loop->first ? 'text-white' : 'text-base-content/60' }}"></i>
+                                                </div>
+
+                                                <!-- Timeline content -->
+                                                <div class="bg-base-100 border border-base-300 rounded-xl hover:shadow-md transition-all duration-200">
+                                                    <div class="p-4">
+                                                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                                                            <div class="flex items-center gap-3">
+                                                                @if($activity->user)
+                                                                    <div class="avatar">
+                                                                        <div class="w-8 h-8 rounded-full">
+                                                                            @if($activity->user->avatar)
+                                                                                <img src="{{ $activity->user->avatar }}" alt="{{ $activity->user->name }}"/>
+                                                                            @else
+                                                                                <div class="bg-primary/10 text-primary rounded-full w-8 h-8 flex items-center justify-center">
+                                                                                    <span class="font-medium">{{ substr($activity->user->name, 0, 1) }}</span>
+                                                                                </div>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <span class="font-medium text-primary/90">{{ $activity->user->name }}</span>
+                                                                @else
+                                                                    <div class="bg-info/10 text-info rounded-full w-8 h-8 flex items-center justify-center">
+                                                                        <i class="fas fa-robot"></i>
+                                                                    </div>
+                                                                    <span class="font-medium text-info">System</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="text-xs text-base-content/50 flex items-center gap-1">
+                                                                <i class="fas fa-clock"></i>
+                                                                <span title="{{ $activity->created_at->format('Y-m-d H:i:s') }}">
+                                                                    {{ $activity->created_at->diffForHumans() }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <p class="mt-3 text-base-content/80">{{ $activity->description }}</p>
+
+                                                        @if($activity->changes)
+                                                            <div class="mt-3 p-3 bg-base-200/50 rounded-lg text-sm border border-base-300">
+                                                                @foreach($activity->changes as $field => $change)
+                                                                    <div class="mb-2">
+                                                                        <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $field)) }}:</span>
+                                                                        <div class="flex items-center gap-2 mt-1 ml-2">
+                                                                            <span class="line-through text-error/80">{{ $change['from'] }}</span>
+                                                                            <i class="fas fa-arrow-right text-xs text-base-content/50"></i>
+                                                                            <span class="text-success/80">{{ $change['to'] }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </x-tab>
 
-                    <x-tab name="time-tracking" label="Time Tracking" icon="o-clock"
+                    <x-tab name="time-tracking" label="Time Tracking" icon="fas.clock"
                            wire:click="setActiveTab('time-tracking')">
                         <!-- Time Tracking -->
-                        <div class="card bg-base-100 shadow-xl">
-                            <div class="card-body">
-                                <h2 class="card-title">Time Tracking</h2>
-                                <div class="flex justify-between items-center mb-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Time Spent</p>
-                                        <p class="mt-1">{{ $this->formatTime($task->time_spent) }}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Time Estimate</p>
-                                        <p class="mt-1">{{ $this->formatTime($task->time_estimate) }}</p>
-                                    </div>
-                                </div>
-                                <div class="progress h-4 mb-4">
-                                    <div class="progress-bar" role="progressbar"
-                                         style="width: {{ $this->getTimeProgressAttribute() }}%"
-                                         aria-valuenow="{{ $this->getTimeProgressAttribute() }}" aria-valuemin="0"
-                                         aria-valuemax="100"></div>
-                                </div>
-                                <div class="flex justify-end">
-                                    <x-button wire:click="openTimeTrackingModal" label="Log Time" icon="o-clock"
-                                              class="btn-primary"/>
+                        <div class="bg-base-100 p-6">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-stopwatch"></i>
+                                </span>
+                                <div>
+                                    <h2 class="text-xl font-semibold">Time Tracking</h2>
+                                    <p class="text-sm text-base-content/70">Track time spent on this task</p>
                                 </div>
                             </div>
+
+                            <div class="bg-base-200/30 p-6 rounded-xl border border-base-300 mb-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                                    <div class="bg-base-100 p-4 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-3 rounded-full bg-primary/10 text-primary">
+                                                <i class="fas fa-hourglass-half"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm text-base-content/70">Time Spent</p>
+                                                <p class="text-xl font-semibold">{{ $this->formatTime($task->time_spent) }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-base-100 p-4 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-3 rounded-full bg-primary/10 text-primary">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm text-base-content/70">Time Estimate</p>
+                                                <p class="text-xl font-semibold">{{ $this->formatTime($task->time_estimate) }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-sm text-base-content/70">Progress</span>
+                                        <span class="text-sm font-medium">{{ $this->getTimeProgressAttribute() }}%</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-base-200 rounded-full overflow-hidden">
+                                        <div class="h-full {{ $this->getTimeProgressAttribute() > 100 ? 'bg-warning' : 'bg-primary' }} transition-all duration-500" 
+                                             style="width: {{ min($this->getTimeProgressAttribute(), 100) }}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-end">
+                                    <x-button 
+                                        wire:click="openTimeTrackingModal" 
+                                        label="Log Time" 
+                                        icon="fas.stopwatch"
+                                        class="btn-primary hover:shadow-md transition-all duration-300"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <!-- Time Logs History would go here -->
                         </div>
                     </x-tab>
 
-                    <x-tab name="tags" label="Tags" icon="o-tag" wire:click="setActiveTab('tags')">
+                    <x-tab name="tags" label="Tags" icon="fas.tags" wire:click="setActiveTab('tags')">
                         <!-- Tags -->
-                        <div class="card bg-base-100 shadow-xl">
-                            <div class="card-body">
-                                <h2 class="card-title">Tags</h2>
-                                <div class="flex justify-between items-center mb-4">
+                        <div class="bg-base-100 p-6">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-tags"></i>
+                                </span>
+                                <div>
+                                    <h2 class="text-xl font-semibold">Tags</h2>
+                                    <p class="text-sm text-base-content/70">Organize and categorize this task</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-base-200/30 p-6 rounded-xl border border-base-300">
+                                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                                     <div>
-                                        <p class="text-sm text-gray-500">Assigned Tags</p>
-                                        <div class="flex gap-2 mt-1">
-                                            @foreach($task->tags as $tag)
-                                                <div class="badge"
-                                                     style="background-color: {{ $tag->color }}">{{ $tag->name }}</div>
-                                            @endforeach
-                                        </div>
+                                        <p class="text-sm font-medium mb-2">Assigned Tags</p>
+                                        @if($task->tags->isEmpty())
+                                            <div class="text-base-content/50 text-sm italic">No tags assigned to this task</div>
+                                        @else
+                                            <div class="flex flex-wrap gap-2">
+                                                @foreach($task->tags as $tag)
+                                                    <div class="badge badge-lg" style="background-color: {{ $tag->color }}; color: white;">
+                                                        <i class="fas fa-tag mr-1 text-xs"></i>
+                                                        {{ $tag->name }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </div>
                                     <div>
-                                        <x-button wire:click="openTagsModal" label="Manage Tags" icon="o-tag"
-                                                  class="btn-primary"/>
+                                        <x-button 
+                                            wire:click="openTagsModal" 
+                                            label="Manage Tags" 
+                                            icon="fas.tags"
+                                            class="btn-primary hover:shadow-md transition-all duration-300"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -247,155 +361,215 @@
                     <x-tab name="attachments" label="Attachments" icon="fas.paperclip"
                            wire:click="setActiveTab('attachments')">
                         <!-- Attachments -->
-                        <div class="card bg-base-100 shadow-xl">
-                            <div class="card-body">
-                                <h2 class="card-title flex justify-between items-center">
-                                    <span>Attachments</span>
-                                    <x-button wire:click="openAttachmentModal" label="Attach File" icon="fas.paperclip"
-                                              class="btn-primary"/>
-                                </h2>
-
-                                @if($task->attachments->isEmpty())
-                                    <div class="text-center py-6">
-                                        <div class="text-4xl mb-2 text-gray-400">
-                                            <i class="fas fa-file-upload"></i>
-                                        </div>
-                                        <p class="text-gray-500">No attachments yet</p>
-                                        <x-button wire:click="openAttachmentModal" label="Upload File"
-                                                  icon="fas.paperclip"
-                                                  class="btn-primary mt-4"/>
+                        <div class="bg-base-100 p-6">
+                            <div class="flex items-center justify-between gap-3 mb-6">
+                                <div class="flex items-center gap-3">
+                                    <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                        <i class="fas fa-paperclip"></i>
+                                    </span>
+                                    <div>
+                                        <h2 class="text-xl font-semibold">Attachments</h2>
+                                        <p class="text-sm text-base-content/70">Files attached to this task</p>
                                     </div>
-                                @else
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                                        @foreach($task->attachments as $attachment)
-                                            <div class="card bg-base-100 border hover:shadow-md transition-shadow">
-                                                <div class="card-body p-4">
-                                                    <div class="flex items-center gap-2 mb-2">
-                                                        <div class="text-2xl">
-                                                            <i class="{{ $attachment->icon_class }}"></i>
-                                                        </div>
-                                                        <div class="flex-grow">
-                                                            <h3 class="font-medium text-sm">{{ Str::limit($attachment->filename, 20) }}</h3>
-                                                            <p class="text-xs text-gray-500">{{ $attachment->formatted_size }}</p>
-                                                        </div>
-                                                        <div class="dropdown dropdown-end">
-                                                            <button class="btn btn-ghost btn-sm btn-circle">
-                                                                <i class="fas fa-ellipsis-v"></i>
-                                                            </button>
-                                                            <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                                                <li>
-                                                                    <a href="{{ asset('storage/' . $attachment->path) }}"
-                                                                       target="_blank">
-                                                                        <i class="fas fa-eye"></i> View
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="{{ asset('storage/' . $attachment->path) }}"
-                                                                       download="{{ $attachment->filename }}">
-                                                                        <i class="fas fa-download"></i> Download
-                                                                    </a>
-                                                                </li>
-                                                                @if($attachment->user_id === auth()->id() || auth()->user()->can('delete', $attachment))
-                                                                    <li>
-                                                                        <a href="#"
-                                                                           wire:click.prevent="deleteAttachment({{ $attachment->id }})">
-                                                                            <i class="fas fa-trash text-error"></i>
-                                                                            Delete
-                                                                        </a>
-                                                                    </li>
-                                                                @endif
-                                                            </ul>
-                                                        </div>
+                                </div>
+                                <x-button 
+                                    wire:click="openAttachmentModal" 
+                                    label="Attach File" 
+                                    icon="fas.paperclip"
+                                    class="btn-primary hover:shadow-md transition-all duration-300"
+                                />
+                            </div>
+
+                            @if($task->attachments->isEmpty())
+                                <div class="flex flex-col items-center justify-center py-12 text-base-content/50 bg-base-200/30 rounded-lg border border-base-300">
+                                    <i class="fas fa-file-upload text-4xl mb-3 text-base-content/30"></i>
+                                    <h3 class="text-lg font-medium text-base-content/80">No attachments yet</h3>
+                                    <p class="mt-1 text-sm text-center max-w-md mb-6">Upload files to share with your team</p>
+                                    <x-button 
+                                        wire:click="openAttachmentModal" 
+                                        label="Upload File"
+                                        icon="fas.cloud-upload-alt"
+                                        class="btn-primary hover:shadow-md transition-all duration-300"
+                                    />
+                                </div>
+                            @else
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    @foreach($task->attachments as $attachment)
+                                        <div class="bg-base-100 border border-base-300 rounded-lg hover:shadow-md transition-all duration-200">
+                                            <div class="p-4">
+                                                <div class="flex items-center gap-3 mb-3">
+                                                    <div class="p-2 rounded-full bg-primary/10 text-primary text-xl">
+                                                        <i class="{{ $attachment->icon_class }}"></i>
                                                     </div>
-
-                                                    @if($attachment->is_image)
-                                                        <div class="mt-2">
-                                                            <img src="{{ asset('storage/' . $attachment->path) }}"
-                                                                 alt="{{ $attachment->filename }}"
-                                                                 class="w-full h-32 object-cover rounded">
-                                                        </div>
-                                                    @endif
-
-                                                    @if($attachment->description)
-                                                        <div class="mt-2 text-xs text-gray-600">
-                                                            {{ $attachment->description }}
-                                                        </div>
-                                                    @endif
-
-                                                    <div class="text-xs text-gray-500 mt-2 flex items-center gap-1">
-                                                        <i class="fas fa-user"></i>
-                                                        <span>{{ $attachment->user->name ?? 'Unknown' }}</span>
-                                                        <span class="mx-1">•</span>
-                                                        <i class="fas fa-clock"></i>
-                                                        <span>{{ $attachment->created_at->diffForHumans() }}</span>
+                                                    <div class="flex-grow">
+                                                        <h3 class="font-medium text-sm">{{ Str::limit($attachment->filename, 20) }}</h3>
+                                                        <p class="text-xs text-base-content/50">{{ $attachment->formatted_size }}</p>
+                                                    </div>
+                                                    <div class="dropdown dropdown-end">
+                                                        <button class="btn btn-ghost btn-sm btn-circle hover:bg-base-200 transition-colors duration-200">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-lg w-52 border border-base-300">
+                                                            <li>
+                                                                <a href="{{ asset('storage/' . $attachment->path) }}"
+                                                                   target="_blank" class="hover:bg-base-200 transition-colors duration-200">
+                                                                    <i class="fas fa-eye"></i> View
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="{{ asset('storage/' . $attachment->path) }}"
+                                                                   download="{{ $attachment->filename }}" class="hover:bg-base-200 transition-colors duration-200">
+                                                                    <i class="fas fa-download"></i> Download
+                                                                </a>
+                                                            </li>
+                                                            @if($attachment->user_id === auth()->id() || auth()->user()->can('delete', $attachment))
+                                                                <li>
+                                                                    <a href="#"
+                                                                       wire:click.prevent="deleteAttachment({{ $attachment->id }})" 
+                                                                       class="text-error hover:bg-error/10 transition-colors duration-200">
+                                                                        <i class="fas fa-trash"></i> Delete
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+                                                        </ul>
                                                     </div>
                                                 </div>
+
+                                                @if($attachment->is_image)
+                                                    <div class="mt-3 border border-base-300 rounded-lg overflow-hidden">
+                                                        <img src="{{ asset('storage/' . $attachment->path) }}"
+                                                             alt="{{ $attachment->filename }}"
+                                                             class="w-full h-32 object-cover">
+                                                    </div>
+                                                @endif
+
+                                                @if($attachment->description)
+                                                    <div class="mt-3 text-xs text-base-content/70 bg-base-200/30 p-2 rounded-lg">
+                                                        {{ $attachment->description }}
+                                                    </div>
+                                                @endif
+
+                                                <div class="text-xs text-base-content/50 mt-3 flex items-center gap-1">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>{{ $attachment->user->name ?? 'Unknown' }}</span>
+                                                    <span class="mx-1">•</span>
+                                                    <i class="fas fa-clock"></i>
+                                                    <span>{{ $attachment->created_at->diffForHumans() }}</span>
+                                                </div>
                                             </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </x-tab>
 
                     <x-tab name="files" label="Files" icon="fas.file" wire:click="setActiveTab('files')">
-                        <div class="mt-4">
-                            <livewire:file-manager :fileable_type="'App\\Models\\Task'" :fileable_id="$task->id" />
+                        <div class="bg-base-100 p-6">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                    <i class="fas fa-file"></i>
+                                </span>
+                                <div>
+                                    <h2 class="text-xl font-semibold">Files</h2>
+                                    <p class="text-sm text-base-content/70">Manage files related to this task</p>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <livewire:file-manager :fileable_type="'App\\Models\\Task'" :fileable_id="$task->id" />
+                            </div>
                         </div>
                     </x-tab>
 
-                    <x-tab name="dependencies" label="Dependencies" icon="o-link"
+                    <x-tab name="dependencies" label="Dependencies" icon="fas.link"
                            wire:click="setActiveTab('dependencies')">
                         <!-- Dependencies -->
-                        <div class="card bg-base-100 shadow-xl">
-                            <div class="card-body">
-                                <h2 class="card-title">Dependencies</h2>
-                                <div class="flex justify-between items-center mb-4">
+                        <div class="bg-base-100 p-6">
+                            <div class="flex items-center justify-between gap-3 mb-6">
+                                <div class="flex items-center gap-3">
+                                    <span class="p-2 rounded-full bg-primary/10 text-primary">
+                                        <i class="fas fa-link"></i>
+                                    </span>
                                     <div>
-                                        <p class="text-sm text-gray-500">This task depends on</p>
-                                        <div class="flex flex-wrap gap-2 mt-1">
+                                        <h2 class="text-xl font-semibold">Dependencies</h2>
+                                        <p class="text-sm text-base-content/70">Manage task relationships and dependencies</p>
+                                    </div>
+                                </div>
+                                <x-button 
+                                    wire:click="openDependencyModal" 
+                                    label="Add Dependency" 
+                                    icon="fas.link"
+                                    class="btn-primary hover:shadow-md transition-all duration-300"
+                                />
+                            </div>
+                            
+                            <div class="space-y-6">
+                                <!-- This task depends on -->
+                                <div class="bg-base-200/30 p-6 rounded-xl border border-base-300">
+                                    <h3 class="font-medium mb-3 flex items-center gap-2">
+                                        <i class="fas fa-arrow-down text-primary"></i>
+                                        <span>This task depends on</span>
+                                    </h3>
+                                    
+                                    @if($task->dependencies->isEmpty())
+                                        <div class="text-base-content/50 text-sm italic bg-base-100 p-4 rounded-lg border border-base-300">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-info-circle"></i>
+                                                <span>No dependencies</span>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="flex flex-wrap gap-2">
                                             @foreach($task->dependencies as $dependency)
-                                                <div class="badge badge-outline">
+                                                <div class="badge badge-lg badge-outline border-primary/30 bg-base-100 hover:border-primary transition-all duration-200 p-3">
                                                     <a href="{{ route('tasks.show', ['project' => $project, 'task' => $dependency]) }}"
-                                                       class="flex items-center gap-1">
-                                                        <span class="text-xs">#{{ $dependency->id }}</span>
-                                                        <span>{{ $dependency->title }}</span>
-                                                        <span class="text-xs">({{ $this->getDependencyTypeLabel($dependency->pivot->type) }})</span>
+                                                       class="flex items-center gap-2">
+                                                        <span class="text-xs font-mono bg-primary/10 text-primary px-1 py-0.5 rounded">{{ $project->key }}-{{ $dependency->id }}</span>
+                                                        <span class="font-medium">{{ $dependency->title }}</span>
+                                                        <span class="text-xs text-base-content/70">({{ $this->getDependencyTypeLabel($dependency->pivot->type) }})</span>
                                                     </a>
-                                                    <button wire:click="removeDependency({{ $dependency->id }})"
-                                                            class="ml-2">
-                                                        <i class="fas fa-times text-error"></i>
+                                                    <button 
+                                                        wire:click="removeDependency({{ $dependency->id }})" 
+                                                        class="ml-2 text-error hover:text-error/80 transition-colors duration-200"
+                                                        title="Remove dependency"
+                                                    >
+                                                        <i class="fas fa-times"></i>
                                                     </button>
                                                 </div>
                                             @endforeach
-
-                                            @if($task->dependencies->isEmpty())
-                                                <div class="text-sm text-gray-500">No dependencies</div>
-                                            @endif
                                         </div>
-
-                                        <p class="text-sm text-gray-500 mt-4">Tasks that depend on this</p>
-                                        <div class="flex flex-wrap gap-2 mt-1">
+                                    @endif
+                                </div>
+                                
+                                <!-- Tasks that depend on this -->
+                                <div class="bg-base-200/30 p-6 rounded-xl border border-base-300">
+                                    <h3 class="font-medium mb-3 flex items-center gap-2">
+                                        <i class="fas fa-arrow-up text-primary"></i>
+                                        <span>Tasks that depend on this</span>
+                                    </h3>
+                                    
+                                    @if($task->dependents->isEmpty())
+                                        <div class="text-base-content/50 text-sm italic bg-base-100 p-4 rounded-lg border border-base-300">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-info-circle"></i>
+                                                <span>No dependent tasks</span>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="flex flex-wrap gap-2">
                                             @foreach($task->dependents as $dependent)
-                                                <div class="badge badge-outline">
+                                                <div class="badge badge-lg badge-outline border-primary/30 bg-base-100 hover:border-primary transition-all duration-200 p-3">
                                                     <a href="{{ route('tasks.show', ['project' => $project, 'task' => $dependent]) }}"
-                                                       class="flex items-center gap-1">
-                                                        <span class="text-xs">#{{ $dependent->id }}</span>
-                                                        <span>{{ $dependent->title }}</span>
-                                                        <span class="text-xs">({{ $this->getDependencyTypeLabel($dependent->pivot->type) }})</span>
+                                                       class="flex items-center gap-2">
+                                                        <span class="text-xs font-mono bg-primary/10 text-primary px-1 py-0.5 rounded">{{ $project->key }}-{{ $dependent->id }}</span>
+                                                        <span class="font-medium">{{ $dependent->title }}</span>
+                                                        <span class="text-xs text-base-content/70">({{ $this->getDependencyTypeLabel($dependent->pivot->type) }})</span>
                                                     </a>
                                                 </div>
                                             @endforeach
-
-                                            @if($task->dependents->isEmpty())
-                                                <div class="text-sm text-gray-500">No dependent tasks</div>
-                                            @endif
                                         </div>
-                                    </div>
-                                    <div>
-                                        <x-button wire:click="openDependencyModal" label="Add Dependency" icon="o-link"
-                                                  class="btn-primary"/>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -405,122 +579,151 @@
 
             <div>
                 <!-- Task Details -->
-                <div class="card bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">Details</h2>
+                <div class="bg-base-100 rounded-xl shadow-xl border border-base-300 overflow-hidden">
+                    <div class="bg-primary/5 p-4 border-b border-base-300 flex items-center gap-3">
+                        <span class="p-2 rounded-full bg-primary/10 text-primary">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        <h2 class="text-lg font-semibold">Task Details</h2>
+                    </div>
 
-                        <div class="space-y-4 mt-4">
-                            <div>
-                                <p class="text-sm text-gray-500">Status</p>
+                    <div class="p-5 space-y-5">
+                        <!-- Status, Type, Priority -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-1">Status</p>
                                 @if($task->status)
-                                    <div class="badge mt-1" style="background-color: {{ $task->status->color }}">
+                                    <div class="badge" style="background-color: {{ $task->status->color }}; color: white;">
                                         {{ $task->status->name }}
                                     </div>
                                 @else
-                                    <p class="italic text-gray-500 mt-1">No status</p>
+                                    <p class="italic text-base-content/50">No status</p>
                                 @endif
                             </div>
 
-                            <div>
-                                <p class="text-sm text-gray-500">Type</p>
-                                <div class="badge mt-1">
+                            <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-1">Type</p>
+                                <div class="badge bg-primary/10 text-primary border-0">
+                                    <i class="fas fa-tasks mr-1"></i>
                                     {{ ucfirst($task->task_type->label() ?? 'Task') }}
                                 </div>
                             </div>
 
-                            <div>
-                                <p class="text-sm text-gray-500">Priority</p>
+                            <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-1">Priority</p>
                                 @if($task->priority)
-                                    <div class="badge mt-1 {{
-                                        $task->priority === 'high' ? 'badge-error' :
-                                        ($task->priority === 'medium' ? 'badge-warning' : 'badge-info')
+                                    <div class="badge {{
+                                        $task->priority->value === 'high' ? 'badge-error' :
+                                        ($task->priority->value === 'medium' ? 'badge-warning' : 'badge-info')
                                     }}">
+                                        @if($task->priority->value === 'high')
+                                            <i class="fas fa-arrow-up mr-1"></i>
+                                        @elseif($task->priority->value === 'medium')
+                                            <i class="fas fa-equals mr-1"></i>
+                                        @else
+                                            <i class="fas fa-arrow-down mr-1"></i>
+                                        @endif
                                         {{ ucfirst($task->priority->label()) }}
                                     </div>
                                 @else
-                                    <p class="italic text-gray-500 mt-1">No priority</p>
+                                    <p class="italic text-base-content/50">No priority</p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- People -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-base-200/30 p-4 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-2">Assignee</p>
+                                @if($task->user)
+                                    <div class="flex items-center gap-3">
+                                        <div class="bg-primary/10 text-primary rounded-full w-10 h-10 flex items-center justify-center">
+                                            @if($task->user->avatar)
+                                                <img src="{{ $task->user->avatar }}" alt="{{ $task->user->name }}" class="rounded-full"/>
+                                            @else
+                                                <span class="font-medium">{{ substr($task->user->name ?? 'U', 0, 1) }}</span>
+                                            @endif
+                                        </div>
+                                        <span class="font-medium">{{ $task->user->name }}</span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center gap-2 text-base-content/50">
+                                        <i class="fas fa-user-slash"></i>
+                                        <span>Unassigned</span>
+                                    </div>
                                 @endif
                             </div>
 
+                            <div class="bg-base-200/30 p-4 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-2">Reporter</p>
+                                @if($task->reporter)
+                                    <div class="flex items-center gap-3">
+                                        <div class="bg-info/10 text-info rounded-full w-10 h-10 flex items-center justify-center">
+                                            @if($task->reporter->avatar)
+                                                <img src="{{ $task->reporter->avatar }}" alt="{{ $task->reporter->name }}" class="rounded-full"/>
+                                            @else
+                                                <span class="font-medium">{{ substr($task->reporter->name ?? 'U', 0, 1) }}</span>
+                                            @endif
+                                        </div>
+                                        <span class="font-medium">{{ $task->reporter->name }}</span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center gap-2 text-base-content/50">
+                                        <i class="fas fa-question-circle"></i>
+                                        <span>Unknown</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Planning -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             @if($task->story_points)
-                                <div>
-                                    <p class="text-sm text-gray-500">Story Points</p>
-                                    <div class="badge badge-outline mt-1">{{ $task->story_points }}</div>
+                                <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                    <p class="text-xs text-base-content/70 mb-1">Story Points</p>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-chart-simple text-primary"></i>
+                                        <span class="text-lg font-semibold">{{ $task->story_points }}</span>
+                                    </div>
                                 </div>
                             @endif
 
-                            <div>
-                                <p class="text-sm text-gray-500">Assignee</p>
-                                @if($task->user)
-                                    <div class="flex items-center gap-2 mt-1">
-                                        <div class="avatar">
-                                            <div class="w-10 h-10 rounded-full">
-                                                @if($task->user->avatar)
-                                                    <img src="{{ $task->user->avatar }}"
-                                                         alt="{{ $task->user->name }}"/>
-                                                @else
-                                                    <div
-                                                        class="bg-neutral text-neutral-content rounded-full w-6">
-                                                        <span>{{ substr($task->user->name ?? 'U', 0, 1) }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <span>{{ $task->user->name }}</span>
-                                    </div>
-                                @else
-                                    <p class="italic text-gray-500 mt-1">Unassigned</p>
-                                @endif
-                            </div>
-
-                            <div>
-                                <p class="text-sm text-gray-500">Reporter</p>
-                                @if($task->reporter)
-                                    <div class="flex items-center gap-2 mt-1">
-                                        <div class="avatar">
-                                            <div class="w-10 h-10 rounded-full">
-                                                @if($task->reporter->avatar)
-                                                    <img src="{{ $task->reporter->avatar }}"
-                                                         alt="{{ $task->reporter->name }}"/>
-                                                @else
-                                                    <div
-                                                        class="bg-neutral text-neutral-content rounded-full w-6">
-                                                        <span>{{ substr($task->reporter->name ?? 'U', 0, 1) }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <span>{{ $task->reporter->name }}</span>
-                                    </div>
-                                @else
-                                    <p class="italic text-gray-500 mt-1">Unknown</p>
-                                @endif
-                            </div>
-
                             @if($task->sprint)
-                                <div>
-                                    <p class="text-sm text-gray-500">Sprint</p>
-                                    <div class="badge badge-outline mt-1">
-                                        {{ $task->sprint->name }}
+                                <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                    <p class="text-xs text-base-content/70 mb-1">Sprint</p>
+                                    <div class="badge badge-outline border-primary/30 text-primary/80 hover:border-primary hover:text-primary transition-all duration-200">
+                                        <i class="fas fa-flag mr-1 text-xs"></i> {{ $task->sprint->name }}
                                     </div>
                                 </div>
                             @endif
 
                             @if($task->due_date)
-                                <div>
-                                    <p class="text-sm text-gray-500">Due Date</p>
-                                    <p class="mt-1">{{ $task->due_date->format('M d, Y') }}</p>
+                                <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                    <p class="text-xs text-base-content/70 mb-1">Due Date</p>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-calendar-day text-{{ $task->due_date < now() ? 'error' : 'primary' }}"></i>
+                                        <span class="{{ $task->due_date < now() ? 'text-error font-medium' : '' }}">{{ $task->due_date->format('M d, Y') }}</span>
+                                    </div>
                                 </div>
                             @endif
+                        </div>
 
-                            <div>
-                                <p class="text-sm text-gray-500">Created</p>
-                                <p class="mt-1">{{ $task->created_at->format('M d, Y H:i') }}</p>
+                        <!-- Dates -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-1">Created</p>
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-plus-circle text-success"></i>
+                                    <span>{{ $task->created_at->format('M d, Y H:i') }}</span>
+                                </div>
                             </div>
 
-                            <div>
-                                <p class="text-sm text-gray-500">Updated</p>
-                                <p class="mt-1">{{ $task->updated_at->format('M d, Y H:i') }}</p>
+                            <div class="bg-base-200/30 p-3 rounded-lg border border-base-300 hover:shadow-sm transition-all duration-200">
+                                <p class="text-xs text-base-content/70 mb-1">Updated</p>
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-edit text-info"></i>
+                                    <span>{{ $task->updated_at->format('M d, Y H:i') }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
