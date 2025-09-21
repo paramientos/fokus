@@ -49,8 +49,11 @@ Fokus is a comprehensive project management system inspired by tools like Jira, 
 - PostgreSQL 15
 - Node.js and Yarn
 - Redis (for queues and broadcasting)
+- Docker ve Docker Compose (opsiyonel)
 
 ### Setup Instructions
+
+#### Option 1: Standard Installation
 
 1. Clone the repository:
    ```bash
@@ -92,6 +95,60 @@ Fokus is a comprehensive project management system inspired by tools like Jira, 
    ```bash
    php artisan serve
    ```
+
+#### Option 2: Docker Installation
+
+Fokus, Docker kullanarak kolayca kurulabilir ve çalıştırılabilir. Bu yöntem, tüm gerekli bağımlılıkları içeren bir konteyner ortamı sağlar.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/fokus.git
+   cd fokus
+   ```
+
+2. Copy the environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Build and start the Docker containers:
+   ```bash
+   docker-compose up -d --build
+   ```
+
+4. Install dependencies and set up the application:
+   ```bash
+   # Container içinde composer bağımlılıklarını yükle
+   docker-compose exec app composer install
+   
+   # Uygulama anahtarını oluştur
+   docker-compose exec app php artisan key:generate
+   
+   # Veritabanı tablolarını oluştur ve örnek verileri ekle
+   docker-compose exec app php artisan migrate --seed
+   ```
+
+5. Build frontend assets:
+   ```bash
+   docker-compose exec app yarn install
+   docker-compose exec app yarn build
+   ```
+
+6. Access the application:
+   - Web uygulaması: `http://localhost:9000`
+   - PostgreSQL veritabanı: `localhost:5432` (kullanıcı: projecta, şifre: secret)
+
+7. Docker konteynerlerini durdurmak için:
+   ```bash
+   docker-compose down
+   ```
+
+#### Docker Ortamı Hakkında
+
+- **app**: PHP 8.3, Composer, Node.js ve Yarn içeren ana uygulama konteyneri
+- **db**: PostgreSQL 15 veritabanı konteyneri
+- Veritabanı verileri kalıcı bir Docker volume'ünde saklanır (`db-data`)
+- Uygulama kodunuz yerel makinenizden konteynere bağlanır, böylece değişiklikler anında yansır
 
 ## Project Structure
 
