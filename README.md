@@ -53,7 +53,7 @@ Fokus is currently under active development with version 1.0.0 targeted for rele
 - PostgreSQL 15
 - Node.js and Yarn
 - Redis (for queues and broadcasting)
-- Docker ve Docker Compose (opsiyonel)
+- Docker and Docker Compose (optional)
 
 ### Setup Instructions
 
@@ -102,7 +102,7 @@ Fokus is currently under active development with version 1.0.0 targeted for rele
 
 #### Option 2: Docker Installation
 
-Fokus, Docker kullanarak kolayca kurulabilir ve çalıştırılabilir. Bu yöntem, tüm gerekli bağımlılıkları içeren bir konteyner ortamı sağlar.
+Fokus can be easily installed and run using Docker. This method provides a container environment containing all necessary dependencies.
 
 1. Clone the repository:
    ```bash
@@ -122,13 +122,13 @@ Fokus, Docker kullanarak kolayca kurulabilir ve çalıştırılabilir. Bu yönte
 
 4. Install dependencies and set up the application:
    ```bash
-   # Container içinde composer bağımlılıklarını yükle
+   # Install composer dependencies inside the container
    docker-compose exec app composer install
    
-   # Uygulama anahtarını oluştur
+   # Generate application key
    docker-compose exec app php artisan key:generate
    
-   # Veritabanı tablolarını oluştur ve örnek verileri ekle
+   # Create database tables and add sample data
    docker-compose exec app php artisan migrate --seed
    ```
 
@@ -139,20 +139,20 @@ Fokus, Docker kullanarak kolayca kurulabilir ve çalıştırılabilir. Bu yönte
    ```
 
 6. Access the application:
-   - Web uygulaması: `http://localhost:9000`
-   - PostgreSQL veritabanı: `localhost:5432` (kullanıcı: projecta, şifre: secret)
+   - Web application: `http://localhost:9000`
+   - PostgreSQL database: `localhost:5432` (username: projecta, password: secret)
 
-7. Docker konteynerlerini durdurmak için:
+7. To stop Docker containers:
    ```bash
    docker-compose down
    ```
 
-#### Docker Ortamı Hakkında
+#### About Docker Environment
 
-- **app**: PHP 8.3, Composer, Node.js ve Yarn içeren ana uygulama konteyneri
-- **db**: PostgreSQL 15 veritabanı konteyneri
-- Veritabanı verileri kalıcı bir Docker volume'ünde saklanır (`db-data`)
-- Uygulama kodunuz yerel makinenizden konteynere bağlanır, böylece değişiklikler anında yansır
+- **app**: Main application container with PHP 8.3, Composer, Node.js and Yarn
+- **db**: PostgreSQL 15 database container
+- Database data is stored in a persistent Docker volume (`db-data`)
+- Your application code is mounted from your local machine to the container, so changes are reflected instantly
 
 ## Project Structure
 
