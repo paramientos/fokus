@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://usefokus.com/asset/images/sprint-overview-chart-fokus.png" alt="Fokus Logo" width="200">
+  <img src="https://usefokus.com/asset/images/sprint-overview-chart-fokus.png" alt="Fokus Logo" width="100%">
 </p>
 
 <h1 align="center">Fokus - Project Management System</h1>
