@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $name
@@ -31,6 +29,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $employees_count
  * @property-read string $status_color
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static Builder<static>|Certification active()
  * @method static Builder<static>|Certification byCategory(string $category)
  * @method static Builder<static>|Certification mandatory()
@@ -51,6 +50,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder<static>|Certification whereUpdatedAt($value)
  * @method static Builder<static>|Certification whereValidityMonths($value)
  * @method static Builder<static>|Certification whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Certification extends Model
@@ -100,8 +100,8 @@ class Certification extends Model
     public function employees()
     {
         return $this->belongsToMany(Employee::class, 'employee_certifications')
-                    ->withPivot(['obtained_date', 'expiry_date', 'status', 'score'])
-                    ->withTimestamps();
+            ->withPivot(['obtained_date', 'expiry_date', 'status', 'score'])
+            ->withTimestamps();
     }
 
     public function scopeActive(Builder $query): Builder

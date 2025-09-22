@@ -20,7 +20,7 @@ return new class extends Migration
                 'overdue_tasks',
                 'blocked_tasks',
                 'budget_exceeded',
-                'team_overload'
+                'team_overload',
             ]);
             $table->enum('severity', ['low', 'medium', 'high', 'critical']);
             $table->string('title');

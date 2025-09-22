@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $repository_id
  * @property string|null $branch_id
@@ -30,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read string $title
  * @property-read \App\Models\GitRepository $repository
  * @property-read \App\Models\Task|null $task
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitCommit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitCommit newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitCommit query()
@@ -47,11 +46,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitCommit whereRepositoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitCommit whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitCommit whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class GitCommit extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'repository_id',
@@ -110,6 +111,7 @@ class GitCommit extends Model
     public function getTitleAttribute(): string
     {
         $lines = explode("\n", $this->message);
+
         return $lines[0];
     }
 
@@ -120,6 +122,7 @@ class GitCommit extends Model
     {
         $lines = explode("\n", $this->message);
         array_shift($lines);
+
         return implode("\n", $lines);
     }
 }

@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $meeting_id
  * @property string $user_id
@@ -19,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Meeting $meeting
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingAttendee newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingAttendee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingAttendee query()
@@ -29,11 +28,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingAttendee whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingAttendee whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingAttendee whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class MeetingAttendee extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'meeting_id',

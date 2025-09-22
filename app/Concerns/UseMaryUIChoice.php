@@ -7,13 +7,12 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 trait UseMaryUIChoice
 {
     public function generateMaryUIChoice(
-        string   $key = 'id',
-        string   $label = 'name',
-        string   $orderBy = 'order',
-        string   $direction = 'asc',
-        callable $query = null
-    ): array
-    {
+        string $key = 'id',
+        string $label = 'name',
+        string $orderBy = 'order',
+        string $direction = 'asc',
+        ?callable $query = null
+    ): array {
         /** @var Builder $builder */
         $builder = $this->query();
 

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Project;
 use App\Models\ProjectAlert;
-use App\Models\User;
 use App\Notifications\ProjectHealthAlert;
 use App\Notifications\ProjectHealthDigest;
 use Illuminate\Support\Collection;
@@ -39,10 +38,10 @@ class HealthNotificationService
 
         foreach ($projects as $project) {
             $healthData = $this->prepareDailyDigestData($project);
-            
+
             if ($this->shouldSendDigest($healthData)) {
                 $recipients = $this->getDigestRecipients($project);
-                
+
                 foreach ($recipients as $user) {
                     $user->notify(new ProjectHealthDigest($project, $healthData));
                 }
@@ -53,7 +52,7 @@ class HealthNotificationService
     public function sendWeeklyHealthReport(): void
     {
         $projects = Project::active()
-            ->with(['healthMetrics' => function($query) {
+            ->with(['healthMetrics' => function ($query) {
                 $query->where('metric_date', '>=', now()->subWeek());
             }])
             ->get();
@@ -61,7 +60,7 @@ class HealthNotificationService
         foreach ($projects as $project) {
             $weeklyData = $this->prepareWeeklyReportData($project);
             $recipients = $this->getWeeklyReportRecipients($project);
-            
+
             foreach ($recipients as $user) {
                 // Weekly report notification implementation
             }
@@ -76,7 +75,7 @@ class HealthNotificationService
         }
 
         $message = $this->formatSlackMessage($project, $alert);
-        
+
         // Slack API call implementation
         // Http::post(config('services.slack.webhook_url'), $message);
     }
@@ -105,7 +104,7 @@ class HealthNotificationService
     {
         $latestMetric = $project->latestHealthMetric;
         $unresolvedAlerts = $project->unresolvedAlerts;
-        
+
         return [
             'health_score' => $latestMetric?->health_score ?? 0,
             'health_trend' => $this->calculateHealthTrend($project),
@@ -121,7 +120,7 @@ class HealthNotificationService
     private function prepareWeeklyReportData(Project $project): array
     {
         $weeklyMetrics = $project->healthMetrics;
-        
+
         return [
             'avg_health_score' => $weeklyMetrics->avg('health_score'),
             'health_trend' => $this->calculateWeeklyTrend($weeklyMetrics),
@@ -135,8 +134,8 @@ class HealthNotificationService
     private function shouldSendDigest(array $healthData): bool
     {
         // Digest gönderme kriterleri
-        return $healthData['health_score'] < 70 || 
-               $healthData['critical_alerts'] > 0 || 
+        return $healthData['health_score'] < 70 ||
+               $healthData['critical_alerts'] > 0 ||
                $healthData['high_alerts'] > 2 ||
                count($healthData['risk_factors']) > 2;
     }
@@ -175,7 +174,7 @@ class HealthNotificationService
 
         return [
             'trend' => $change > 0 ? 'improving' : ($change < 0 ? 'declining' : 'stable'),
-            'change' => round($change, 1)
+            'change' => round($change, 1),
         ];
     }
 
@@ -190,7 +189,7 @@ class HealthNotificationService
             ->map(function ($tasks) {
                 $completed = $tasks->where('status', 'done')->count();
                 $total = $tasks->count();
-                
+
                 return [
                     'user' => $tasks->first()->assignee->name,
                     'completion_rate' => $total > 0 ? round(($completed / $total) * 100, 1) : 0,
@@ -217,23 +216,23 @@ class HealthNotificationService
                         [
                             'title' => 'Alert Type',
                             'value' => ucwords(str_replace('_', ' ', $alert->type)),
-                            'short' => true
+                            'short' => true,
                         ],
                         [
                             'title' => 'Severity',
                             'value' => ucfirst($alert->severity),
-                            'short' => true
+                            'short' => true,
                         ],
                         [
                             'title' => 'Description',
                             'value' => $alert->description,
-                            'short' => false
-                        ]
+                            'short' => false,
+                        ],
                     ],
                     'footer' => 'Fokus Project Health Monitor',
-                    'ts' => $alert->created_at->timestamp
-                ]
-            ]
+                    'ts' => $alert->created_at->timestamp,
+                ],
+            ],
         ];
     }
 }

@@ -3,15 +3,12 @@
 namespace App\Models;
 
 use App\Concerns\UseMaryUIChoice;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property string $name
  * @property string $slug
@@ -24,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\Project $project
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Status newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Status newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Status query()
@@ -36,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Status whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Status extends Model

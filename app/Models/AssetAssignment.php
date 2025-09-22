@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $asset_id
  * @property string $user_id
@@ -29,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read string $condition_color
  * @property-read string|null $duration
  * @property-read \App\Models\User $user
+ *
  * @method static Builder<static>|AssetAssignment newModelQuery()
  * @method static Builder<static>|AssetAssignment newQuery()
  * @method static Builder<static>|AssetAssignment query()
@@ -45,11 +44,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder<static>|AssetAssignment whereReturnedAt($value)
  * @method static Builder<static>|AssetAssignment whereUpdatedAt($value)
  * @method static Builder<static>|AssetAssignment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class AssetAssignment extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'asset_id',

@@ -15,28 +15,28 @@ return new class extends Migration
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'form_data')) {
                 $table->json('form_data')->nullable();
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'comments')) {
                 $table->text('comments')->nullable();
             }
-            
+
             // PHPDoc'ta data ve notes olarak geçen sütunlar
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'data')) {
                 $table->json('data')->nullable();
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'notes')) {
                 $table->text('notes')->nullable();
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'status')) {
                 $table->string('status')->default('pending');
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'started_at')) {
                 $table->timestamp('started_at')->nullable();
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_step_instances', 'completed_at')) {
                 $table->timestamp('completed_at')->nullable();
             }

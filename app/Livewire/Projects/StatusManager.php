@@ -5,15 +5,19 @@ namespace App\Livewire\Projects;
 use App\Models\Project;
 use App\Models\Status;
 use Livewire\Component;
-use Mary\View\Components\Stat;
 
 class StatusManager extends Component
 {
     public Project $project;
+
     public $statuses;
+
     public $name = '';
+
     public $color = '#3B82F6'; // Varsayılan bir renk
+
     public $order = 0;
+
     public $is_completed = false;
 
     public function mount(Project $project)
@@ -29,9 +33,9 @@ class StatusManager extends Component
             'color' => 'required|string',
         ]);
 
-
         if (Status::where('name', $this->name)->where('project_id', $this->project->id)->exists()) {
             session()->flash('error', 'Status already exists!');
+
             return;
         }
 
@@ -40,7 +44,7 @@ class StatusManager extends Component
         $i = 1;
 
         while (Status::where('slug', $slug)->where('project_id', $this->project->id)->exists()) {
-            $slug = $baseSlug . '-' . $i;
+            $slug = $baseSlug.'-'.$i;
             $i++;
         }
 
@@ -63,10 +67,12 @@ class StatusManager extends Component
     {
         if ($status->project_id !== $this->project->id) {
             session()->flash('error', 'Status not found.');
+
             return;
         }
         if ($status->tasks()->count() > 0) {
             session()->flash('error', 'Cannot delete status: There are tasks assigned to this status.');
+
             return;
         }
 

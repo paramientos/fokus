@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $employee_id
  * @property string $leave_type_id
@@ -25,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\User|null $approvedBy
  * @property-read \App\Models\Employee $employee
  * @property-read \App\Models\LeaveType $leaveType
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveRequest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveRequest newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveRequest query()
@@ -41,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveRequest whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveRequest whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveRequest whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class LeaveRequest extends Model
@@ -57,7 +57,7 @@ class LeaveRequest extends Model
         'status',
         'approved_by',
         'approved_at',
-        'rejection_reason'
+        'rejection_reason',
     ];
 
     protected $casts = [

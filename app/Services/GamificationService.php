@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Achievement;
-use App\Models\UserAchievement;
 use App\Models\Leaderboard;
-use App\Models\Task;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
+use App\Models\UserAchievement;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class GamificationService
 {
@@ -35,7 +34,7 @@ class GamificationService
             'progress' => 0,
             'points_earned' => $achievement->points,
             'earned_at' => now(),
-            'metadata' => $metadata
+            'metadata' => $metadata,
         ]);
 
         // Update leaderboards
@@ -115,7 +114,7 @@ class GamificationService
 
         $completedTasks = $user->tasks()
             ->where('workspace_id', $user->current_workspace_id)
-            ->whereHas('status', function($query) {
+            ->whereHas('status', function ($query) {
                 $query->where('name', 'Done')->orWhere('name', 'Completed');
             })
             ->count();
@@ -134,7 +133,7 @@ class GamificationService
 
         $completedProjects = $user->projects()
             ->where('workspace_id', $user->current_workspace_id)
-            ->whereHas('status', function($query) {
+            ->whereHas('status', function ($query) {
                 $query->where('name', 'Completed')->orWhere('name', 'Done');
             })
             ->count();
@@ -168,6 +167,7 @@ class GamificationService
         }
 
         $currentStreak = $data['streak_days'] ?? $user->current_streak;
+
         return $currentStreak >= $criteria['streak_days'];
     }
 
@@ -205,7 +205,7 @@ class GamificationService
             'period' => $period,
             'category' => $category,
             'period_start' => $dates['start'],
-            'period_end' => $dates['end']
+            'period_end' => $dates['end'],
         ], $stats);
 
         // Update rankings for this period and category
@@ -264,7 +264,7 @@ class GamificationService
         foreach ($defaultAchievements as $achievementData) {
             Achievement::firstOrCreate([
                 'workspace_id' => $workspaceId,
-                'name' => $achievementData['name']
+                'name' => $achievementData['name'],
             ], array_merge($achievementData, ['workspace_id' => $workspaceId]));
         }
     }
@@ -285,12 +285,12 @@ class GamificationService
         // Add task completion dates
         $taskDates = $user->tasks()
             ->where('workspace_id', $workspaceId)
-            ->whereHas('status', function($query) {
+            ->whereHas('status', function ($query) {
                 $query->where('name', 'Done')->orWhere('name', 'Completed');
             })
             ->where('updated_at', '>=', now()->subDays(365))
             ->pluck('updated_at')
-            ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
+            ->map(fn ($date) => Carbon::parse($date)->format('Y-m-d'))
             ->unique();
 
         $activities = $activities->merge($taskDates);
@@ -300,7 +300,7 @@ class GamificationService
             ->where('workspace_id', $workspaceId)
             ->where('updated_at', '>=', now()->subDays(365))
             ->pluck('updated_at')
-            ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
+            ->map(fn ($date) => Carbon::parse($date)->format('Y-m-d'))
             ->unique();
 
         $activities = $activities->merge($projectDates);

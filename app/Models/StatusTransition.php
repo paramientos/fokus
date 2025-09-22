@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
- *
  * @property string $id
  * @property string $project_id
  * @property int $from_status_id
@@ -17,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Models\Status $fromStatus
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\Status $toStatus
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StatusTransition newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StatusTransition newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StatusTransition query()
@@ -26,13 +25,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StatusTransition whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StatusTransition whereToStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StatusTransition whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class StatusTransition extends Model
 {
     use HasUuids;
 
-    protected $table='status_transitions';
+    protected $table = 'status_transitions';
 
     protected $fillable = ['project_id', 'from_status_id', 'to_status_id'];
 

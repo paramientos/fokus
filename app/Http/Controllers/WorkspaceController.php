@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Workspace;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
 class WorkspaceController extends Controller
@@ -30,7 +28,7 @@ class WorkspaceController extends Controller
             foreach ($workspace->projects as $project) {
                 // Delete project files if any
                 // This would need to be expanded based on your actual file storage structure
-                Storage::deleteDirectory('projects/' . $project->id);
+                Storage::deleteDirectory('projects/'.$project->id);
 
                 // Delete the project (cascading deletes should handle related records)
                 $project->delete();
@@ -55,7 +53,7 @@ class WorkspaceController extends Controller
             DB::rollBack();
 
             return redirect()->back()
-                ->with('error', 'Failed to delete workspace: ' . $e->getMessage());
+                ->with('error', 'Failed to delete workspace: '.$e->getMessage());
         }
     }
 
@@ -67,13 +65,13 @@ class WorkspaceController extends Controller
         }
 
         // Generate a filename for the export
-        $filename = 'workspace_' . $workspace->id . '_export_' . date('Y-m-d_H-i-s') . '.zip';
+        $filename = 'workspace_'.$workspace->id.'_export_'.date('Y-m-d_H-i-s').'.zip';
 
         return response()->streamDownload(function () use ($workspace) {
-            $zip = new ZipArchive();
+            $zip = new ZipArchive;
             $tempFile = tempnam(sys_get_temp_dir(), 'workspace_export_');
 
-            if ($zip->open($tempFile, ZipArchive::CREATE) === TRUE) {
+            if ($zip->open($tempFile, ZipArchive::CREATE) === true) {
                 // Export workspace details as JSON
                 $workspaceData = [
                     'id' => $workspace->id,
@@ -105,7 +103,7 @@ class WorkspaceController extends Controller
                     $zip->addEmptyDir('projects');
 
                     foreach ($projects as $project) {
-                        $projectDir = 'projects/' . $project->id . '_' . $project->key;
+                        $projectDir = 'projects/'.$project->id.'_'.$project->key;
                         $zip->addEmptyDir($projectDir);
 
                         // Project details
@@ -118,11 +116,11 @@ class WorkspaceController extends Controller
                             'updated_at' => $project->updated_at->toIso8601String(),
                         ];
 
-                        $zip->addFromString($projectDir . '/project.json', json_encode($projectData, JSON_PRETTY_PRINT));
+                        $zip->addFromString($projectDir.'/project.json', json_encode($projectData, JSON_PRETTY_PRINT));
 
                         // Export tasks
                         if ($project->tasks()->count() > 0) {
-                            $zip->addEmptyDir($projectDir . '/tasks');
+                            $zip->addEmptyDir($projectDir.'/tasks');
 
                             $tasks = $project->tasks()->with(['user', 'status', 'tags', 'attachments'])->get();
                             $tasksData = $tasks->map(function ($task) {
@@ -150,12 +148,12 @@ class WorkspaceController extends Controller
                                 ];
                             })->toArray();
 
-                            $zip->addFromString($projectDir . '/tasks/tasks.json', json_encode($tasksData, JSON_PRETTY_PRINT));
+                            $zip->addFromString($projectDir.'/tasks/tasks.json', json_encode($tasksData, JSON_PRETTY_PRINT));
                         }
 
                         // Export sprints
                         if ($project->sprints()->count() > 0) {
-                            $zip->addEmptyDir($projectDir . '/sprints');
+                            $zip->addEmptyDir($projectDir.'/sprints');
 
                             $sprints = $project->sprints()->get();
                             $sprintsData = $sprints->map(function ($sprint) {
@@ -171,7 +169,7 @@ class WorkspaceController extends Controller
                                 ];
                             })->toArray();
 
-                            $zip->addFromString($projectDir . '/sprints/sprints.json', json_encode($sprintsData, JSON_PRETTY_PRINT));
+                            $zip->addFromString($projectDir.'/sprints/sprints.json', json_encode($sprintsData, JSON_PRETTY_PRINT));
                         }
                     }
                 }
@@ -183,7 +181,7 @@ class WorkspaceController extends Controller
             }
         }, $filename, [
             'Content-Type' => 'application/zip',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 }

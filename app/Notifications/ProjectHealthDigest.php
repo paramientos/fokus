@@ -26,7 +26,7 @@ class ProjectHealthDigest extends Notification implements ShouldQueue
     {
         $healthScore = $this->healthData['health_score'];
         $trend = $this->healthData['health_trend'];
-        
+
         $healthStatus = match (true) {
             $healthScore >= 80 => '🟢 Excellent',
             $healthScore >= 60 => '🔵 Good',
@@ -46,9 +46,9 @@ class ProjectHealthDigest extends Notification implements ShouldQueue
             ->line("Here's your daily health summary for **{$this->project->name}**:")
             ->line('')
             ->line("**Overall Health: {$healthStatus} ({$healthScore}%)**")
-            ->line("**Trend: {$trendEmoji} " . ucfirst($trend) . "**")
+            ->line("**Trend: {$trendEmoji} ".ucfirst($trend).'**')
             ->line('')
-            ->line("**Key Metrics:**")
+            ->line('**Key Metrics:**')
             ->line("• Overdue Tasks: {$this->healthData['overdue_tasks']}")
             ->line("• Blocked Tasks: {$this->healthData['blocked_tasks']}")
             ->line("• Team Velocity: {$this->healthData['velocity']}")
@@ -61,9 +61,9 @@ class ProjectHealthDigest extends Notification implements ShouldQueue
             })
             ->when(count($this->healthData['risk_factors']) > 0, function ($mail) {
                 $mail->line('')
-                    ->line("**Risk Factors Detected:**");
+                    ->line('**Risk Factors Detected:**');
                 foreach ($this->healthData['risk_factors'] as $risk) {
-                    $mail->line("• " . ucwords(str_replace('_', ' ', $risk)));
+                    $mail->line('• '.ucwords(str_replace('_', ' ', $risk)));
                 }
             })
             ->action('View Full Health Dashboard', route('projects.health', $this->project))

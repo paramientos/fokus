@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $employee_id
  * @property string $reviewer_id
@@ -24,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Employee $employee
  * @property-read \App\Models\User $reviewer
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PerformanceReview newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PerformanceReview newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PerformanceReview query()
@@ -40,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PerformanceReview whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PerformanceReview whereStrengths($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PerformanceReview whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class PerformanceReview extends Model
@@ -56,7 +56,7 @@ class PerformanceReview extends Model
         'improvement_areas',
         'overall_rating',
         'feedback',
-        'status'
+        'status',
     ];
 
     protected $casts = [

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
- *
  * @property string $id
  * @property string $pull_request_id
  * @property string|null $user_id
@@ -17,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $commented_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequestComment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequestComment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequestComment query()
@@ -29,11 +28,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequestComment wherePullRequestId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequestComment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequestComment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class GitPullRequestComment extends Model
 {
     use HasUuids;
 
-    protected $guarded=[];
+    protected $guarded = [];
 }

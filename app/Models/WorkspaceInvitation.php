@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $email
@@ -21,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $invitedBy
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation query()
@@ -33,11 +32,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceInvitation whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class WorkspaceInvitation extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',

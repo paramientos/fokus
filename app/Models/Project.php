@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string $key
@@ -54,6 +52,7 @@ use Illuminate\Support\Str;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $wikiPages
  * @property-read int|null $wiki_pages_count
  * @property-read \App\Models\Workspace|null $workspace
+ *
  * @method static Builder<static>|Project active()
  * @method static Builder<static>|Project archived()
  * @method static Builder<static>|Project newModelQuery()
@@ -70,11 +69,13 @@ use Illuminate\Support\Str;
  * @method static Builder<static>|Project whereUpdatedAt($value)
  * @method static Builder<static>|Project whereUserId($value)
  * @method static Builder<static>|Project whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Project extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -112,7 +113,7 @@ class Project extends Model
             }
 
             $project->update([
-                'workspace_id' => session('workspace_id')
+                'workspace_id' => session('workspace_id'),
             ]);
         });
 

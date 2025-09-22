@@ -4,12 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
- *
  * @property string $id
  * @property string $file_id
  * @property string $user_id
@@ -19,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\File $file
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FileComment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FileComment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FileComment onlyTrashed()
@@ -32,11 +30,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FileComment whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FileComment withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|FileComment withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class FileComment extends Model
 {
-    use SoftDeletes,HasUuids;
+    use HasUuids;
+    use SoftDeletes;
 
     protected $fillable = [
         'file_id',

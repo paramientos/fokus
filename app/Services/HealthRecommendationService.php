@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Project;
-use App\Models\ProjectHealthMetric;
 use Illuminate\Support\Collection;
 
 class HealthRecommendationService
@@ -49,10 +48,10 @@ class HealthRecommendationService
                     'Review and prioritize overdue tasks',
                     'Reassign tasks to available team members',
                     'Consider extending project timeline',
-                    'Hold emergency team meeting'
+                    'Hold emergency team meeting',
                 ],
                 'impact' => 'high',
-                'effort' => 'medium'
+                'effort' => 'medium',
             ];
         }
 
@@ -66,10 +65,10 @@ class HealthRecommendationService
                     'Identify root causes of blocked tasks',
                     'Assign dedicated resources to unblock tasks',
                     'Implement daily blocker review process',
-                    'Create escalation procedures for blockers'
+                    'Create escalation procedures for blockers',
                 ],
                 'impact' => 'high',
-                'effort' => 'low'
+                'effort' => 'low',
             ];
         }
 
@@ -88,10 +87,10 @@ class HealthRecommendationService
                     'Break down large tasks into smaller chunks',
                     'Implement time boxing techniques',
                     'Review task estimation accuracy',
-                    'Provide time management training'
+                    'Provide time management training',
                 ],
                 'impact' => 'high',
-                'effort' => 'medium'
+                'effort' => 'medium',
             ]],
 
             'team_overload' => [[
@@ -103,10 +102,10 @@ class HealthRecommendationService
                     'Analyze individual workloads',
                     'Redistribute tasks among team members',
                     'Consider hiring additional resources',
-                    'Implement workload monitoring'
+                    'Implement workload monitoring',
                 ],
                 'impact' => 'high',
-                'effort' => 'high'
+                'effort' => 'high',
             ]],
 
             'low_velocity' => [[
@@ -118,10 +117,10 @@ class HealthRecommendationService
                     'Identify velocity bottlenecks',
                     'Streamline development processes',
                     'Reduce context switching',
-                    'Implement pair programming'
+                    'Implement pair programming',
                 ],
                 'impact' => 'medium',
-                'effort' => 'medium'
+                'effort' => 'medium',
             ]],
 
             'deadline_risk' => [[
@@ -133,10 +132,10 @@ class HealthRecommendationService
                     'Reassess project scope',
                     'Prioritize critical features',
                     'Consider scope reduction',
-                    'Increase team capacity temporarily'
+                    'Increase team capacity temporarily',
                 ],
                 'impact' => 'critical',
-                'effort' => 'high'
+                'effort' => 'high',
             ]],
 
             default => []
@@ -155,10 +154,10 @@ class HealthRecommendationService
                     'Review unassigned tasks',
                     'Assign tasks based on team capacity',
                     'Implement automatic assignment rules',
-                    'Create task assignment workflow'
+                    'Create task assignment workflow',
                 ],
                 'impact' => 'medium',
-                'effort' => 'low'
+                'effort' => 'low',
             ]],
 
             'user_overload' => [[
@@ -170,10 +169,10 @@ class HealthRecommendationService
                     'Redistribute tasks from overloaded members',
                     'Implement workload limits',
                     'Cross-train team members',
-                    'Monitor workload distribution regularly'
+                    'Monitor workload distribution regularly',
                 ],
                 'impact' => 'high',
-                'effort' => 'medium'
+                'effort' => 'medium',
             ]],
 
             'status_bottleneck' => [[
@@ -185,10 +184,10 @@ class HealthRecommendationService
                     'Review workflow status definitions',
                     'Implement WIP limits',
                     'Identify status transition blockers',
-                    'Optimize review processes'
+                    'Optimize review processes',
                 ],
                 'impact' => 'medium',
-                'effort' => 'medium'
+                'effort' => 'medium',
             ]],
 
             default => []
@@ -220,10 +219,10 @@ class HealthRecommendationService
                     'Conduct velocity retrospective',
                     'Identify impediments to productivity',
                     'Review and optimize processes',
-                    'Consider team motivation factors'
+                    'Consider team motivation factors',
                 ],
                 'impact' => 'medium',
-                'effort' => 'low'
+                'effort' => 'low',
             ];
         }
 
@@ -239,10 +238,10 @@ class HealthRecommendationService
                     'Conduct comprehensive health review',
                     'Address top risk factors',
                     'Implement daily health monitoring',
-                    'Create health improvement action plan'
+                    'Create health improvement action plan',
                 ],
                 'impact' => 'high',
-                'effort' => 'medium'
+                'effort' => 'medium',
             ];
         }
 
@@ -261,8 +260,8 @@ class HealthRecommendationService
 
         $sumX = array_sum($x);
         $sumY = array_sum($y);
-        $sumXY = array_sum(array_map(fn($i) => $x[$i] * $y[$i], range(0, $n - 1)));
-        $sumX2 = array_sum(array_map(fn($val) => $val * $val, $x));
+        $sumXY = array_sum(array_map(fn ($i) => $x[$i] * $y[$i], range(0, $n - 1)));
+        $sumX2 = array_sum(array_map(fn ($val) => $val * $val, $x));
 
         return ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX);
     }
@@ -279,6 +278,7 @@ class HealthRecommendationService
             if ($aPriority === $bPriority) {
                 $aImpact = $impactOrder[$a['impact']] ?? 0;
                 $bImpact = $impactOrder[$b['impact']] ?? 0;
+
                 return $bImpact <=> $aImpact;
             }
 
@@ -317,27 +317,27 @@ class HealthRecommendationService
             $score >= 90 => [
                 'status' => 'excellent',
                 'message' => 'Project is performing exceptionally well',
-                'advice' => 'Maintain current practices and share best practices with other teams'
+                'advice' => 'Maintain current practices and share best practices with other teams',
             ],
             $score >= 80 => [
                 'status' => 'good',
                 'message' => 'Project is in good health with minor areas for improvement',
-                'advice' => 'Focus on continuous improvement and monitor for any declining trends'
+                'advice' => 'Focus on continuous improvement and monitor for any declining trends',
             ],
             $score >= 60 => [
                 'status' => 'fair',
                 'message' => 'Project has some health issues that need attention',
-                'advice' => 'Address key risk factors and implement improvement measures'
+                'advice' => 'Address key risk factors and implement improvement measures',
             ],
             $score >= 40 => [
                 'status' => 'poor',
                 'message' => 'Project health is concerning and requires immediate action',
-                'advice' => 'Implement urgent corrective measures and increase monitoring frequency'
+                'advice' => 'Implement urgent corrective measures and increase monitoring frequency',
             ],
             default => [
                 'status' => 'critical',
                 'message' => 'Project is in critical condition',
-                'advice' => 'Emergency intervention required - consider project restructuring'
+                'advice' => 'Emergency intervention required - consider project restructuring',
             ]
         };
     }
@@ -359,7 +359,7 @@ class HealthRecommendationService
         return [
             'average_velocity' => round($avgVelocity, 1),
             'trend' => $trend > 0.1 ? 'increasing' : ($trend < -0.1 ? 'decreasing' : 'stable'),
-            'recommendation' => $this->getVelocityRecommendation($avgVelocity, $trend)
+            'recommendation' => $this->getVelocityRecommendation($avgVelocity, $trend),
         ];
     }
 
@@ -374,6 +374,7 @@ class HealthRecommendationService
         $efficiency = $tasks->groupBy('user_id')->map(function ($userTasks) {
             $completed = $userTasks->whereNotNull('completed_at')->count();
             $total = $userTasks->count();
+
             return $total > 0 ? ($completed / $total) * 100 : 0;
         });
 
@@ -401,7 +402,7 @@ class HealthRecommendationService
             $assessedRisks[] = [
                 'factor' => $risk,
                 'level' => $riskLevels[$risk] ?? 'low',
-                'description' => $this->getRiskDescription($risk)
+                'description' => $this->getRiskDescription($risk),
             ];
         }
 
@@ -418,7 +419,7 @@ class HealthRecommendationService
                 'type' => 'quick_win',
                 'title' => 'Unblock Tasks',
                 'effort' => 'low',
-                'impact' => 'high'
+                'impact' => 'high',
             ];
         }
 
@@ -428,7 +429,7 @@ class HealthRecommendationService
                 'type' => 'process_improvement',
                 'title' => 'Optimize Development Process',
                 'effort' => 'medium',
-                'impact' => 'high'
+                'impact' => 'high',
             ];
         }
 

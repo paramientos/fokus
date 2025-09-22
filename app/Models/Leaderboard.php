@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
-use Carbon\Carbon;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $user_id
@@ -32,6 +30,7 @@ use Carbon\Carbon;
  * @property-read string $rank_suffix
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static Builder<static>|Leaderboard currentPeriod(string $period)
  * @method static Builder<static>|Leaderboard forCategory(string $category)
  * @method static Builder<static>|Leaderboard forPeriod(string $period)
@@ -55,11 +54,13 @@ use Carbon\Carbon;
  * @method static Builder<static>|Leaderboard whereUpdatedAt($value)
  * @method static Builder<static>|Leaderboard whereUserId($value)
  * @method static Builder<static>|Leaderboard whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Leaderboard extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -74,13 +75,13 @@ class Leaderboard extends Model
         'streak_days',
         'rank',
         'period_start',
-        'period_end'
+        'period_end',
     ];
 
     protected $casts = [
         'period_start' => 'date',
         'period_end' => 'date',
-        'quality_score' => 'decimal:2'
+        'quality_score' => 'decimal:2',
     ];
 
     public function workspace(): BelongsTo
@@ -108,7 +109,7 @@ class Leaderboard extends Model
         $dates = self::getPeriodDates($period);
 
         return $query->where('period_start', $dates['start'])
-                    ->where('period_end', $dates['end']);
+            ->where('period_end', $dates['end']);
     }
 
     public function scopeTopRanked(Builder $query, int $limit = 10): Builder
@@ -121,20 +122,20 @@ class Leaderboard extends Model
         $rank = $this->rank;
 
         if ($rank >= 11 && $rank <= 13) {
-            return $rank . 'th';
+            return $rank.'th';
         }
 
-        return match($rank % 10) {
-            1 => $rank . 'st',
-            2 => $rank . 'nd',
-            3 => $rank . 'rd',
-            default => $rank . 'th'
+        return match ($rank % 10) {
+            1 => $rank.'st',
+            2 => $rank.'nd',
+            3 => $rank.'rd',
+            default => $rank.'th'
         };
     }
 
     public function getRankBadgeColorAttribute(): string
     {
-        return match($this->rank) {
+        return match ($this->rank) {
             1 => '#FFD700', // Gold
             2 => '#C0C0C0', // Silver
             3 => '#CD7F32', // Bronze
@@ -146,30 +147,30 @@ class Leaderboard extends Model
     {
         $now = Carbon::now();
 
-        return match($period) {
+        return match ($period) {
             'daily' => [
                 'start' => $now->startOfDay()->toDateString(),
-                'end' => $now->endOfDay()->toDateString()
+                'end' => $now->endOfDay()->toDateString(),
             ],
             'weekly' => [
                 'start' => $now->startOfWeek()->toDateString(),
-                'end' => $now->endOfWeek()->toDateString()
+                'end' => $now->endOfWeek()->toDateString(),
             ],
             'monthly' => [
                 'start' => $now->startOfMonth()->toDateString(),
-                'end' => $now->endOfMonth()->toDateString()
+                'end' => $now->endOfMonth()->toDateString(),
             ],
             'quarterly' => [
                 'start' => $now->startOfQuarter()->toDateString(),
-                'end' => $now->endOfQuarter()->toDateString()
+                'end' => $now->endOfQuarter()->toDateString(),
             ],
             'yearly' => [
                 'start' => $now->startOfYear()->toDateString(),
-                'end' => $now->endOfYear()->toDateString()
+                'end' => $now->endOfYear()->toDateString(),
             ],
             'all_time' => [
                 'start' => '1970-01-01',
-                'end' => '2099-12-31'
+                'end' => '2099-12-31',
             ]
         };
     }
@@ -205,7 +206,7 @@ class Leaderboard extends Model
             'tasks_completed' => 0,
             'projects_completed' => 0,
             'quality_score' => 0,
-            'streak_days' => 0
+            'streak_days' => 0,
         ];
 
         // Calculate achievements points
@@ -220,7 +221,7 @@ class Leaderboard extends Model
         // Calculate tasks completed
         $stats['tasks_completed'] = $user->tasks()
             ->where('workspace_id', $workspaceId)
-            ->whereHas('status', function($query) {
+            ->whereHas('status', function ($query) {
                 $query->where('name', 'Done')->orWhere('name', 'Completed');
             })
             ->whereBetween('updated_at', [$startDate, $endDate])
@@ -229,7 +230,7 @@ class Leaderboard extends Model
         // Calculate projects completed
         $stats['projects_completed'] = $user->projects()
             ->where('workspace_id', $workspaceId)
-            ->whereHas('status', function($query) {
+            ->whereHas('status', function ($query) {
                 $query->where('name', 'Completed')->orWhere('name', 'Done');
             })
             ->whereBetween('updated_at', [$startDate, $endDate])

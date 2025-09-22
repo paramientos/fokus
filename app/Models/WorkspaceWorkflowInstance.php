@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_workflow_id
  * @property string $workspace_id
@@ -31,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $step_instances_count
  * @property-read \App\Models\WorkspaceWorkflow $workflow
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowInstance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowInstance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowInstance query()
@@ -49,11 +48,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowInstance whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowInstance whereWorkspaceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowInstance whereWorkspaceWorkflowId($value)
+ *
  * @mixin \Eloquent
  */
 class WorkspaceWorkflowInstance extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -122,7 +123,7 @@ class WorkspaceWorkflowInstance extends Model
     public function currentStepInstance()
     {
         return $this->stepInstances()
-            ->whereIn('status', ['active','pending'])
+            ->whereIn('status', ['active', 'pending'])
             ->first();
     }
 
@@ -139,6 +140,7 @@ class WorkspaceWorkflowInstance extends Model
         if ($requiresAdminApproval) {
             return false;
         }
+
         // Tüm adımlar tamamlanmış, reddedilmiş ya da iptal edilmişse tamamlandı
         return $this->stepInstances()
             ->whereNotIn('status', ['completed', 'rejected', 'cancelled'])
@@ -167,7 +169,7 @@ class WorkspaceWorkflowInstance extends Model
         if ($nextStep) {
             $nextStep->update([
                 'status' => 'in_progress',
-                'started_at' => now()
+                'started_at' => now(),
             ]);
 
             return true;
@@ -178,7 +180,7 @@ class WorkspaceWorkflowInstance extends Model
         if ($finalStep && $finalStep->step && ($finalStep->step->step_config['requires_admin_approval'] ?? false)) {
             $this->update([
                 'status' => 'waiting_admin_approval',
-                'completed_at' => null
+                'completed_at' => null,
             ]);
 
             return false;
@@ -203,8 +205,9 @@ class WorkspaceWorkflowInstance extends Model
         }
         $this->update([
             'status' => 'completed',
-            'completed_at' => now()
+            'completed_at' => now(),
         ]);
+
         return true;
     }
 }

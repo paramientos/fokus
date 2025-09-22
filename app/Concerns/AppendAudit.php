@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 trait AppendAudit
 {
-
     public static function bootAppendAudit()
     {
         if (auth()->check()) {

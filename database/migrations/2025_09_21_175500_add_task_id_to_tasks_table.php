@@ -17,13 +17,13 @@ return new class extends Migration
 
         // Mevcut görevlere task_id atama - her proje için sıralı ID'ler oluştur
         $projects = DB::table('projects')->get(['id']);
-        
+
         foreach ($projects as $project) {
             $tasks = DB::table('tasks')
                 ->where('project_id', $project->id)
                 ->orderBy('created_at')
                 ->get(['id']);
-                
+
             $counter = 1;
             foreach ($tasks as $task) {
                 DB::table('tasks')

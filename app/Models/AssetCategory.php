@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $name
@@ -29,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int $assigned_assets_count
  * @property-read int $available_assets_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static Builder<static>|AssetCategory newModelQuery()
  * @method static Builder<static>|AssetCategory newQuery()
  * @method static Builder<static>|AssetCategory query()
@@ -42,11 +41,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|AssetCategory whereSlug($value)
  * @method static Builder<static>|AssetCategory whereUpdatedAt($value)
  * @method static Builder<static>|AssetCategory whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class AssetCategory extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',

@@ -13,16 +13,15 @@ class MainLine extends Component
     public function __construct(
 
         // Slots
-        public mixed   $sidebar = null,
-        public mixed   $content = null,
-        public mixed   $footer = null,
-        public ?bool   $fullWidth = false,
-        public ?bool   $withNav = false,
+        public mixed $sidebar = null,
+        public mixed $content = null,
+        public mixed $footer = null,
+        public ?bool $fullWidth = false,
+        public ?bool $withNav = false,
         public ?string $collapseText = 'Collapse',
         public ?string $collapseIcon = 'o-bars-3-bottom-right',
-        public ?bool   $collapsible = false,
-    )
-    {
+        public ?bool $collapsible = false,
+    ) {
         $this->url = route('mary.toogle-sidebar', absolute: false);
     }
 

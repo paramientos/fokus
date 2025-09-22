@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * 
- *
  * @property string $id
  * @property string $file_name
  * @property string $file_path
@@ -31,6 +29,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read \App\Models\User $uploader
  * @property-read \Illuminate\Database\Eloquent\Collection<int, File> $versions
  * @property-read int|null $versions_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File onlyTrashed()
@@ -51,11 +50,13 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereVersion($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class File extends Model
 {
-    use SoftDeletes,HasUuids;
+    use HasUuids;
+    use SoftDeletes;
 
     protected $fillable = [
         'file_name',
@@ -94,8 +95,7 @@ class File extends Model
     /**
      * Workspace depolama alanını güncelle
      *
-     * @param int $bytes Eklenecek veya çıkarılacak byte miktarı (negatif değer çıkarma işlemi yapar)
-     * @return bool
+     * @param  int  $bytes  Eklenecek veya çıkarılacak byte miktarı (negatif değer çıkarma işlemi yapar)
      */
     public function updateWorkspaceStorageUsage(int $bytes): bool
     {
@@ -127,10 +127,9 @@ class File extends Model
     /**
      * Dosya yüklemeden önce workspace'in yeterli depolama alanı olup olmadığını kontrol et
      *
-     * @param string $fileabletype Dosyanın bağlı olduğu model tipi
-     * @param int $fileableid Dosyanın bağlı olduğu model ID'si
-     * @param int $filesize Dosya boyutu (byte)
-     * @return bool
+     * @param  string  $fileabletype  Dosyanın bağlı olduğu model tipi
+     * @param  int  $fileableid  Dosyanın bağlı olduğu model ID'si
+     * @param  int  $filesize  Dosya boyutu (byte)
      */
     public static function hasEnoughStorageSpace(string $fileabletype, int $fileableid, int $filesize): bool
     {

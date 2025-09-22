@@ -28,11 +28,13 @@ class SendHealthNotificationsCommand extends Command
                 default => $this->error("Invalid notification type: {$type}")
             };
 
-            $this->info("Health notifications sent successfully!");
+            $this->info('Health notifications sent successfully!');
+
             return Command::SUCCESS;
 
         } catch (\Exception $e) {
-            $this->error("Failed to send notifications: " . $e->getMessage());
+            $this->error('Failed to send notifications: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }
@@ -60,13 +62,13 @@ class SendHealthNotificationsCommand extends Command
         } else {
             $this->info('Checking critical alerts for all active projects...');
             $projects = \App\Models\Project::active()->get();
-            
+
             foreach ($projects as $project) {
                 $service->sendCriticalAlerts($project);
                 $this->line("Processed: {$project->name}");
             }
         }
-        
+
         $this->info('Critical alert check completed.');
     }
 }

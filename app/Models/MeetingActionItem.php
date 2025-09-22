@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $meeting_id
  * @property string|null $assigned_to
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $assignee
  * @property-read \App\Models\Meeting $meeting
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingActionItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingActionItem newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingActionItem query()
@@ -31,11 +30,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingActionItem whereMeetingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingActionItem whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|MeetingActionItem whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class MeetingActionItem extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'meeting_id',

@@ -15,7 +15,7 @@ class ProjectSeeder extends Seeder
     {
         // Tüm kullanıcıları al
         $users = User::all();
-        
+
         // Örnek projeler oluştur
         $projects = [
             [
@@ -37,11 +37,11 @@ class ProjectSeeder extends Seeder
                 'is_active' => true,
             ],
         ];
-        
+
         foreach ($projects as $projectData) {
             // Rastgele bir kullanıcıyı proje sahibi olarak ata
             $user = $users->random();
-            
+
             Project::create([
                 'name' => $projectData['name'],
                 'key' => $projectData['key'],

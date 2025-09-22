@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_workflow_instance_id
  * @property string $workspace_workflow_step_id
@@ -28,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\User|null $completedByUser
  * @property-read \App\Models\WorkspaceWorkflowStep $step
  * @property-read \App\Models\WorkspaceWorkflowInstance $workflowInstance
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance query()
@@ -45,11 +44,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereWorkspaceWorkflowInstanceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStepInstance whereWorkspaceWorkflowStepId($value)
+ *
  * @mixin \Eloquent
  */
 class WorkspaceWorkflowStepInstance extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -156,6 +157,7 @@ class WorkspaceWorkflowStepInstance extends Model
         $this->completed_by = $userId;
         $this->completed_at = now();
         $this->comments = $reason;
+
         return $this->save();
     }
 

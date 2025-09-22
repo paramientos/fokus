@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $software_license_id
  * @property string $user_id
@@ -26,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read string|null $duration
  * @property-read \App\Models\SoftwareLicense $softwareLicense
  * @property-read \App\Models\User $user
+ *
  * @method static Builder<static>|LicenseAssignment newModelQuery()
  * @method static Builder<static>|LicenseAssignment newQuery()
  * @method static Builder<static>|LicenseAssignment query()
@@ -40,11 +39,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder<static>|LicenseAssignment whereSoftwareLicenseId($value)
  * @method static Builder<static>|LicenseAssignment whereUpdatedAt($value)
  * @method static Builder<static>|LicenseAssignment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class LicenseAssignment extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'software_license_id',

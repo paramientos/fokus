@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Task;
 use App\Models\Activity;
+use App\Models\Task;
 
 class TaskObserver
 {
@@ -29,17 +29,17 @@ class TaskObserver
     {
         $changes = [];
         $description = 'Task updated';
-        
+
         // Durum değişikliği
         if ($task->isDirty('status_id')) {
             $oldStatus = \App\Models\Status::find($task->getOriginal('status_id'))?->name ?? 'Unknown';
             $newStatus = \App\Models\Status::find($task->status_id)?->name ?? 'Unknown';
-            
+
             $changes['status'] = [
                 'from' => $oldStatus,
-                'to' => $newStatus
+                'to' => $newStatus,
             ];
-            
+
             $description = "Status changed from '{$oldStatus}' to '{$newStatus}'";
             $action = 'status_changed';
         }
@@ -47,12 +47,12 @@ class TaskObserver
         elseif ($task->isDirty('user_id')) {
             $oldUser = \App\Models\User::find($task->getOriginal('user_id'))?->name ?? 'Unassigned';
             $newUser = \App\Models\User::find($task->user_id)?->name ?? 'Unassigned';
-            
+
             $changes['assigned_to'] = [
                 'from' => $oldUser,
-                'to' => $newUser
+                'to' => $newUser,
             ];
-            
+
             if (!$task->getOriginal('user_id')) {
                 $description = "Assigned to {$newUser}";
                 $action = 'assigned';
@@ -71,15 +71,15 @@ class TaskObserver
                 if (in_array($field, ['updated_at', 'remember_token'])) {
                     continue;
                 }
-                
+
                 $changes[$field] = [
                     'from' => $task->getOriginal($field),
-                    'to' => $value
+                    'to' => $value,
                 ];
             }
             $action = 'updated';
         }
-        
+
         if (!empty($changes)) {
             Activity::create([
                 'user_id' => auth()->id() ?? 1,

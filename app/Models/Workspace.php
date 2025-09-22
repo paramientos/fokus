@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string|null $description
@@ -34,6 +32,7 @@ use Illuminate\Support\Str;
  * @property-read int|null $workflow_instances_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkspaceWorkflow> $workflows
  * @property-read int|null $workflows_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace query()
@@ -44,17 +43,19 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Workspace extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'name',
         'description',
         'created_by',
-        'owner_id'
+        'owner_id',
     ];
 
     public function creator()
@@ -74,7 +75,7 @@ class Workspace extends Model
 
     public function members()
     {
-        return $this->belongsToMany(User::class,WorkspaceMember::class)
+        return $this->belongsToMany(User::class, WorkspaceMember::class)
             ->withTimestamps()
             ->withPivot(['role']);
     }
@@ -121,8 +122,6 @@ class Workspace extends Model
 
     /**
      * Get or create storage usage for the workspace.
-     *
-     * @return StorageUsage
      */
     public function getStorageUsage(): StorageUsage
     {
@@ -131,7 +130,7 @@ class Workspace extends Model
                 'workspace_id' => $this->id,
                 'used_bytes' => 0,
                 'limit_bytes' => 1073741824, // Default 1GB
-                'plan_name' => 'basic'
+                'plan_name' => 'basic',
             ]);
         }
 
@@ -140,9 +139,6 @@ class Workspace extends Model
 
     /**
      * Check if the workspace has enough storage space left
-     *
-     * @param int $bytes
-     * @return bool
      */
     public function hasEnoughStorageSpace(int $bytes): bool
     {
@@ -155,7 +151,7 @@ class Workspace extends Model
             // Add creator/owner to workspace_members pivot as role 'owner' if not already.
             if (!$workspace->members()->where('user_id', $workspace->owner_id)->exists()) {
                 $workspace->members()->attach($workspace->owner_id, [
-                    'id'=> Str::uuid7()->toString(),
+                    'id' => Str::uuid7()->toString(),
                     'role' => 'owner',
                 ]);
             }
@@ -165,7 +161,7 @@ class Workspace extends Model
                 'workspace_id' => $workspace->id,
                 'used_bytes' => 0,
                 'limit_bytes' => 1073741824, // Default 1GB
-                'plan_name' => 'basic'
+                'plan_name' => 'basic',
             ]);
         });
     }

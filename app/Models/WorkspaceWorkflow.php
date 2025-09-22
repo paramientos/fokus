@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string|null $description
@@ -27,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkspaceWorkflowStep> $steps
  * @property-read int|null $steps_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflow newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflow query()
@@ -40,11 +39,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflow whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflow whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflow whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class WorkspaceWorkflow extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

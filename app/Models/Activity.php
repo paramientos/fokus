@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $user_id
  * @property string|null $project_id
@@ -26,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\Sprint|null $sprint
  * @property-read \App\Models\Task|null $task
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Activity newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Activity newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Activity query()
@@ -39,11 +38,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Activity whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Activity whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Activity whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Activity extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -106,7 +107,7 @@ class Activity extends Model
      */
     public function getIconAttribute(): string
     {
-        return match($this->action) {
+        return match ($this->action) {
             'created' => 'fas.plus',
             'updated' => 'fas.pen',
             'deleted' => 'fas.trash',

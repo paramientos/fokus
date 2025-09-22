@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $employee_id
  * @property string $training_id
@@ -27,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read int $progress_percentage
  * @property-read string $status_color
  * @property-read \App\Models\Training $training
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EmployeeTraining newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EmployeeTraining newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EmployeeTraining query()
@@ -43,11 +42,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EmployeeTraining whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EmployeeTraining whereTrainingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|EmployeeTraining whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class EmployeeTraining extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $table = 'employee_training';
 
@@ -61,14 +62,14 @@ class EmployeeTraining extends Model
         'assigned_at',
         'due_date',
         'is_required',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [
         'assigned_at' => 'datetime',
         'due_date' => 'date',
         'is_required' => 'boolean',
-        'score' => 'decimal:2'
+        'score' => 'decimal:2',
     ];
 
     public function employee(): BelongsTo
@@ -83,7 +84,7 @@ class EmployeeTraining extends Model
 
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'registered', 'assigned' => 'warning',
             'in_progress' => 'info',
             'completed' => 'success',
@@ -94,7 +95,7 @@ class EmployeeTraining extends Model
 
     public function getProgressPercentageAttribute(): int
     {
-        return match($this->status) {
+        return match ($this->status) {
             'registered', 'assigned' => 0,
             'in_progress' => 50,
             'completed' => 100,

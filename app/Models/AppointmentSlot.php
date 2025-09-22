@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
- *
  * @property string $id
  * @property string $user_id
  * @property \Illuminate\Support\Carbon $date
@@ -23,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read int $duration_in_minutes
  * @property-read string $formatted_time
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentSlot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentSlot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentSlot query()
@@ -34,11 +33,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentSlot whereStartTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentSlot whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppointmentSlot whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class AppointmentSlot extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -70,7 +71,7 @@ class AppointmentSlot extends Model
 
     public function getFormattedTimeAttribute(): string
     {
-        return date('H:i', strtotime($this->start_time)) . ' - ' . date('H:i', strtotime($this->end_time));
+        return date('H:i', strtotime($this->start_time)).' - '.date('H:i', strtotime($this->end_time));
     }
 
     public function getDurationInMinutesAttribute(): int

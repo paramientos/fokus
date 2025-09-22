@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\Project|null $project
  * @property-read \App\Models\Task|null $task
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpoint newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpoint newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpoint query()
@@ -45,11 +46,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpoint whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpoint whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpoint whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class ApiEndpoint extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

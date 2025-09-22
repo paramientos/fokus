@@ -51,24 +51,25 @@ class GenerateProjectDocumentation extends Command
         } else {
             // Proje seçimi için interaktif menü
             $projects = Project::orderBy('name')->get(['id', 'name', 'key']);
-            
+
             if ($projects->isEmpty()) {
                 $this->error('Hiç proje bulunamadı!');
+
                 return 1;
             }
-            
+
             $choices = $projects->mapWithKeys(function ($project) {
                 return [$project->id => "{$project->key} - {$project->name}"];
             })->toArray();
-            
+
             $choices['all'] = 'Tüm projeler';
-            
+
             $selectedProject = $this->choice(
                 'Hangi proje için dokümantasyon oluşturulacak?',
                 $choices,
                 'all'
             );
-            
+
             if ($selectedProject === 'Tüm projeler') {
                 $this->generateForAllProjects($force);
             } else {
@@ -79,7 +80,7 @@ class GenerateProjectDocumentation extends Command
 
         return 0;
     }
-    
+
     /**
      * Tüm projeler için dokümantasyon oluştur
      */
@@ -87,38 +88,39 @@ class GenerateProjectDocumentation extends Command
     {
         $projects = Project::all();
         $count = $projects->count();
-        
+
         $this->info("Toplam {$count} proje için dokümantasyon oluşturuluyor...");
         $progressBar = $this->output->createProgressBar($count);
         $progressBar->start();
-        
+
         foreach ($projects as $project) {
             $this->generateDocumentation($project, $force);
             $progressBar->advance();
         }
-        
+
         $progressBar->finish();
         $this->newLine(2);
         $this->info('Tüm projeler için dokümantasyon oluşturuldu!');
     }
-    
+
     /**
      * Belirli bir proje için dokümantasyon oluştur
      */
     protected function generateForProject(int $projectId, bool $force): void
     {
         $project = Project::find($projectId);
-        
+
         if (!$project) {
             $this->error("ID: {$projectId} olan proje bulunamadı!");
+
             return;
         }
-        
+
         $this->info("'{$project->name}' projesi için dokümantasyon oluşturuluyor...");
         $this->generateDocumentation($project, $force);
         $this->info('Dokümantasyon başarıyla oluşturuldu!');
     }
-    
+
     /**
      * Dokümantasyon oluştur
      */

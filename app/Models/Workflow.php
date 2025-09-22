@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string|null $description
@@ -24,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkflowAction> $actions
  * @property-read int|null $actions_count
  * @property-read \App\Models\Project $project
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workflow newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workflow newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workflow query()
@@ -37,11 +36,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workflow whereTriggerType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workflow whereTriggerValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workflow whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Workflow extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -86,9 +87,6 @@ class Workflow extends Model
 
     /**
      * Check if the workflow should be triggered for a given task.
-     *
-     * @param Task $task
-     * @return bool
      */
     public function shouldTrigger(Task $task): bool
     {
@@ -108,9 +106,6 @@ class Workflow extends Model
 
     /**
      * Check if the status change trigger condition is met.
-     *
-     * @param Task $task
-     * @return bool
      */
     private function checkStatusChangeTrigger(Task $task): bool
     {
@@ -126,9 +121,6 @@ class Workflow extends Model
 
     /**
      * Check if the priority change trigger condition is met.
-     *
-     * @param Task $task
-     * @return bool
      */
     private function checkPriorityChangeTrigger(Task $task): bool
     {
@@ -144,9 +136,6 @@ class Workflow extends Model
 
     /**
      * Check if the assignment trigger condition is met.
-     *
-     * @param Task $task
-     * @return bool
      */
     private function checkAssignmentTrigger(Task $task): bool
     {
@@ -165,9 +154,6 @@ class Workflow extends Model
 
     /**
      * Check if the due date approaching trigger condition is met.
-     *
-     * @param Task $task
-     * @return bool
      */
     private function checkDueDateApproachingTrigger(Task $task): bool
     {
@@ -183,9 +169,6 @@ class Workflow extends Model
 
     /**
      * Check if the sprint added trigger condition is met.
-     *
-     * @param Task $task
-     * @return bool
      */
     private function checkSprintAddedTrigger(Task $task): bool
     {
@@ -204,9 +187,6 @@ class Workflow extends Model
 
     /**
      * Execute all actions for this workflow.
-     *
-     * @param Task $task
-     * @return void
      */
     public function executeActions(Task $task): void
     {

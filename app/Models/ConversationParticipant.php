@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $conversation_id
  * @property string $user_id
@@ -21,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Conversation $conversation
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant active()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant admins()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant forConversation($conversationId)
@@ -37,11 +36,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereLeftAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ConversationParticipant whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class ConversationParticipant extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

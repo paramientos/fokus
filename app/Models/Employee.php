@@ -5,12 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $user_id
  * @property string $workspace_id
@@ -59,6 +57,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read int|null $trainings_count
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Employee newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Employee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Employee query()
@@ -81,6 +80,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Employee whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Employee whereWorkLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Employee whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Employee extends Model
@@ -103,7 +103,7 @@ class Employee extends Model
         'bank_account',
         'iban',
         'skills',
-        'notes'
+        'notes',
     ];
 
     protected $casts = [

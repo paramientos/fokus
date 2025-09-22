@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property int $used_bytes
@@ -21,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read int $usage_percent
  * @property-read float $usage_percentage
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage query()
@@ -31,11 +30,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage whereUsedBytes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StorageUsage whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class StorageUsage extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -54,9 +55,6 @@ class StorageUsage extends Model
 
     /**
      * Check if the workspace has enough storage space left
-     *
-     * @param int $bytes
-     * @return bool
      */
     public function hasEnoughSpace(int $bytes): bool
     {
@@ -65,32 +63,26 @@ class StorageUsage extends Model
 
     /**
      * Add bytes to the used storage
-     *
-     * @param int $bytes
-     * @return bool
      */
     public function addUsage(int $bytes): bool
     {
         $this->used_bytes += $bytes;
+
         return $this->save();
     }
 
     /**
      * Remove bytes from the used storage
-     *
-     * @param int $bytes
-     * @return bool
      */
     public function removeUsage(int $bytes): bool
     {
         $this->used_bytes = max(0, $this->used_bytes - $bytes);
+
         return $this->save();
     }
 
     /**
      * Get the usage percentage
-     *
-     * @return float
      */
     public function getUsagePercentageAttribute(): float
     {
@@ -103,8 +95,6 @@ class StorageUsage extends Model
 
     /**
      * Get the formatted used bytes
-     *
-     * @return string
      */
     public function getFormattedUsedAttribute(): string
     {
@@ -113,8 +103,6 @@ class StorageUsage extends Model
 
     /**
      * Get the formatted limit bytes
-     *
-     * @return string
      */
     public function getFormattedLimitAttribute(): string
     {
@@ -123,23 +111,18 @@ class StorageUsage extends Model
 
     /**
      * Get the storage usage percent (0-100)
-     *
-     * @return int
      */
     public function getUsagePercentAttribute(): int
     {
         if ($this->limit_bytes <= 0) {
             return 0;
         }
+
         return min(100, (int) round($this->used_bytes / $this->limit_bytes * 100));
     }
 
     /**
      * Format bytes to human readable format
-     *
-     * @param int $bytes
-     * @param int $precision
-     * @return string
      */
     protected function formatBytes(int $bytes, int $precision = 2): string
     {
@@ -151,6 +134,6 @@ class StorageUsage extends Model
 
         $bytes /= (1 << (10 * $pow));
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision).' '.$units[$pow];
     }
 }

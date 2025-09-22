@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $team_id
  * @property string $project_id
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\User|null $assignedBy
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\Team $team
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamProject newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamProject newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamProject query()
@@ -31,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamProject whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamProject whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamProject whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class TeamProject extends Model

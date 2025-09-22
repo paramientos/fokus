@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $filename
  * @property string $path
@@ -28,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read string $icon_class
  * @property-read bool $is_image
  * @property-read \App\Models\User|null $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment query()
@@ -42,11 +41,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Attachment whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Attachment extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -80,8 +81,6 @@ class Attachment extends Model
 
     /**
      * Get the formatted file size.
-     *
-     * @return string
      */
     public function getFormattedSizeAttribute(): string
     {
@@ -92,13 +91,11 @@ class Attachment extends Model
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 
     /**
      * Get the file extension.
-     *
-     * @return string
      */
     public function getExtensionAttribute(): string
     {
@@ -107,8 +104,6 @@ class Attachment extends Model
 
     /**
      * Check if the file is an image.
-     *
-     * @return bool
      */
     public function getIsImageAttribute(): bool
     {
@@ -123,8 +118,6 @@ class Attachment extends Model
 
     /**
      * Get the file type icon class based on mime type or extension.
-     *
-     * @return string
      */
     public function getIconClassAttribute(): string
     {

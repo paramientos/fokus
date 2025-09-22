@@ -2,49 +2,66 @@
 
 namespace App\Livewire\Tasks;
 
-use App\Models\Task;
-use App\Models\Tag;
 use App\Models\Attachment;
 use App\Models\Comment;
+use App\Models\Tag;
+use App\Models\Task;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\Rule;
 
 class Show extends Component
 {
     use WithFileUploads;
 
     public Task $task;
+
     public $project;
+
     public $comments = [];
+
     public $newComment = '';
+
     public $activeTab = 'details';
 
     // Attachment properties
     public $showAttachmentModal = false;
+
     #[Rule('file|max:10240')] // 10MB max
     public $attachmentFile = null;
+
     public $attachmentDescription = '';
 
     // Tag properties
     public $showTagsModal = false;
+
     public $availableTags = [];
+
     public $selectedTagIds = [];
+
     public $newTagName = '';
+
     public $newTagColor = '#3498db';
 
     // Dependency properties
     public $showDependencyModal = false;
+
     public $searchTask = '';
+
     public $searchResults = [];
+
     public $selectedDependencyId = null;
+
     public $dependencyType = 'blocks';
 
     // Time tracking properties
     public $showTimeTrackingModal = false;
+
     public $timeSpent = '';
+
     public $timeEstimate = '';
+
     public $timeUnit = 'h';
 
     public function mount(Task $task)
@@ -186,6 +203,7 @@ class Show extends Component
         // Workspace depolama limiti kontrolü
         if (!$workspace->hasEnoughStorageSpace($fileSize)) {
             $this->error('Workspace storage limit reached. Please upgrade your plan or delete some files.');
+
             return;
         }
 
@@ -346,6 +364,7 @@ class Show extends Component
         }
 
         $progress = ($this->task->time_spent / $this->task->time_estimate) * 100;
+
         return min(100, $progress);
     }
 
@@ -358,7 +377,7 @@ class Show extends Component
     /**
      * Format time in minutes to a human-readable format
      *
-     * @param int|null $minutes
+     * @param  int|null  $minutes
      * @return string
      */
     public function formatTime($minutes)

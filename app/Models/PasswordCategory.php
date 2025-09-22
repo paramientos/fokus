@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $password_vault_id
  * @property string $name
@@ -21,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PasswordEntry> $entries
  * @property-read int $entries_count
  * @property-read \App\Models\PasswordVault $vault
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordCategory query()
@@ -31,11 +30,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordCategory whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordCategory wherePasswordVaultId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordCategory whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class PasswordCategory extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

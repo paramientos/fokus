@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $project_id
  * @property string $name
@@ -22,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WikiPage> $pages
  * @property-read int|null $pages_count
  * @property-read \App\Models\Project $project
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WikiCategory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WikiCategory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WikiCategory query()
@@ -33,11 +32,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WikiCategory whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WikiCategory whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WikiCategory whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class WikiCategory extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'project_id',

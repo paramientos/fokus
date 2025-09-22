@@ -6,15 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Models\Workspace;
-use App\Models\TeamMember;
-use App\Models\User;
-use App\Models\Project;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $name
@@ -28,6 +21,7 @@ use App\Models\Project;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Project> $projects
  * @property-read int|null $projects_count
  * @property-read Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team query()
@@ -38,6 +32,7 @@ use App\Models\Project;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Team extends Model
@@ -48,7 +43,7 @@ class Team extends Model
         'workspace_id', 'name', 'description', 'created_by',
     ];
 
-    protected $casts=[
+    protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

@@ -25,7 +25,6 @@ class HRModuleSeeder extends Seeder
             ]
         );
 
-
         // Get or create the workspace
         $workspace = Workspace::firstOrCreate(
             ['name' => 'Default Workspace'],
@@ -38,7 +37,7 @@ class HRModuleSeeder extends Seeder
 
         // Assign HR Manager to workspace if not already assigned
         if (!$hrManager->workspaceMembers()->where('workspace_id', $workspace->id)->exists()) {
-            $hrManager->workspaceMembers()->attach($workspace->id, ['role' => 'hr_manager', 'id' => Str::uuid(),]);
+            $hrManager->workspaceMembers()->attach($workspace->id, ['role' => 'hr_manager', 'id' => Str::uuid()]);
             $hrManager->current_workspace_id = $workspace->id;
             $hrManager->save();
         }
@@ -65,7 +64,7 @@ class HRModuleSeeder extends Seeder
 
         // Assign employee to workspace if not already assigned
         if (!$employeeUser->workspaceMembers()->where('workspace_id', $workspace->id)->exists()) {
-            $employeeUser->workspaceMembers()->attach($workspace->id, ['role' => 'employee','id'=> Str::uuid(),]);
+            $employeeUser->workspaceMembers()->attach($workspace->id, ['role' => 'employee', 'id' => Str::uuid()]);
             $employeeUser->current_workspace_id = $workspace->id;
             $employeeUser->save();
         }
@@ -75,7 +74,7 @@ class HRModuleSeeder extends Seeder
             ['user_id' => $employeeUser->id],
             [
                 'workspace_id' => $workspace->id,
-                'employee_id' => 'EMP' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT),
+                'employee_id' => 'EMP'.str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT),
                 'department' => 'Engineering',
                 'position' => 'Senior Developer',
                 'hire_date' => now()->subYear(),
@@ -137,7 +136,7 @@ class HRModuleSeeder extends Seeder
         $training = Training::firstOrCreate(
             [
                 'workspace_id' => $workspace->id,
-                'title' => 'Advanced Laravel Development'
+                'title' => 'Advanced Laravel Development',
             ],
             [
                 'description' => 'In-depth training on advanced Laravel features and best practices.',
@@ -156,7 +155,7 @@ class HRModuleSeeder extends Seeder
         // Enroll employee in training
         if (!$employee->trainings()->where('training_id', $training->id)->exists()) {
             $employee->trainings()->attach($training->id, [
-                'id'=> Str::uuid(),
+                'id' => Str::uuid(),
                 'status' => 'registered',
                 'score' => null,
                 'feedback' => null,

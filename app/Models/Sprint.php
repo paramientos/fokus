@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string|null $goal
@@ -30,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
  * @property-read \App\Models\Workflow|null $workflow
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Sprint newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Sprint newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Sprint query()
@@ -43,11 +42,13 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Sprint whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Sprint whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Sprint whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Sprint extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

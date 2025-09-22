@@ -15,15 +15,15 @@ return new class extends Migration
             if (!Schema::hasColumn('workspace_workflow_instances', 'description')) {
                 $table->text('description')->nullable()->after('name');
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_instances', 'status')) {
                 $table->string('status')->default('pending')->after('custom_fields');
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_instances', 'started_at')) {
                 $table->timestamp('started_at')->nullable()->after('status');
             }
-            
+
             if (!Schema::hasColumn('workspace_workflow_instances', 'completed_at')) {
                 $table->timestamp('completed_at')->nullable()->after('started_at');
             }

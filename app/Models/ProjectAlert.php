@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * 
- *
  * @property string $id
  * @property string $project_id
  * @property string|null $user_id
@@ -31,6 +29,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\User|null $resolvedBy
  * @property-read \App\Models\User|null $user
+ *
  * @method static Builder<static>|ProjectAlert bySeverity(string $severity)
  * @method static Builder<static>|ProjectAlert byType(string $type)
  * @method static Builder<static>|ProjectAlert newModelQuery()
@@ -51,11 +50,13 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder<static>|ProjectAlert whereType($value)
  * @method static Builder<static>|ProjectAlert whereUpdatedAt($value)
  * @method static Builder<static>|ProjectAlert whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class ProjectAlert extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'project_id',
@@ -142,7 +143,7 @@ class ProjectAlert extends Model
         };
     }
 
-    public function resolve(User $user, string $notes = null): void
+    public function resolve(User $user, ?string $notes = null): void
     {
         $this->update([
             'is_resolved' => true,

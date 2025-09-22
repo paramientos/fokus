@@ -12,42 +12,39 @@ class SprintExportController extends Controller
     /**
      * Sprint'i CSV formatında dışa aktar.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
-     * @param  \App\Models\Sprint  $sprint
      * @return \Illuminate\Http\Response
      */
     public function exportCsv(Request $request, Project $project, Sprint $sprint)
     {
         // Yetkilendirme kontrolü
         $this->authorize('view', $project);
-        
+
         if ($sprint->project_id !== $project->id) {
             abort(404);
         }
-        
+
         // Sprint verilerini yükle
         $sprint->load(['tasks.status', 'tasks.user']);
-        
+
         // CSV başlıkları
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="sprint_' . $sprint->id . '_export.csv"',
+            'Content-Disposition' => 'attachment; filename="sprint_'.$sprint->id.'_export.csv"',
             'Pragma' => 'no-cache',
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0',
         ];
-        
+
         // CSV verilerini oluştur
-        $callback = function() use ($sprint) {
+        $callback = function () use ($sprint) {
             $file = fopen('php://output', 'w');
-            
+
             // Başlık satırı
             fputcsv($file, [
-                'ID', 'Title', 'Description', 'Status', 'Assignee', 
-                'Priority', 'Story Points', 'Created At', 'Updated At'
+                'ID', 'Title', 'Description', 'Status', 'Assignee',
+                'Priority', 'Story Points', 'Created At', 'Updated At',
             ]);
-            
+
             // Görev verileri
             foreach ($sprint->tasks as $task) {
                 fputcsv($file, [
@@ -62,42 +59,39 @@ class SprintExportController extends Controller
                     $task->updated_at->format('Y-m-d H:i:s'),
                 ]);
             }
-            
+
             fclose($file);
         };
-        
+
         return Response::stream($callback, 200, $headers);
     }
-    
+
     /**
      * Sprint'i JSON formatında dışa aktar.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
-     * @param  \App\Models\Sprint  $sprint
      * @return \Illuminate\Http\Response
      */
     public function exportJson(Request $request, Project $project, Sprint $sprint)
     {
         // Yetkilendirme kontrolü
         $this->authorize('view', $project);
-        
+
         if ($sprint->project_id !== $project->id) {
             abort(404);
         }
-        
+
         // Sprint verilerini yükle
         $sprint->load(['tasks.status', 'tasks.user']);
-        
+
         // Sprint istatistiklerini hesapla
         $startDate = $sprint->start_date ?? $sprint->created_at;
         $endDate = $sprint->end_date ?? $startDate->copy()->addDays(14);
-        
+
         // Tamamlanan görevler
         $completedTasks = $sprint->tasks->filter(function ($task) {
             return $task->status && $task->status->slug === 'done';
         });
-        
+
         // Sprint verilerini hazırla
         $data = [
             'sprint' => [
@@ -114,8 +108,8 @@ class SprintExportController extends Controller
             'stats' => [
                 'total_tasks' => $sprint->tasks->count(),
                 'completed_tasks' => $completedTasks->count(),
-                'completion_percentage' => $sprint->tasks->count() > 0 
-                    ? round(($completedTasks->count() / $sprint->tasks->count()) * 100) 
+                'completion_percentage' => $sprint->tasks->count() > 0
+                    ? round(($completedTasks->count() / $sprint->tasks->count()) * 100)
                     : 0,
                 'duration_days' => $startDate->diffInDays($endDate) + 1,
                 'remaining_days' => now()->diffInDays($endDate, false),
@@ -134,13 +128,13 @@ class SprintExportController extends Controller
                 ];
             })->toArray(),
         ];
-        
+
         // JSON dosyasını oluştur
         $headers = [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="sprint_' . $sprint->id . '_export.json"',
+            'Content-Disposition' => 'attachment; filename="sprint_'.$sprint->id.'_export.json"',
         ];
-        
+
         return response()->json($data, 200, $headers);
     }
 }

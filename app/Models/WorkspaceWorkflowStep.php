@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string|null $description
@@ -28,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WorkspaceWorkflowStepInstance> $instances
  * @property-read int|null $instances_count
  * @property-read \App\Models\WorkspaceWorkflow $workflow
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStep newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStep newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStep query()
@@ -44,11 +43,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStep whereStepType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStep whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceWorkflowStep whereWorkspaceWorkflowId($value)
+ *
  * @mixin \Eloquent
  */
 class WorkspaceWorkflowStep extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

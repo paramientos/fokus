@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $asset_category_id
@@ -52,6 +50,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read string $status_color
  * @property-read string $status_label
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static Builder<static>|Asset newModelQuery()
  * @method static Builder<static>|Asset newQuery()
  * @method static Builder<static>|Asset query()
@@ -81,11 +80,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|Asset whereUpdatedAt($value)
  * @method static Builder<static>|Asset whereWarrantyExpiry($value)
  * @method static Builder<static>|Asset whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Asset extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -221,7 +222,7 @@ class Asset extends Model
         $prefix = strtoupper(substr($category->name, 0, 3));
         $count = static::where('asset_category_id', $categoryId)->count() + 1;
 
-        return $prefix . '-' . str_pad($count, 3, '0', STR_PAD_LEFT);
+        return $prefix.'-'.str_pad($count, 3, '0', STR_PAD_LEFT);
     }
 
     public function assignTo(User $user, User $assignedBy, ?string $notes = null): AssetAssignment

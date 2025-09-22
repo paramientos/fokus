@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $repository_id
  * @property string|null $task_id
@@ -33,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitPullRequestReview> $reviews
  * @property-read int|null $reviews_count
  * @property-read \App\Models\Task|null $task
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest query()
@@ -51,11 +50,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitPullRequest whereUrl($value)
+ *
  * @mixin \Eloquent
  */
 class GitPullRequest extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'repository_id',

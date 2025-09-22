@@ -3,12 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\Meeting;
-use App\Models\User;
+use App\Notifications\MeetingReminder;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\MeetingReminder;
 
 class SendMeetingReminders extends Command
 {
@@ -33,46 +31,47 @@ class SendMeetingReminders extends Command
     {
         $minutes = $this->option('minutes');
         $this->info("Sending reminders for meetings starting in {$minutes} minutes...");
-        
+
         $now = Carbon::now();
         $reminderTime = $now->copy()->addMinutes($minutes);
-        
+
         // Find meetings that start in the specified time window
         $meetings = Meeting::where('status', 'scheduled')
             ->whereBetween('scheduled_at', [
                 $reminderTime->copy()->subMinutes(1),
-                $reminderTime->copy()->addMinutes(1)
+                $reminderTime->copy()->addMinutes(1),
             ])
             ->with(['project', 'users'])
             ->get();
-        
+
         $this->info("Found {$meetings->count()} meetings to send reminders for.");
-        
+
         foreach ($meetings as $meeting) {
             $this->sendReminders($meeting);
         }
-        
+
         $this->info('Meeting reminders sent successfully.');
     }
-    
+
     /**
      * Send reminders to all attendees of a meeting.
      */
     private function sendReminders(Meeting $meeting)
     {
         $this->info("Sending reminders for meeting: {$meeting->title}");
-        
+
         // Get all attendees
         $attendees = $meeting->users;
-        
+
         if ($attendees->isEmpty()) {
             $this->warn("No attendees found for meeting: {$meeting->title}");
+
             return;
         }
-        
+
         // Send notifications to all attendees
         Notification::send($attendees, new MeetingReminder($meeting));
-        
+
         $this->info("Sent reminders to {$attendees->count()} attendees for meeting: {$meeting->title}");
     }
 }

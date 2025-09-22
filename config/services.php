@@ -38,7 +38,7 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect_uri' => env('GOOGLE_REDIRECT_URI', env('APP_URL') . '/auth/google/callback'),
+        'redirect_uri' => env('GOOGLE_REDIRECT_URI', env('APP_URL').'/auth/google/callback'),
     ],
 
     'turnstile' => [
@@ -49,7 +49,7 @@ return [
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID', ''),
         'client_secret' => env('GITHUB_CLIENT_SECRET', ''),
-        'redirect_uri' => env('GITHUB_REDIRECT_URI', env('APP_URL') . '/git/sso/github/callback'),
+        'redirect_uri' => env('GITHUB_REDIRECT_URI', env('APP_URL').'/git/sso/github/callback'),
     ],
 
 ];

@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $employee_id
  * @property string $workspace_id
@@ -42,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read OkrGoal|null $parent
  * @property-read \App\Models\PerformanceReview|null $performanceReview
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static Builder<static>|OkrGoal byPriority(string $priority)
  * @method static Builder<static>|OkrGoal byStatus(string $status)
  * @method static Builder<static>|OkrGoal keyResults()
@@ -70,6 +69,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|OkrGoal whereUnit($value)
  * @method static Builder<static>|OkrGoal whereUpdatedAt($value)
  * @method static Builder<static>|OkrGoal whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class OkrGoal extends Model

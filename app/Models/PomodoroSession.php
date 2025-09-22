@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $user_id
  * @property string|null $workspace_id
@@ -34,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $tags_count
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Workspace|null $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSession newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSession newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSession query()
@@ -53,11 +52,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSession whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSession whereWorkDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroSession whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class PomodoroSession extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'user_id',

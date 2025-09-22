@@ -70,12 +70,12 @@ class ProfileController extends Controller
             }
 
             // Delete any files associated with the user
-            Storage::deleteDirectory('users/' . $user->id);
+            Storage::deleteDirectory('users/'.$user->id);
 
             // Anonymize user data instead of deleting the account completely
             // This preserves references in tasks, comments, etc.
             $user->name = 'Deleted User';
-            $user->email = 'deleted_' . $user->id . '@deleted.fokus.app';
+            $user->email = 'deleted_'.$user->id.'@deleted.fokus.app';
             $user->password = Hash::make(str_random(32));
             $user->remember_token = null;
             $user->email_verified_at = null;
@@ -98,7 +98,7 @@ class ProfileController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Failed to delete your account: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete your account: '.$e->getMessage());
         }
     }
 }

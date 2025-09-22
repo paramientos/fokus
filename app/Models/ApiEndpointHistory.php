@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\ApiEndpoint $apiEndpoint
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpointHistory newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpointHistory newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpointHistory query()
@@ -41,11 +42,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpointHistory whereResponseStatusCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpointHistory whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ApiEndpointHistory whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class ApiEndpointHistory extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.

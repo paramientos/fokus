@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $name
@@ -24,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LeaveRequest> $leaveRequests
  * @property-read int|null $leave_requests_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveType query()
@@ -38,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveType whereRequiresApproval($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveType whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|LeaveType whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class LeaveType extends Model
@@ -52,7 +52,7 @@ class LeaveType extends Model
         'max_carried_over',
         'requires_approval',
         'description',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [

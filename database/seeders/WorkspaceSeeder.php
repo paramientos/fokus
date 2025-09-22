@@ -14,7 +14,7 @@ class WorkspaceSeeder extends Seeder
             'name' => 'Ana Çalışma Alanı',
             'description' => 'Varsayılan çalışma alanı',
             'created_by' => 1,
-            'owner_id' => 1
+            'owner_id' => 1,
         ]);
     }
 }

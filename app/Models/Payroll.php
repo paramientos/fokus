@@ -2,17 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\Employee;
-use App\Models\Workspace;
-use App\Models\User;
 
 /**
- * 
- *
  * @property string $id
  * @property string $employee_id
  * @property string $workspace_id
@@ -43,6 +38,7 @@ use App\Models\User;
  * @property-read Employee $employee
  * @property-read string $status_color
  * @property-read Workspace $workspace
+ *
  * @method static Builder<static>|Payroll byStatus(string $status)
  * @method static Builder<static>|Payroll forPeriod(string $period)
  * @method static Builder<static>|Payroll newModelQuery()
@@ -74,6 +70,7 @@ use App\Models\User;
  * @method static Builder<static>|Payroll whereTotalDeductions($value)
  * @method static Builder<static>|Payroll whereUpdatedAt($value)
  * @method static Builder<static>|Payroll whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Payroll extends Model

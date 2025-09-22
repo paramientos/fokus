@@ -3,14 +3,15 @@
 namespace App\Livewire\Projects;
 
 use App\Models\Project;
-use App\Models\Status;
 use App\Models\StatusTransition;
 use Livewire\Component;
 
 class StatusTransitionManager extends Component
 {
     public Project $project;
+
     public $statuses;
+
     public $transitions;
 
     public function mount(Project $project)

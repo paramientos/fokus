@@ -28,14 +28,14 @@ class InitializeGamification extends Command
     public function handle()
     {
         $gamificationService = app(GamificationService::class);
-        
+
         if ($workspaceId = $this->option('workspace')) {
             $workspace = Workspace::findOrFail($workspaceId);
             $this->initializeWorkspace($workspace, $gamificationService);
         } else {
             $workspaces = Workspace::all();
             $this->info("Initializing gamification for {$workspaces->count()} workspaces...");
-            
+
             foreach ($workspaces as $workspace) {
                 $this->initializeWorkspace($workspace, $gamificationService);
             }
@@ -47,17 +47,17 @@ class InitializeGamification extends Command
     private function initializeWorkspace(Workspace $workspace, GamificationService $gamificationService)
     {
         $this->info("Initializing workspace: {$workspace->name}");
-        
+
         try {
             $gamificationService->initializeDefaultAchievements($workspace->id);
             $this->info("✓ Default achievements created for {$workspace->name}");
-            
+
             // Initialize leaderboards for all workspace members
             foreach ($workspace->members as $user) {
                 $gamificationService->updateUserLeaderboards($user);
             }
             $this->info("✓ Leaderboards initialized for {$workspace->members->count()} members");
-            
+
         } catch (\Exception $e) {
             $this->error("✗ Failed to initialize {$workspace->name}: {$e->getMessage()}");
         }

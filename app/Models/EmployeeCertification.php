@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
-use Carbon\Carbon;
 
 /**
- * 
- *
  * @property string $id
  * @property string $employee_id
  * @property string $certification_id
@@ -28,6 +25,7 @@ use Carbon\Carbon;
  * @property-read \App\Models\Employee $employee
  * @property-read int|null $days_until_expiry
  * @property-read string $status_color
+ *
  * @method static Builder<static>|EmployeeCertification active()
  * @method static Builder<static>|EmployeeCertification expired()
  * @method static Builder<static>|EmployeeCertification expiringSoon(int $days = 30)
@@ -47,6 +45,7 @@ use Carbon\Carbon;
  * @method static Builder<static>|EmployeeCertification whereScore($value)
  * @method static Builder<static>|EmployeeCertification whereStatus($value)
  * @method static Builder<static>|EmployeeCertification whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class EmployeeCertification extends Model
@@ -121,17 +120,17 @@ class EmployeeCertification extends Model
     public function scopeExpired(Builder $query): Builder
     {
         return $query->where('status', 'expired')
-                    ->orWhere(function ($q) {
-                        $q->where('expiry_date', '<', now())
-                          ->where('status', '!=', 'expired');
-                    });
+            ->orWhere(function ($q) {
+                $q->where('expiry_date', '<', now())
+                    ->where('status', '!=', 'expired');
+            });
     }
 
     public function scopeExpiringSoon(Builder $query, int $days = 30): Builder
     {
         return $query->where('expiry_date', '<=', now()->addDays($days))
-                    ->where('expiry_date', '>', now())
-                    ->where('status', 'active');
+            ->where('expiry_date', '>', now())
+            ->where('status', 'active');
     }
 
     protected static function booted(): void

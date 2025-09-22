@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $name
@@ -34,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Achievement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Achievement newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Achievement query()
@@ -52,11 +51,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Achievement whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Achievement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Achievement whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Achievement extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',
@@ -70,13 +71,13 @@ class Achievement extends Model
         'is_active',
         'is_repeatable',
         'max_level',
-        'badge_color'
+        'badge_color',
     ];
 
     protected $casts = [
         'criteria' => 'array',
         'is_active' => 'boolean',
-        'is_repeatable' => 'boolean'
+        'is_repeatable' => 'boolean',
     ];
 
     public function workspace(): BelongsTo
@@ -98,7 +99,7 @@ class Achievement extends Model
 
     public function getTypeColorAttribute(): string
     {
-        return match($this->type) {
+        return match ($this->type) {
             'bronze' => '#CD7F32',
             'silver' => '#C0C0C0',
             'gold' => '#FFD700',
@@ -110,7 +111,7 @@ class Achievement extends Model
 
     public function getCategoryIconAttribute(): string
     {
-        return match($this->category) {
+        return match ($this->category) {
             'task' => 'fas.check-circle',
             'project' => 'fas.project-diagram',
             'collaboration' => 'fas.users',
@@ -146,7 +147,7 @@ class Achievement extends Model
                         return false;
                     }
                     break;
-                // Add more criteria as needed
+                    // Add more criteria as needed
             }
         }
 
@@ -164,7 +165,7 @@ class Achievement extends Model
                 'type' => 'bronze',
                 'points' => 10,
                 'criteria' => ['tasks_completed' => 1],
-                'badge_color' => '#CD7F32'
+                'badge_color' => '#CD7F32',
             ],
             [
                 'name' => 'Task Master',
@@ -174,7 +175,7 @@ class Achievement extends Model
                 'type' => 'silver',
                 'points' => 50,
                 'criteria' => ['tasks_completed' => 10],
-                'badge_color' => '#C0C0C0'
+                'badge_color' => '#C0C0C0',
             ],
             [
                 'name' => 'Project Pioneer',
@@ -184,7 +185,7 @@ class Achievement extends Model
                 'type' => 'gold',
                 'points' => 100,
                 'criteria' => ['projects_completed' => 1],
-                'badge_color' => '#FFD700'
+                'badge_color' => '#FFD700',
             ],
             [
                 'name' => 'Team Player',
@@ -194,7 +195,7 @@ class Achievement extends Model
                 'type' => 'silver',
                 'points' => 75,
                 'criteria' => ['collaborations' => 5],
-                'badge_color' => '#C0C0C0'
+                'badge_color' => '#C0C0C0',
             ],
             [
                 'name' => 'Learning Enthusiast',
@@ -204,7 +205,7 @@ class Achievement extends Model
                 'type' => 'gold',
                 'points' => 150,
                 'criteria' => ['trainings_completed' => 3],
-                'badge_color' => '#FFD700'
+                'badge_color' => '#FFD700',
             ],
             [
                 'name' => 'Streak Warrior',
@@ -214,8 +215,8 @@ class Achievement extends Model
                 'type' => 'platinum',
                 'points' => 200,
                 'criteria' => ['streak_days' => 7],
-                'badge_color' => '#E5E4E2'
-            ]
+                'badge_color' => '#E5E4E2',
+            ],
         ];
     }
 }

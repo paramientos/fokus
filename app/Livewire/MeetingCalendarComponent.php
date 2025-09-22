@@ -5,24 +5,31 @@ namespace App\Livewire;
 use App\Models\Meeting;
 use App\Models\Project;
 use Carbon\Carbon;
-use Livewire\Component;
 use Illuminate\Support\Collection;
+use Livewire\Component;
 
 class MeetingCalendarComponent extends Component
 {
     public $meetings = [];
+
     public $currentMonth;
+
     public $currentYear;
+
     public $selectedDate = null;
+
     public $projectId = null;
+
     public $projects = [];
+
     public $meetingTypes = [
         'all' => 'All Types',
         'daily' => 'Daily Standup',
         'planning' => 'Sprint Planning',
         'retro' => 'Retrospective',
-        'other' => 'Other'
+        'other' => 'Other',
     ];
+
     public $selectedType = 'all';
 
     public function mount($projectId = null)
@@ -51,10 +58,10 @@ class MeetingCalendarComponent extends Component
             $query->where('meeting_type', $this->selectedType);
         }
 
-        $this->meetings = $query->get()->groupBy(function($meeting) {
+        $this->meetings = $query->get()->groupBy(function ($meeting) {
             return $meeting->scheduled_at->format('Y-m-d');
         })
-        ->collect();
+            ->collect();
     }
 
     public function previousMonth()
@@ -104,7 +111,7 @@ class MeetingCalendarComponent extends Component
                 'isCurrentMonth' => false,
                 'isToday' => false,
                 'isSelected' => false,
-                'meetings' => []
+                'meetings' => [],
             ];
         }
 
@@ -127,7 +134,7 @@ class MeetingCalendarComponent extends Component
                 'isCurrentMonth' => true,
                 'isToday' => $isToday,
                 'isSelected' => $isSelected,
-                'meetings' => $dayMeetings
+                'meetings' => $dayMeetings,
             ];
         }
 
@@ -140,7 +147,7 @@ class MeetingCalendarComponent extends Component
                 'isCurrentMonth' => false,
                 'isToday' => false,
                 'isSelected' => false,
-                'meetings' => []
+                'meetings' => [],
             ];
         }
 
@@ -161,7 +168,7 @@ class MeetingCalendarComponent extends Component
         return view('livewire.meeting-calendar-component', [
             'calendarDays' => $this->getCalendarDaysProperty(),
             'selectedDateMeetings' => $this->getSelectedDateMeetingsProperty(),
-            'currentMonthName' => Carbon::createFromDate($this->currentYear, $this->currentMonth, 1)->format('F Y')
+            'currentMonthName' => Carbon::createFromDate($this->currentYear, $this->currentMonth, 1)->format('F Y'),
         ]);
     }
 }

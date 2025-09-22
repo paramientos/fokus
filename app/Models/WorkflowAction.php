@@ -6,11 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Mail;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workflow_id
  * @property string $action_type
@@ -19,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Workflow $workflow
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkflowAction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkflowAction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkflowAction query()
@@ -29,11 +27,13 @@ use Illuminate\Support\Facades\Mail;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkflowAction whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkflowAction whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkflowAction whereWorkflowId($value)
+ *
  * @mixin \Eloquent
  */
 class WorkflowAction extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -66,9 +66,6 @@ class WorkflowAction extends Model
 
     /**
      * Execute the action for a given task.
-     *
-     * @param Task $task
-     * @return void
      */
     public function execute(Task $task): void
     {
@@ -85,9 +82,6 @@ class WorkflowAction extends Model
 
     /**
      * Update the status of a task.
-     *
-     * @param Task $task
-     * @return void
      */
     private function updateStatus(Task $task): void
     {
@@ -117,9 +111,6 @@ class WorkflowAction extends Model
 
     /**
      * Update the priority of a task.
-     *
-     * @param Task $task
-     * @return void
      */
     private function updatePriority(Task $task): void
     {
@@ -148,9 +139,6 @@ class WorkflowAction extends Model
 
     /**
      * Assign a user to a task.
-     *
-     * @param Task $task
-     * @return void
      */
     private function assignUser(Task $task): void
     {
@@ -180,9 +168,6 @@ class WorkflowAction extends Model
 
     /**
      * Add a task to a sprint.
-     *
-     * @param Task $task
-     * @return void
      */
     private function addToSprint(Task $task): void
     {
@@ -213,9 +198,6 @@ class WorkflowAction extends Model
 
     /**
      * Send a notification about a task.
-     *
-     * @param Task $task
-     * @return void
      */
     private function sendNotification(Task $task): void
     {
@@ -245,9 +227,6 @@ class WorkflowAction extends Model
 
     /**
      * Add a comment to a task.
-     *
-     * @param Task $task
-     * @return void
      */
     private function addComment(Task $task): void
     {
@@ -273,7 +252,7 @@ class WorkflowAction extends Model
                 'project_id' => $task->project_id,
                 'task_id' => $task->id,
                 'action' => 'comment_added',
-                'description' => "Comment automatically added by workflow",
+                'description' => 'Comment automatically added by workflow',
             ]);
         }
     }

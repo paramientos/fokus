@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $project_id
  * @property string $created_by
@@ -37,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\Project $project
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting daily()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting newQuery()
@@ -59,11 +58,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Meeting whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class Meeting extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'project_id',
@@ -170,7 +171,7 @@ class Meeting extends Model
      */
     public function getMeetingRoomName()
     {
-        return 'projecta-meeting-' . $this->id . '-' . str_replace(' ', '-', strtolower($this->title));
+        return 'projecta-meeting-'.$this->id.'-'.str_replace(' ', '-', strtolower($this->title));
     }
 
     /**

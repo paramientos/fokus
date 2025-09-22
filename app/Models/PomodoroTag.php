@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $name
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PomodoroSession> $sessions
  * @property-read int|null $sessions_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroTag query()
@@ -29,11 +28,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroTag whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroTag whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PomodoroTag whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class PomodoroTag extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',

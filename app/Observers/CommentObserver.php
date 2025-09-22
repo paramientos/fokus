@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Comment;
 use App\Models\Activity;
+use App\Models\Comment;
 
 class CommentObserver
 {
@@ -37,8 +37,8 @@ class CommentObserver
                 'changes' => [
                     'content' => [
                         'from' => $comment->getOriginal('content'),
-                        'to' => $comment->content
-                    ]
+                        'to' => $comment->content,
+                    ],
                 ],
             ]);
         }

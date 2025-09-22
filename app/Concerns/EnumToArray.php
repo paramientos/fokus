@@ -105,7 +105,7 @@ trait EnumToArray
     {
         $items = self::localize($excludeValues);
 
-        return collect($items)->map(fn($val, $key) => [
+        return collect($items)->map(fn ($val, $key) => [
             'id' => $key,
             'name' => $val,
         ])

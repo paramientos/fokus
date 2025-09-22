@@ -45,7 +45,7 @@ class MeetingReminder extends Notification implements ShouldQueue
         $meetingTime = $this->meeting->scheduled_at->format('F j, Y \a\t g:i A');
         $meetingDuration = $this->meeting->duration;
         $meetingUrl = url("/meetings/{$this->meeting->id}");
-        
+
         return (new MailMessage)
             ->subject("Reminder: {$this->meeting->title} starts soon")
             ->greeting("Hello {$notifiable->name}!")

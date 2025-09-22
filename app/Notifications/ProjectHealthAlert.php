@@ -32,11 +32,11 @@ class ProjectHealthAlert extends Notification implements ShouldQueue
             ->subject("🚨 Critical Health Alert: {$this->project->name}")
             ->greeting("Hello {$notifiable->name}!")
             ->line("We've detected critical issues in your project **{$this->project->name}** that require immediate attention.")
-            ->line("**Alert Summary:**")
+            ->line('**Alert Summary:**')
             ->line("• Critical Alerts: {$criticalCount}")
             ->line("• High Priority Alerts: {$highCount}")
             ->line('')
-            ->line("**Recent Alerts:**")
+            ->line('**Recent Alerts:**')
             ->when($this->alerts->take(3), function ($mail, $recentAlerts) {
                 foreach ($recentAlerts as $alert) {
                     $mail->line("• **{$alert->title}** ({$alert->severity})");

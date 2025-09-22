@@ -20,9 +20,6 @@ class GitSSOController extends Controller
     /**
      * Redirect to OAuth provider for authentication.
      *
-     * @param Request $request
-     * @param string $provider
-     * @param int $projectId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function redirect(Request $request, string $provider, int $projectId)
@@ -44,13 +41,13 @@ class GitSSOController extends Controller
 
             return redirect()->away($authUrl);
         } catch (\Exception $e) {
-            Log::error('Failed to redirect to OAuth provider: ' . $e->getMessage(), [
+            Log::error('Failed to redirect to OAuth provider: '.$e->getMessage(), [
                 'provider' => $provider,
                 'project_id' => $projectId,
-                'exception' => $e
+                'exception' => $e,
             ]);
 
-            return redirect()->back()->with('error', 'Failed to connect with ' . ucfirst($provider) . '. Please try again.');
+            return redirect()->back()->with('error', 'Failed to connect with '.ucfirst($provider).'. Please try again.');
         }
     }
 
@@ -73,7 +70,7 @@ class GitSSOController extends Controller
             $callbackData = [
                 'code' => $request->code,
                 'state' => $request->state,
-                'redirect_uri' => $redirectUrl
+                'redirect_uri' => $redirectUrl,
             ];
 
             // Call the service with the correct parameters
@@ -81,29 +78,27 @@ class GitSSOController extends Controller
 
             if (!$gitRepository) {
                 return redirect()->route('projects.edit', $project)
-                    ->with('error', 'Failed to connect with ' . ucfirst($provider) . ': Invalid response from provider');
+                    ->with('error', 'Failed to connect with '.ucfirst($provider).': Invalid response from provider');
             }
 
             return redirect()->route('projects.edit', $project)
-                ->with('success', ucfirst($provider) . ' repository connected successfully: ' . $gitRepository->name);
+                ->with('success', ucfirst($provider).' repository connected successfully: '.$gitRepository->name);
         } catch (\Exception $e) {
-            Log::error('Failed to handle OAuth callback: ' . $e->getMessage(), [
+            Log::error('Failed to handle OAuth callback: '.$e->getMessage(), [
                 'provider' => $provider,
                 'project_id' => $projectId,
                 'code' => $request->code,
-                'exception' => $e
+                'exception' => $e,
             ]);
 
             return redirect()->route('projects.edit', $projectId)
-                ->with('error', 'Failed to connect with ' . ucfirst($provider) . ': ' . $e->getMessage());
+                ->with('error', 'Failed to connect with '.ucfirst($provider).': '.$e->getMessage());
         }
     }
 
     /**
      * Disconnect a Git repository.
      *
-     * @param Request $request
-     * @param int $repositoryId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function disconnect(Request $request, int $repositoryId)
@@ -121,14 +116,14 @@ class GitSSOController extends Controller
             $repositoryName = $repository->name;
             $repository->delete();
 
-            return redirect()->back()->with('success', 'Git repository disconnected: ' . $repositoryName);
+            return redirect()->back()->with('success', 'Git repository disconnected: '.$repositoryName);
         } catch (\Exception $e) {
-            Log::error('Failed to disconnect repository: ' . $e->getMessage(), [
+            Log::error('Failed to disconnect repository: '.$e->getMessage(), [
                 'repository_id' => $repositoryId,
-                'exception' => $e
+                'exception' => $e,
             ]);
 
-            return redirect()->back()->with('error', 'Failed to disconnect repository: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to disconnect repository: '.$e->getMessage());
         }
     }
 }

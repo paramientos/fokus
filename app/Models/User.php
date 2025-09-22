@@ -12,8 +12,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * 
- *
  * @property string $id
  * @property string $name
  * @property string $email
@@ -69,6 +67,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read int|null $user_achievements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Workspace> $workspaceMembers
  * @property-read int|null $workspace_members_count
+ *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
@@ -95,12 +94,16 @@ use Illuminate\Notifications\Notifiable;
  * @method static Builder<static>|User whereState($value)
  * @method static Builder<static>|User whereTaxId($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasUuids;
+    use HasFactory;
+
+    use HasUuids;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $user_id
  * @property string $achievement_id
@@ -23,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\Achievement $achievement
  * @property-read float $progress_percentage
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement query()
@@ -36,11 +35,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereProgress($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserAchievement whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class UserAchievement extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -49,12 +50,12 @@ class UserAchievement extends Model
         'progress',
         'points_earned',
         'earned_at',
-        'metadata'
+        'metadata',
     ];
 
     protected $casts = [
         'earned_at' => 'datetime',
-        'metadata' => 'array'
+        'metadata' => 'array',
     ];
 
     public function user(): BelongsTo

@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use App\Models\Project;
-use App\Models\ProjectHealthMetric;
 use App\Models\ProjectAlert;
+use App\Models\ProjectHealthMetric;
 use App\Models\Task;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 class ProjectHealthService
 {
@@ -157,7 +155,7 @@ class ProjectHealthService
                 'type' => 'unassigned_tasks',
                 'severity' => 'medium',
                 'count' => $unassignedTasks,
-                'description' => "Too many unassigned tasks ({$unassignedTasks})"
+                'description' => "Too many unassigned tasks ({$unassignedTasks})",
             ];
         }
 
@@ -176,7 +174,7 @@ class ProjectHealthService
                     'severity' => 'high',
                     'user_id' => $workload->user_id,
                     'task_count' => $workload->task_count,
-                    'description' => "User overloaded with {$workload->task_count} active tasks"
+                    'description' => "User overloaded with {$workload->task_count} active tasks",
                 ];
             }
         }
@@ -192,7 +190,7 @@ class ProjectHealthService
             $bottlenecks[] = [
                 'type' => 'status_bottleneck',
                 'severity' => 'medium',
-                'description' => 'Too many tasks in progress compared to todo'
+                'description' => 'Too many tasks in progress compared to todo',
             ];
         }
 
@@ -208,37 +206,37 @@ class ProjectHealthService
                 'high_overdue_rate' => [
                     'type' => 'overdue',
                     'message' => 'High number of overdue tasks detected',
-                    'severity' => 'high'
+                    'severity' => 'high',
                 ],
                 'high_blocked_rate' => [
                     'type' => 'blocked',
                     'message' => 'Many tasks are currently blocked',
-                    'severity' => 'high'
+                    'severity' => 'high',
                 ],
                 'low_velocity' => [
                     'type' => 'velocity',
                     'message' => 'Team velocity is below expected levels',
-                    'severity' => 'medium'
+                    'severity' => 'medium',
                 ],
                 'team_overload' => [
                     'type' => 'workload',
                     'message' => 'Team appears to be overloaded',
-                    'severity' => 'high'
+                    'severity' => 'high',
                 ],
                 'deadline_risk' => [
                     'type' => 'deadline',
                     'message' => 'Project deadline is at risk',
-                    'severity' => 'critical'
+                    'severity' => 'critical',
                 ],
                 'poor_burndown' => [
                     'type' => 'burndown',
                     'message' => 'Burndown rate is concerning',
-                    'severity' => 'medium'
+                    'severity' => 'medium',
                 ],
                 default => [
                     'type' => 'general',
                     'message' => 'Unknown risk factor detected',
-                    'severity' => 'low'
+                    'severity' => 'low',
                 ]
             };
         }
@@ -308,9 +306,11 @@ class ProjectHealthService
         $totalTasks = $project->tasks()->count();
         $completedTasks = $project->tasks()->whereNotNull('completed_at')->count();
 
-        if ($totalTasks === 0) return 0;
+        if ($totalTasks === 0) {
+            return 0;
+        }
 
-        return ($completedTasks / $totalTasks);
+        return $completedTasks / $totalTasks;
     }
 
     private function calculateTeamWorkload(Project $project): int
@@ -318,7 +318,9 @@ class ProjectHealthService
         $members = $project->members()->count();
         $activeTasks = $project->tasks()->whereNotNull('completed_at')->count();
 
-        if ($members === 0) return 10;
+        if ($members === 0) {
+            return 10;
+        }
 
         $tasksPerMember = $activeTasks / $members;
 
@@ -328,7 +330,9 @@ class ProjectHealthService
 
     private function calculateDeadlineProximity(Project $project): int
     {
-        if (!$project->end_date) return 365; // Deadline yoksa uzak gelecek
+        if (!$project->end_date) {
+            return 365;
+        } // Deadline yoksa uzak gelecek
 
         return now()->diffInDays($project->end_date, false);
     }

@@ -5,12 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
- *
  * @property string $id
  * @property string $conversation_id
  * @property string $user_id
@@ -23,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Conversation $conversation
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message forConversation($conversationId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message fromUser($userId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message newModelQuery()
@@ -43,11 +42,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Message withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Message extends Model
 {
-    use HasFactory, SoftDeletes,HasUuids;
+    use HasFactory;
+    use HasUuids;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

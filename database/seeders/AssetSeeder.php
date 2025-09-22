@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\AssetCategory;
 use App\Models\Asset;
+use App\Models\AssetCategory;
 use App\Models\SoftwareLicense;
-use App\Models\Workspace;
 use App\Models\User;
+use App\Models\Workspace;
+use Illuminate\Database\Seeder;
 
 class AssetSeeder extends Seeder
 {

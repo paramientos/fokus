@@ -9,7 +9,7 @@ function get_real_ip(): mixed
 
     if (!empty($server->get('HTTP_CF_CONNECTING_IP'))) {
         $ip = $server->get('HTTP_CF_CONNECTING_IP');
-    } else if (!empty($server->get('HTTP_CLIENT_IP'))) {
+    } elseif (!empty($server->get('HTTP_CLIENT_IP'))) {
         $ip = $server->get('HTTP_CLIENT_IP');
     } elseif (!empty($server->get('HTTP_X_FORWARDED_FOR'))) {
         $ip = $server->get('HTTP_X_FORWARDED_FOR');
@@ -54,20 +54,19 @@ function generate_number(int $length = 10, bool $upperCase = true, string $prefi
         $randomString .= $characters[random_int(0, $charactersLength - 1)];
     }
 
-    return $prefix . (
+    return $prefix.(
         $upperCase
             ? strtoupper($randomString)
             : strtolower($randomString)
-        );
+    );
 }
-
 
 function image_to_base64(string $path, string $assetType = 'image'): string
 {
     $type = pathinfo($path, PATHINFO_EXTENSION);
     $content = file_get_contents($path);
 
-    return "data:{$assetType}/" . $type . ';base64,' . base64_encode($content);
+    return "data:{$assetType}/".$type.';base64,'.base64_encode($content);
 }
 
 function in_array_recursive($needle, $haystack, $strict = false): bool
@@ -88,13 +87,12 @@ function get_task_with_id(Task $task): string
     return "{$task->project->key}{$task->task_id } - {$task->title}";
 }
 
-
 function generate_project_key(string $name): string
 {
     $words = explode(' ', $name);
 
     if (count($words) > 1) {
-        $key = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
+        $key = strtoupper(substr($words[0], 0, 1).substr($words[1], 0, 1));
     } else {
         $key = strtoupper(substr($name, 0, 2));
     }
@@ -103,7 +101,7 @@ function generate_project_key(string $name): string
     $originalKey = $key;
 
     while (Project::where('key', $key)->exists()) {
-        $key = $originalKey . $count;
+        $key = $originalKey.$count;
         $count++;
     }
 
@@ -112,5 +110,5 @@ function generate_project_key(string $name): string
 
 function get_workspace_id(): ?string
 {
-    return (string)session('workspace_id');
+    return (string) session('workspace_id');
 }

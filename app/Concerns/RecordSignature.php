@@ -2,7 +2,6 @@
 
 namespace App\Concerns;
 
-
 use Illuminate\Support\Facades\Auth;
 
 trait RecordSignature
@@ -23,5 +22,4 @@ trait RecordSignature
             }
         });
     }
-
 }

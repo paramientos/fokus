@@ -18,5 +18,4 @@ trait Radio
     {
         return $value === true ? 'Evet' : 'Hayır';
     }
-
 }

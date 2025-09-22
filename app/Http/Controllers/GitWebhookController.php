@@ -50,11 +50,12 @@ class GitWebhookController extends Controller
                 default => response()->json(['status' => 'ignored', 'event' => $event]),
             };
         } catch (\Exception $e) {
-            Log::error('Error processing GitHub webhook: ' . $e->getMessage(), [
+            Log::error('Error processing GitHub webhook: '.$e->getMessage(), [
                 'repository' => $repository->id,
                 'event' => $event,
                 'exception' => $e,
             ]);
+
             return response()->json(['error' => 'Internal server error'], 500);
         }
     }
@@ -79,6 +80,7 @@ class GitWebhookController extends Controller
                 'repository' => $repository->id,
                 'ip' => $request->ip(),
             ]);
+
             return response()->json(['error' => 'Invalid token'], 403);
         }
 
@@ -95,11 +97,12 @@ class GitWebhookController extends Controller
                     return response()->json(['status' => 'ignored', 'event' => $event]);
             }
         } catch (\Exception $e) {
-            Log::error('Error processing GitLab webhook: ' . $e->getMessage(), [
+            Log::error('Error processing GitLab webhook: '.$e->getMessage(), [
                 'repository' => $repository->id,
                 'event' => $event,
                 'exception' => $e,
             ]);
+
             return response()->json(['error' => 'Internal server error'], 500);
         }
     }
@@ -134,11 +137,12 @@ class GitWebhookController extends Controller
                     return response()->json(['status' => 'ignored', 'event' => $event]);
             }
         } catch (\Exception $e) {
-            Log::error('Error processing Bitbucket webhook: ' . $e->getMessage(), [
+            Log::error('Error processing Bitbucket webhook: '.$e->getMessage(), [
                 'repository' => $repository->id,
                 'event' => $event,
                 'exception' => $e,
             ]);
+
             return response()->json(['error' => 'Internal server error'], 500);
         }
     }
@@ -179,7 +183,7 @@ class GitWebhookController extends Controller
         }
 
         $payload = $request->getContent();
-        $expectedSignature = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+        $expectedSignature = 'sha256='.hash_hmac('sha256', $payload, $secret);
 
         return hash_equals($expectedSignature, $signature);
     }

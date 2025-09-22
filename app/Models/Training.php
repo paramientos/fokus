@@ -7,11 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Testing\Fluent\Concerns\Has;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $title
@@ -32,6 +29,7 @@ use Illuminate\Testing\Fluent\Concerns\Has;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employee> $employees
  * @property-read int|null $employees_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Training newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Training newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Training query()
@@ -50,6 +48,7 @@ use Illuminate\Testing\Fluent\Concerns\Has;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Training whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Training whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Training whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class Training extends Model
@@ -68,7 +67,7 @@ class Training extends Model
         'location',
         'max_participants',
         'is_mandatory',
-        'prerequisites'
+        'prerequisites',
     ];
 
     protected $casts = [

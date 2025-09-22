@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $created_by
@@ -46,6 +44,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read string $status_label
  * @property-read float $usage_percentage
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static Builder<static>|SoftwareLicense newModelQuery()
  * @method static Builder<static>|SoftwareLicense newQuery()
  * @method static Builder<static>|SoftwareLicense query()
@@ -70,11 +69,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder<static>|SoftwareLicense whereVendor($value)
  * @method static Builder<static>|SoftwareLicense whereVersion($value)
  * @method static Builder<static>|SoftwareLicense whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class SoftwareLicense extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',

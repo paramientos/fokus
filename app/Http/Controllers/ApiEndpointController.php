@@ -8,7 +8,6 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
 
 class ApiEndpointController extends Controller
 {
@@ -54,19 +53,19 @@ class ApiEndpointController extends Controller
         // Task ve proje kontrolü
         if (!empty($validated['task_id'])) {
             $task = Task::findOrFail($validated['task_id']);
-            
+
             // Task'ın projesini otomatik olarak ekle
             if (empty($validated['project_id'])) {
                 $validated['project_id'] = $task->project_id;
             }
-            
+
             // Kullanıcının bu task'a erişim yetkisi var mı?
             if ($task->project->user_id !== auth()->id()) {
                 abort(403, 'Bu göreve erişim yetkiniz yok.');
             }
         } elseif (!empty($validated['project_id'])) {
             $project = Project::findOrFail($validated['project_id']);
-            
+
             // Kullanıcının bu projeye erişim yetkisi var mı?
             if ($project->user_id !== auth()->id()) {
                 abort(403, 'Bu projeye erişim yetkiniz yok.');
@@ -121,7 +120,7 @@ class ApiEndpointController extends Controller
         // Task ve proje kontrolü
         if (!empty($validated['task_id'])) {
             $task = Task::findOrFail($validated['task_id']);
-            
+
             // Kullanıcının bu task'a erişim yetkisi var mı?
             if ($task->project->user_id !== auth()->id()) {
                 abort(403, 'Bu göreve erişim yetkiniz yok.');
@@ -130,7 +129,7 @@ class ApiEndpointController extends Controller
 
         if (!empty($validated['project_id'])) {
             $project = Project::findOrFail($validated['project_id']);
-            
+
             // Kullanıcının bu projeye erişim yetkisi var mı?
             if ($project->user_id !== auth()->id()) {
                 abort(403, 'Bu projeye erişim yetkiniz yok.');
@@ -181,10 +180,10 @@ class ApiEndpointController extends Controller
 
         // URL'yi oluştur
         $url = $apiEndpoint->url;
-        
+
         // URL parametrelerini ekle
         if (!empty($params)) {
-            $url .= '?' . http_build_query($params);
+            $url .= '?'.http_build_query($params);
         }
 
         // Başlangıç zamanını kaydet
@@ -193,7 +192,7 @@ class ApiEndpointController extends Controller
         try {
             // HTTP isteğini yap
             $response = Http::withHeaders($headers);
-            
+
             // Metoda göre isteği yap
             switch ($apiEndpoint->method) {
                 case 'GET':
@@ -221,10 +220,10 @@ class ApiEndpointController extends Controller
 
             // Yanıt başlıklarını al
             $responseHeaders = $response->headers();
-            
+
             // Yanıt gövdesini al
             $responseBody = $response->json() ?: $response->body();
-            
+
             // Yanıt durum kodunu al
             $statusCode = $response->status();
 
@@ -252,7 +251,7 @@ class ApiEndpointController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'API isteği başarısız oldu: ' . $e->getMessage(),
+                'error' => 'API isteği başarısız oldu: '.$e->getMessage(),
             ], 500);
         }
     }

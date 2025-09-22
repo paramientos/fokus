@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $project_id
  * @property \Illuminate\Support\Carbon $metric_date
@@ -28,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read string $health_color
  * @property-read string $health_status
  * @property-read \App\Models\Project $project
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectHealthMetric newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectHealthMetric newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectHealthMetric query()
@@ -46,11 +45,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectHealthMetric whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectHealthMetric whereVelocity($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProjectHealthMetric whereWarnings($value)
+ *
  * @mixin \Eloquent
  */
 class ProjectHealthMetric extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'project_id',

@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class ProjectMemberSeeder extends Seeder
@@ -25,7 +24,7 @@ class ProjectMemberSeeder extends Seeder
             // Proje sahibini admin olarak ekle
             $project->teamMembers()->attach($project->user_id, [
                 'role' => 'admin',
-                'id'=> Str::uuid(),
+                'id' => Str::uuid(),
             ]);
 
             // Rastgele 2-5 kullanıcıyı takım üyesi olarak ekle
@@ -35,7 +34,7 @@ class ProjectMemberSeeder extends Seeder
             foreach ($randomUsers as $user) {
                 $project->teamMembers()->attach($user->id, [
                     'role' => 'member',
-                    'id'=> Str::uuid(),
+                    'id' => Str::uuid(),
                 ]);
             }
         }

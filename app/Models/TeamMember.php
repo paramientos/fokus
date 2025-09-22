@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
- *
  * @property string $id
  * @property string $team_id
  * @property string $user_id
@@ -18,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Team $team
  * @property-read \App\Models\User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamMember newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamMember newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamMember query()
@@ -28,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamMember whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamMember whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamMember whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class TeamMember extends Model

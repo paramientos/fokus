@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $user_id
@@ -29,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read bool $is_locked
  * @property-read \App\Models\User $user
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault query()
@@ -43,11 +42,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordVault whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class PasswordVault extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -143,15 +144,16 @@ class PasswordVault extends Model
             return false;
         }
 
-        $unlockTime = session('vault_unlock_' . $this->id);
+        $unlockTime = session('vault_unlock_'.$this->id);
 
         if (!$unlockTime) {
             return true;
         }
 
         // Check if the unlock time is still valid (1 minute)
-        if (now()->diffInSeconds($unlockTime,true) > 60) {
+        if (now()->diffInSeconds($unlockTime, true) > 60) {
             $this->lock();
+
             return true;
         }
 
@@ -164,7 +166,8 @@ class PasswordVault extends Model
     public function unlock(string $password): bool
     {
         if ($this->verifyMasterPassword($password)) {
-            session(['vault_unlock_' . $this->id => now()]);
+            session(['vault_unlock_'.$this->id => now()]);
+
             return true;
         }
 
@@ -176,7 +179,7 @@ class PasswordVault extends Model
      */
     public function lock(): void
     {
-        session()->forget('vault_unlock_' . $this->id);
+        session()->forget('vault_unlock_'.$this->id);
     }
 
     /**
@@ -185,7 +188,7 @@ class PasswordVault extends Model
     public function extendUnlockTime(): void
     {
         if (!$this->is_locked) {
-            session(['vault_unlock_' . $this->id => now()]);
+            session(['vault_unlock_'.$this->id => now()]);
         }
     }
 }

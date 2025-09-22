@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $repository_id
  * @property string|null $task_id
@@ -26,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\User|null $creator
  * @property-read \App\Models\GitRepository $repository
  * @property-read \App\Models\Task|null $task
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitBranch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitBranch newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitBranch query()
@@ -39,11 +38,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitBranch whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitBranch whereTaskId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitBranch whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  */
 class GitBranch extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'repository_id',

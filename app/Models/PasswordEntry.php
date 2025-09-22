@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 
 /**
- * 
- *
  * @property string $id
  * @property string $password_vault_id
  * @property string|null $password_category_id
@@ -30,6 +28,7 @@ use Illuminate\Support\Facades\Crypt;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\PasswordCategory|null $category
  * @property-read \App\Models\PasswordVault $vault
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordEntry newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordEntry newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordEntry onlyTrashed()
@@ -52,11 +51,14 @@ use Illuminate\Support\Facades\Crypt;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordEntry whereUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordEntry withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PasswordEntry withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class PasswordEntry extends Model
 {
-    use HasFactory, SoftDeletes,HasUuids;
+    use HasFactory;
+    use HasUuids;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -158,13 +160,23 @@ class PasswordEntry extends Model
         $strength = 0;
 
         // Length check
-        if (strlen($password) >= 8) $strength++;
-        if (strlen($password) >= 12) $strength++;
+        if (strlen($password) >= 8) {
+            $strength++;
+        }
+        if (strlen($password) >= 12) {
+            $strength++;
+        }
 
         // Complexity checks
-        if (preg_match('/[A-Z]/', $password)) $strength++;
-        if (preg_match('/[0-9]/', $password)) $strength++;
-        if (preg_match('/[^A-Za-z0-9]/', $password)) $strength++;
+        if (preg_match('/[A-Z]/', $password)) {
+            $strength++;
+        }
+        if (preg_match('/[0-9]/', $password)) {
+            $strength++;
+        }
+        if (preg_match('/[^A-Za-z0-9]/', $password)) {
+            $strength++;
+        }
 
         return min(5, $strength);
     }
@@ -174,7 +186,7 @@ class PasswordEntry extends Model
      */
     public function getStrengthDescription(): string
     {
-        return match($this->security_level) {
+        return match ($this->security_level) {
             0 => 'Çok Zayıf',
             1 => 'Zayıf',
             2 => 'Orta',
@@ -190,7 +202,7 @@ class PasswordEntry extends Model
      */
     public function getStrengthLabel(): string
     {
-        return match($this->security_level) {
+        return match ($this->security_level) {
             0 => 'Very Weak',
             1 => 'Weak',
             2 => 'Fair',
@@ -206,7 +218,7 @@ class PasswordEntry extends Model
      */
     public function getStrengthColor(): string
     {
-        return match($this->security_level) {
+        return match ($this->security_level) {
             0 => 'red-500',
             1 => 'red-400',
             2 => 'yellow-500',

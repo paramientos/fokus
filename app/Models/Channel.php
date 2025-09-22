@@ -8,34 +8,35 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * 
- *
  * @property-read \App\Models\User|null $createdBy
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
  * @property-read int|null $members_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message> $messages
  * @property-read int|null $messages_count
  * @property-read \App\Models\Workspace|null $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Channel forUser($userId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Channel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Channel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Channel query()
+ *
  * @mixin \Eloquent
  */
 class Channel extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'name',
         'description',
         'is_private',
         'workspace_id',
-        'created_by'
+        'created_by',
     ];
 
     protected $casts = [
-        'is_private' => 'boolean'
+        'is_private' => 'boolean',
     ];
 
     public function workspace()

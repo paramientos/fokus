@@ -10,7 +10,6 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -35,15 +34,17 @@ class GitService
         }
 
         $providerClass = $this->providers[$repository->provider];
+
         return new $providerClass($repository);
     }
 
     /**
      * Connect to a Git provider using SSO
      *
-     * @param string $provider Provider name (github, gitlab, bitbucket)
-     * @param string $redirectUrl URL to redirect after authentication
+     * @param  string  $provider  Provider name (github, gitlab, bitbucket)
+     * @param  string  $redirectUrl  URL to redirect after authentication
      * @return string URL to redirect user for SSO authentication
+     *
      * @throws Exception
      */
     public function connectWithSSO(string $provider, string $redirectUrl): string
@@ -55,7 +56,7 @@ class GitService
         $providerClass = $this->providers[$provider];
 
         /** @var GitHubService|GitLabService|BitbucketService $providerInstance */
-        $providerInstance = new $providerClass();
+        $providerInstance = new $providerClass;
 
         return $providerInstance->getOAuthUrl($redirectUrl);
     }
@@ -72,7 +73,7 @@ class GitService
         $providerClass = $this->providers[$provider];
 
         /** @var GitHubService|GitLabService|BitbucketService $providerInstance */
-        $providerInstance = new $providerClass();
+        $providerInstance = new $providerClass;
 
         // Exchange code for token
         $tokenData = $providerInstance->exchangeCodeForToken($callbackData);
@@ -117,7 +118,7 @@ class GitService
     /**
      * Refresh token for a repository if needed
      *
-     * @param GitRepository $repository Repository to refresh token for
+     * @param  GitRepository  $repository  Repository to refresh token for
      * @return bool True if token was refreshed successfully or didn't need refreshing
      */
     public function refreshTokenIfNeeded(GitRepository $repository): bool
@@ -175,10 +176,11 @@ class GitService
 
             return true;
         } catch (Exception $e) {
-            Log::error('Failed to sync repository: ' . $e->getMessage(), [
+            Log::error('Failed to sync repository: '.$e->getMessage(), [
                 'repository' => $repository->name,
                 'exception' => $e,
             ]);
+
             return false;
         }
     }
@@ -186,7 +188,7 @@ class GitService
     /**
      * Create a new branch for a task
      */
-    public function createBranchForTask(Task $task, GitRepository $repository, string $branchName = null): ?GitBranch
+    public function createBranchForTask(Task $task, GitRepository $repository, ?string $branchName = null): ?GitBranch
     {
         try {
             $provider = $this->getProviderService($repository);
@@ -215,11 +217,12 @@ class GitService
 
             return null;
         } catch (Exception $e) {
-            Log::error('Failed to create branch: ' . $e->getMessage(), [
+            Log::error('Failed to create branch: '.$e->getMessage(), [
                 'task' => $task->id,
                 'repository' => $repository->name,
                 'exception' => $e,
             ]);
+
             return null;
         }
     }
@@ -272,10 +275,11 @@ class GitService
 
             return false;
         } catch (Exception $e) {
-            Log::error('Failed to sync PR status: ' . $e->getMessage(), [
+            Log::error('Failed to sync PR status: '.$e->getMessage(), [
                 'pull_request' => $pr->id,
                 'exception' => $e,
             ]);
+
             return false;
         }
     }
@@ -291,11 +295,12 @@ class GitService
 
             return $provider->getFileDiff($commit->hash, $filePath);
         } catch (Exception $e) {
-            Log::error('Failed to get file diff: ' . $e->getMessage(), [
+            Log::error('Failed to get file diff: '.$e->getMessage(), [
                 'commit' => $commit->id,
                 'file' => $filePath,
                 'exception' => $e,
             ]);
+
             return null;
         }
     }
@@ -377,7 +382,7 @@ class GitService
     {
         foreach ($pullRequests as $pr) {
             // Try to extract task ID from PR title or description
-            $taskId = $this->extractTaskIdFromCommit($pr['title'] . ' ' . ($pr['description'] ?? ''));
+            $taskId = $this->extractTaskIdFromCommit($pr['title'].' '.($pr['description'] ?? ''));
 
             // Find author
             $author = null;

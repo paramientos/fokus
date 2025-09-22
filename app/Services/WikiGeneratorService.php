@@ -7,7 +7,6 @@ use App\Models\Task;
 use App\Models\WikiCategory;
 use App\Models\WikiPage;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class WikiGeneratorService
@@ -15,8 +14,8 @@ class WikiGeneratorService
     /**
      * Task açıklamaları ve yorumlarından wiki sayfası oluştur
      *
-     * @param Project $project Dokümantasyon oluşturulacak proje
-     * @param bool $force Tüm dokümantasyonu yeniden oluşturmaya zorla
+     * @param  Project  $project  Dokümantasyon oluşturulacak proje
+     * @param  bool  $force  Tüm dokümantasyonu yeniden oluşturmaya zorla
      */
     public function generateWikiFromTasks(Project $project, bool $force = false): void
     {
@@ -38,7 +37,9 @@ class WikiGeneratorService
 
         // Her task tipi için bir wiki kategorisi oluştur
         foreach ($tasksByType as $taskType => $typeTasks) {
-            if (!$taskType) continue; // Tipi olmayan task'ları atla
+            if (!$taskType) {
+                continue;
+            } // Tipi olmayan task'ları atla
 
             $this->processTasksForType($project, $taskType, $typeTasks, $force);
         }
@@ -145,9 +146,9 @@ class WikiGeneratorService
     /**
      * Kategori oluştur veya mevcut olanı bul
      *
-     * @param Project $project Proje
-     * @param string $name Kategori adı
-     * @param string $type Kategori tipi (status, type, technical, user)
+     * @param  Project  $project  Proje
+     * @param  string  $name  Kategori adı
+     * @param  string  $type  Kategori tipi (status, type, technical, user)
      * @return WikiCategory Oluşturulan veya bulunan kategori
      */
     private function findOrCreateCategory(Project $project, string $name, string $type): WikiCategory
@@ -156,11 +157,11 @@ class WikiGeneratorService
             [
                 'project_id' => $project->id,
                 'name' => $name,
-                'type' => $type
+                'type' => $type,
             ],
             [
                 'slug' => Str::slug($name),
-                'description' => "$name kategorisindeki wiki sayfaları"
+                'description' => "$name kategorisindeki wiki sayfaları",
             ]
         );
     }
@@ -178,8 +179,8 @@ class WikiGeneratorService
 
         $content .= "## Detaylar\n\n";
         $content .= "- **Durum:** {$task->status->name}\n";
-        $content .= "- **Tip:** " . ($task->task_type ? ucfirst($task->task_type->label()) : 'Belirtilmemiş') . "\n";
-        $content .= "- **Öncelik:** " . ($task->priority ? ucfirst($task->priority->label()) : 'Belirtilmemiş') . "\n";
+        $content .= '- **Tip:** '.($task->task_type ? ucfirst($task->task_type->label()) : 'Belirtilmemiş')."\n";
+        $content .= '- **Öncelik:** '.($task->priority ? ucfirst($task->priority->label()) : 'Belirtilmemiş')."\n";
 
         if ($task->user) {
             $content .= "- **Atanan:** {$task->user->name}\n";
@@ -194,7 +195,7 @@ class WikiGeneratorService
         }
 
         if ($task->due_date) {
-            $content .= "- **Bitiş Tarihi:** " . $task->due_date->format('d.m.Y') . "\n";
+            $content .= '- **Bitiş Tarihi:** '.$task->due_date->format('d.m.Y')."\n";
         }
 
         // Yorumları ekle
@@ -202,7 +203,7 @@ class WikiGeneratorService
             $content .= "\n## Yorumlar\n\n";
 
             foreach ($task->comments as $comment) {
-                $content .= "### {$comment->user->name} - " . $comment->created_at->format('d.m.Y H:i') . "\n\n";
+                $content .= "### {$comment->user->name} - ".$comment->created_at->format('d.m.Y H:i')."\n\n";
                 $content .= "{$comment->content}\n\n";
             }
         }
@@ -297,7 +298,7 @@ class WikiGeneratorService
             return in_array($task->task_type, ['bug', 'task', 'technical-debt', 'improvement']);
         });
 
-        $title = "Teknik Dokümantasyon";
+        $title = 'Teknik Dokümantasyon';
         $slug = WikiPage::createSlug($title);
 
         $content = "# {$project->name} - Teknik Dokümantasyon\n\n";
@@ -356,7 +357,7 @@ class WikiGeneratorService
             return in_array($task->task_type, ['story', 'feature', 'enhancement']);
         });
 
-        $title = "Kullanıcı Dokümantasyonu";
+        $title = 'Kullanıcı Dokümantasyonu';
         $slug = WikiPage::createSlug($title);
 
         $content = "# {$project->name} - Kullanıcı Dokümantasyonu\n\n";

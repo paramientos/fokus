@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
- *
  * @property string $id
  * @property string|null $title
  * @property string|null $description
@@ -36,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property-read \App\Models\Project $project
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation forContext($contextType, $contextId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation forProject($projectId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation newModelQuery()
@@ -58,11 +57,14 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Conversation withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Conversation extends Model
 {
-    use HasFactory, SoftDeletes,HasUuids;
+    use HasFactory;
+    use HasUuids;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

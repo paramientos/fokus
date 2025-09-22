@@ -14,7 +14,7 @@ trait Paginatable
             $perPage = $this->count();
         }
 
-        return max(1, min($this->perPageMax, (int)$perPage));
+        return max(1, min($this->perPageMax, (int) $perPage));
     }
 
     public function setPerPageMax(int $perPageMax): void

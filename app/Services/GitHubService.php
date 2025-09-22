@@ -11,11 +11,14 @@ use Illuminate\Support\Str;
 class GitHubService
 {
     protected ?GitRepository $repository = null;
+
     protected string $baseUrl = 'https://api.github.com';
+
     protected string $authUrl = 'https://github.com/login/oauth/authorize';
+
     protected string $tokenUrl = 'https://github.com/login/oauth/access_token';
 
-    public function __construct(GitRepository $repository = null)
+    public function __construct(?GitRepository $repository = null)
     {
         $this->repository = $repository;
     }
@@ -23,7 +26,7 @@ class GitHubService
     /**
      * Get OAuth URL for GitHub SSO
      *
-     * @param string $redirectUrl URL to redirect after authentication
+     * @param  string  $redirectUrl  URL to redirect after authentication
      * @return string URL to redirect user for SSO authentication
      */
     public function getOAuthUrl(string $redirectUrl): string
@@ -46,13 +49,13 @@ class GitHubService
             'state' => $state,
         ];
 
-        return $this->authUrl . '?' . http_build_query($params);
+        return $this->authUrl.'?'.http_build_query($params);
     }
 
     /**
      * Exchange OAuth code for access token
      *
-     * @param array $callbackData Data from OAuth callback
+     * @param  array  $callbackData  Data from OAuth callback
      * @return array|null Token data or null on failure
      */
     public function exchangeCodeForToken(array $callbackData): ?array
@@ -60,11 +63,13 @@ class GitHubService
         // Verify state to prevent CSRF
         if (empty($callbackData['state']) || $callbackData['state'] !== session('github_oauth_state')) {
             Log::error('GitHub OAuth state mismatch');
+
             return null;
         }
 
         if (empty($callbackData['code'])) {
             Log::error('GitHub OAuth code missing');
+
             return null;
         }
 
@@ -80,6 +85,7 @@ class GitHubService
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
+
                 return null;
             }
 
@@ -89,6 +95,7 @@ class GitHubService
                 Log::error('GitHub OAuth token missing from response', [
                     'response' => $data,
                 ]);
+
                 return null;
             }
 
@@ -104,6 +111,7 @@ class GitHubService
             Log::error('GitHub OAuth token exchange exception', [
                 'exception' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
@@ -111,7 +119,7 @@ class GitHubService
     /**
      * Get repository information using access token
      *
-     * @param string $accessToken OAuth access token
+     * @param  string  $accessToken  OAuth access token
      * @return array|null Repository information or null on failure
      */
     public function getRepositoryInfoFromToken(string $accessToken): ?array
@@ -130,6 +138,7 @@ class GitHubService
                     'status' => $userResponse->status(),
                     'response' => $userResponse->body(),
                 ]);
+
                 return null;
             }
 
@@ -151,6 +160,7 @@ class GitHubService
                     'status' => $reposResponse->status(),
                     'response' => $reposResponse->body(),
                 ]);
+
                 return null;
             }
 
@@ -168,6 +178,7 @@ class GitHubService
             Log::error('Failed to get GitHub repository info', [
                 'exception' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
@@ -177,7 +188,7 @@ class GitHubService
      */
     public function getBranches(): array
     {
-        $url = $this->getRepoApiUrl() . '/branches';
+        $url = $this->getRepoApiUrl().'/branches';
         $response = $this->makeRequest('GET', $url);
 
         $branches = [];
@@ -198,7 +209,7 @@ class GitHubService
      */
     public function getCommits(int $limit = 100): array
     {
-        $url = $this->getRepoApiUrl() . '/commits';
+        $url = $this->getRepoApiUrl().'/commits';
         $response = $this->makeRequest('GET', $url, ['per_page' => $limit]);
 
         $commits = [];
@@ -221,7 +232,7 @@ class GitHubService
      */
     public function getPullRequests(): array
     {
-        $url = $this->getRepoApiUrl() . '/pulls';
+        $url = $this->getRepoApiUrl().'/pulls';
         $response = $this->makeRequest('GET', $url, ['state' => 'all']);
 
         $pullRequests = [];
@@ -255,7 +266,7 @@ class GitHubService
      */
     public function getPullRequest(int $number): ?array
     {
-        $url = $this->getRepoApiUrl() . '/pulls/' . $number;
+        $url = $this->getRepoApiUrl().'/pulls/'.$number;
         $pr = $this->makeRequest('GET', $url);
 
         if (!$pr) {
@@ -290,7 +301,7 @@ class GitHubService
     {
         try {
             // First, get the SHA of the latest commit on the base branch
-            $url = $this->getRepoApiUrl() . '/git/refs/heads/' . $baseBranch;
+            $url = $this->getRepoApiUrl().'/git/refs/heads/'.$baseBranch;
             $baseRef = $this->makeRequest('GET', $url);
 
             if (!$baseRef || !isset($baseRef['object']['sha'])) {
@@ -300,19 +311,20 @@ class GitHubService
             $sha = $baseRef['object']['sha'];
 
             // Create the new branch
-            $url = $this->getRepoApiUrl() . '/git/refs';
+            $url = $this->getRepoApiUrl().'/git/refs';
             $response = $this->makeRequest('POST', $url, [
-                'ref' => 'refs/heads/' . $branchName,
+                'ref' => 'refs/heads/'.$branchName,
                 'sha' => $sha,
             ]);
 
             return isset($response['ref']);
         } catch (Exception $e) {
-            Log::error('Failed to create branch on GitHub: ' . $e->getMessage(), [
+            Log::error('Failed to create branch on GitHub: '.$e->getMessage(), [
                 'repository' => $this->repository->name,
                 'branch' => $branchName,
                 'exception' => $e,
             ]);
+
             return false;
         }
     }
@@ -322,7 +334,7 @@ class GitHubService
      */
     public function getFileDiff(string $commitHash, string $filePath): ?string
     {
-        $url = $this->getRepoApiUrl() . '/commits/' . $commitHash;
+        $url = $this->getRepoApiUrl().'/commits/'.$commitHash;
         $response = $this->makeRequest('GET', $url);
 
         if (!$response || !isset($response['files'])) {
@@ -360,17 +372,18 @@ class GitHubService
                 return $response->json();
             }
 
-            Log::error('GitHub API error: ' . $response->status(), [
+            Log::error('GitHub API error: '.$response->status(), [
                 'url' => $url,
                 'response' => $response->body(),
             ]);
 
             return null;
         } catch (Exception $e) {
-            Log::error('GitHub API request failed: ' . $e->getMessage(), [
+            Log::error('GitHub API request failed: '.$e->getMessage(), [
                 'url' => $url,
                 'exception' => $e,
             ]);
+
             return null;
         }
     }
@@ -381,7 +394,7 @@ class GitHubService
     protected function getRepoApiUrl(): string
     {
         if (!$this->repository) {
-            throw new Exception("Repository not set");
+            throw new Exception('Repository not set');
         }
 
         // Extract owner and repo from repository URL

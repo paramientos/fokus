@@ -5,6 +5,7 @@ namespace App\Concerns;
 trait UserTimezone
 {
     public ?string $timezone = null;
+
     public ?string $dateTimeFormat = null;
 
     public function loadTimezone()

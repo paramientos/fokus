@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property string $id
  * @property string $workspace_id
  * @property string $project_id
@@ -34,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\GitPullRequest> $pullRequests
  * @property-read int|null $pull_requests_count
  * @property-read \App\Models\Workspace $workspace
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitRepository newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitRepository newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitRepository query()
@@ -52,11 +51,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitRepository whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitRepository whereWebhookSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GitRepository whereWorkspaceId($value)
+ *
  * @mixin \Eloquent
  */
 class GitRepository extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory;
+    use HasUuids;
 
     protected $fillable = [
         'workspace_id',
