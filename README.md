@@ -20,7 +20,7 @@
 Fokus is a comprehensive project management system inspired by tools like Jira, Asana, and Trello. It aims to consolidate all team collaboration needs into a single platform, eliminating the need for multiple tools.
 
 <p align="center">
-  <img src="https://usefokus.com/asset/images/no-workspace.png.png" alt="Fokus Logo" width="200">
+  <img src="https://usefokus.com/asset/images/no-workspace.png" alt="Fokus Logo" width="200">
 </p>
 
 ### Development Status
